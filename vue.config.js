@@ -1,11 +1,20 @@
+/* eslint-disable global-require */
 const path = require('path');
 const merge = require('webpack-merge');
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const {
+  BundleAnalyzerPlugin
+} = require('webpack-bundle-analyzer');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const AutoDllPlugin = require('autodll-webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
 module.exports = {
+  parallel: require('os').cpus().length > 1,
   lintOnSave: false,
   css: {
     loaderOptions: {
@@ -32,6 +41,13 @@ module.exports = {
     },
   },
   chainWebpack: (config) => {
+    // config.optimization
+    //   .splitChunks({
+    //     cacheGroups: {},
+    //   });
+    config.plugins.delete('preload');
+    config.plugins.delete('prefetch');
+    config.plugins.delete('SplitChunksPlugin');
     config.resolve.alias
       .set('@assets', resolve('src/assets'))
       .set('@api', resolve('src/api'))
@@ -49,5 +65,36 @@ module.exports = {
         });
         return options;
       });
+    config.plugin('copy')
+      .tap((args) => {
+        args[0].push({
+          from: resolve('./WW_verify_z793ZwW9R5YytI0x.txt'),
+          to: resolve('./dist'),
+        });
+        return args;
+      });
+  },
+  configureWebpack: (config) => {
+    config.plugins.push(
+      new AutoDllPlugin({
+        inject: true, // will inject the DLL bundle to index.html
+        debug: true,
+        filename: '[name]_[hash].js',
+        path: './dll',
+        entry: {
+          vue: [
+            'vue-router',
+            'vuex',
+            'vant/lib',
+          ],
+          vant: ['vant'],
+          corejs: [
+            'core-js',
+            'core-js/library',
+          ],
+        },
+      }),
+      new BundleAnalyzerPlugin(),
+    );
   },
 };
