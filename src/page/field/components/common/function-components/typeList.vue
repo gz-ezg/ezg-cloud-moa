@@ -2,7 +2,7 @@
     <van-dialog
         :value="fieldTypeModalStatus"
         :show-confirm-button="false"
-        :close-on-click-overlay="true"
+        :close-on-click-overlay="false"
         show-cancel-button
         @cancel="close"
         >
@@ -24,7 +24,7 @@ import * as commonApi from '../../../api/common/index.js'
 @Component
 export default class typeList extends Vue{
     get fieldTypeModalStatus(){
-        return this.$store.state.modalStatus.fieldTypeModalStatus
+        return this.$store.state.fieldDetail.fieldTypeModalStatus
     }
     get fieldTypeList(){
         return this.$store.state.fieldDetail.fieldTypeList
@@ -34,12 +34,12 @@ export default class typeList extends Vue{
     }
 
     choose(type){
-        this.$store.commit("set_fieldType", type)
-        this.$store.commit("change_fieldType_modal_status")
+        this.$store.commit("fieldDetail/set_fieldType", type)
+        this.$store.commit("fieldDetail/change_fieldType_modal_status")
     }
 
     close(){
-        this.$store.commit("change_fieldType_modal_status")
+        this.$store.commit("fieldDetail/change_fieldType_modal_status")
     }
 }
 </script>

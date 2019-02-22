@@ -2,7 +2,7 @@
     <van-dialog
         :value="OpenCompany"
         :show-confirm-button="false"
-        :close-on-click-overlay="true"
+        :close-on-click-overlay="false"
         show-cancel-button
         @cancel="close"
         >
@@ -37,16 +37,16 @@ export default class companyList extends Vue{
     }
 
     get OpenCompany(){
-        return this.$store.state.modalStatus.companyModalStatus
+        return this.$store.state.fieldDetail.companyModalStatus
     }
 
     choose(company){
-        this.$store.commit("set_company", company)
-        this.$store.commit("change_company_modal_status")
+        this.$store.commit("fieldDetail/set_company", company)
+        this.$store.commit("fieldDetail/change_company_modal_status")
     }
 
     close(){
-        this.$store.commit("change_company_modal_status")
+        this.$store.commit("fieldDetail/change_company_modal_status")
     }
 
     @Watch('searchCompanyname', {immediate: true})

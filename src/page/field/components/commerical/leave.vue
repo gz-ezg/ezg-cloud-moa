@@ -150,7 +150,7 @@ export default class marketLeave extends Vue {
     this.openNationTaxType = false
   }
   open_fieldType_select(){
-    this.$store.commit("change_fieldType_modal_status")
+    this.$store.commit("fieldDetail/change_fieldType_modal_status")
   }
   data_check(){
     let _self = this
@@ -224,8 +224,8 @@ export default class marketLeave extends Vue {
       }
     }
     if(status){
-      this.$store.commit("remove_all")
-      this.$store.commit("set_finalTime", this.timeTamp)
+      this.$store.commit("fieldDetail/remove_all")
+      this.$store.commit("fieldDetail/set_finalTime", this.timeTamp)
       setTimeout(()=>{
         this.$router.push({
           name: "Success"
@@ -257,7 +257,7 @@ export default class marketLeave extends Vue {
         }
       }
       let time = new Date(this.clockDetail.clocktime.replace(/\-/g, "/"))
-      this.$store.commit("update_clockTime", time)
+      this.$store.commit("fieldDetail/update_clockTime", time)
 
       let time1 = setInterval(()=>{
         let now = new Date()
@@ -275,7 +275,7 @@ export default class marketLeave extends Vue {
         }
     }
     let { commercial_status } = await commonApi.getDictionary(config)
-    this.$store.commit("set_fieldTypeList", commercial_status)
+    this.$store.commit("fieldDetail/set_fieldTypeList", commercial_status)
   }
 }
 </script>

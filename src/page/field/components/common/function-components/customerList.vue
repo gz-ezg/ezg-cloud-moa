@@ -2,7 +2,7 @@
     <van-dialog
         :value="OpenCustomer"
         :show-confirm-button="false"
-        :close-on-click-overlay="true"
+        :close-on-click-overlay="false"
         show-cancel-button
         @cancel="close"
         >
@@ -34,16 +34,16 @@ export default class customerList extends Vue{
     }
 
     get OpenCustomer(){
-        return this.$store.state.modalStatus.customerModalStatus
+        return this.$store.state.fieldDetail.customerModalStatus
     }
 
     choose(company){
-        this.$store.commit("set_company", company)
-        this.$store.commit("change_customer_modal_status")
+        this.$store.commit("fieldDetail/set_company", company)
+        this.$store.commit("fieldDetail/change_customer_modal_status")
     }
 
     close(){
-        this.$store.commit("change_customer_modal_status")
+        this.$store.commit("fieldDetail/change_customer_modal_status")
     }
 
     @Watch('searchCompanyname', {immediate: true})

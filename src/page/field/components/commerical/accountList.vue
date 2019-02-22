@@ -33,10 +33,10 @@ export default {
   },
   methods: {
     search() {
-      let _self = this
-      let url = `api/legwork/apiCheckAccountMsg`
-      let formdata = new FormData()
-      formdata.append('realname', _self.searchaccountname)
+      const _self = this,
+      const url = 'api/legwork/apiCheckAccountMsg',
+      let formdata = new FormData(),
+      formdata.append('realname', _self.searchaccountname),
 
       this.$http.post(url, formdata).then(function (res) {
         if (res.data.msgCode == "40000") {

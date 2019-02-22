@@ -3,6 +3,5 @@ declare module "*.vue" {
   export default Vue;
 }
 
-// declare global {
-//   const wx
-// }
+declare let wx: any;
+declare let WeixinJSBridge: any;

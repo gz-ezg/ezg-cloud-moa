@@ -7,12 +7,23 @@ const fieldDetail = {
     fieldType: {},
     fieldTypeList: [],
     fieldDetail: {},
-    company: {
-    },
+    company: {},
     clockTime: '',
     finalTime: '',
+    companyModalStatus: false,
+    customerModalStatus: false,
+    fieldTypeModalStatus: false,
   },
   mutations: {
+    change_company_modal_status(state) {
+      state.companyModalStatus = !state.companyModalStatus;
+    },
+    change_customer_modal_status(state) {
+      state.customerModalStatus = !state.customerModalStatus;
+    },
+    change_fieldType_modal_status(state) {
+      state.fieldTypeModalStatus = !state.fieldTypeModalStatus;
+    },
     set_accout_status(state, item) {
       state.fieldType = item;
     },

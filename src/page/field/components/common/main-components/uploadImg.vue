@@ -29,7 +29,7 @@ export default class uploadImg extends Vue {
     async upload(e){
         let _self = this
         let img = await yasuo(e)
-        this.$store.commit("push_upload_img", img)
+        this.$store.commit("fieldDetail/push_upload_img", img)
         let reader = new FileReader()
         reader.readAsDataURL(e)
         let filename = e.name
@@ -38,14 +38,14 @@ export default class uploadImg extends Vue {
                 name:filename,
                 src:this.result
             }
-            _self.$store.commit("push_img", imgMsg)
+            _self.$store.commit("fieldDetail/push_img", imgMsg)
         }
     }
     get showImg(){
         return this.$store.state.fieldDetail.showImg
     }
     remove(index){
-      this.$store.commit("remove_upload_img", index)
+      this.$store.commit("fieldDetail/remove_upload_img", index)
     }
 }
 </script>

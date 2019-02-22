@@ -140,11 +140,11 @@ export default class commericalIndex extends Vue {
       return this.$store.state.fieldDetail.uploadImg
     }
     open_company_select(id){
-        this.$store.commit("change_company_modal_status")
+        this.$store.commit("fieldDetail/change_company_modal_status")
     }
 
     open_fieldType_select(){
-        this.$store.commit("change_fieldType_modal_status")
+        this.$store.commit("fieldDetail/change_fieldType_modal_status")
     }
 
     change_workorder(item){
@@ -164,7 +164,7 @@ export default class commericalIndex extends Vue {
             }
         }
         let { commercial_field_type } = await commonApi.AjaxDic(config)
-        this.$store.commit("set_fieldTypeList", commercial_field_type)
+        this.$store.commit("fieldDetail/set_fieldTypeList", commercial_field_type)
     }
 
     data_check(){
@@ -228,7 +228,7 @@ export default class commericalIndex extends Vue {
           message: "正在跳转至离开打卡界面...",
           duration: 1000
         })
-        this.$store.commit("remove_all")
+        this.$store.commit("fieldDetail/remove_all")
         setTimeout(()=>{
           this.$router.push({
             name: "commericalLeave"

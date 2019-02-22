@@ -1,12 +1,8 @@
 /* eslint-disable global-require */
 const path = require('path');
 const merge = require('webpack-merge');
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const {
-  BundleAnalyzerPlugin
-} = require('webpack-bundle-analyzer');
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+// const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 
 function resolve(dir) {
@@ -41,10 +37,6 @@ module.exports = {
     },
   },
   chainWebpack: (config) => {
-    // config.optimization
-    //   .splitChunks({
-    //     cacheGroups: {},
-    //   });
     config.plugins.delete('preload');
     config.plugins.delete('prefetch');
     config.plugins.delete('SplitChunksPlugin');
