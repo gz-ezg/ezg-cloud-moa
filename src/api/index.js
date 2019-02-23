@@ -18,8 +18,9 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-  Toast.clear(),
+  // Toast.clear(),
   (response) => {
+    console.log(response);
     if (response.data.msgCode === '50003') {
       Toast.fail('登录失效！');
       router.push({
@@ -49,6 +50,7 @@ function AjaxGet(url, config, success, fail = commonFail) {
   return new Promise((resolve, reject) => {
     axios.get(baseUrl, config).then((res) => {
       if (res.status === 200 && res.data.msgCode === '40000') {
+        Toast.clear();
         resolve(res.data.data);
       } else {
         fail(res);

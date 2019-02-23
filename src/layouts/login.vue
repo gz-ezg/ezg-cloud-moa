@@ -43,6 +43,9 @@ export default {
         this.$store.commit('setUserInfo', data.data.user);
         //  设置标志位表示已登录，用于首页跳转
         Cookies.set('userId', '10000');
+        this.$router.push({
+          name: 'Index',
+        });
       }
     },
   },

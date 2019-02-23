@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import Toast from 'vant/lib/toast';
 import 'vant/lib/toast/style';
 import { routers } from './routes';
+import store from '../store/index';
 
 Vue.use(Router);
 
@@ -17,16 +18,28 @@ router.beforeEach((to, from, next) => {
   //   mask: true,
   //   message: '加载中...',
   // });
+  console.log(store.state);
+  // console.log(to);
+  if (to.name === 'Login') {
+    store.commit('clearAll');
+    next();
+  }
   if (!Cookies.get('userId') && to.name !== 'Login') {
     next({
       name: 'Login',
     });
   }
-  next();
+  if (to.meta.access && !store.state.userAccess.includes(to.meta.access)) {
+    // console.log('1234');
+    Toast.fail('权限不足！');
+    next(false);
+  } else {
+    // console.log('error');
+    next();
+  }
 });
 
 router.afterEach(() => {
-  Toast.clear();
   window.scrollTo(0, 0);
 });
 

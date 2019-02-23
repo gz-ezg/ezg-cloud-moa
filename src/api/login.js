@@ -22,7 +22,17 @@ function checkUserRoleByUserId(id) {
   });
 }
 
+function getInterfaceItemByUserId() {
+  const url = 'menu/getInterfaceItemByUserId';
+  return new Promise((resolve) => {
+    resolve(AjaxGet(url));
+  }).catch((err) => {
+    return err;
+  });
+}
+
 export {
   userLogin,
   checkUserRoleByUserId,
+  getInterfaceItemByUserId,
 };
