@@ -31,8 +31,18 @@ function getInterfaceItemByUserId() {
   });
 }
 
+function getUserInfo() {
+  const url = 'user/login/detail';
+  return new Promise((resolve) => {
+    resolve(AjaxGet(url));
+  }).catch((err) => {
+    return err;
+  });
+}
+
 export {
   userLogin,
   checkUserRoleByUserId,
   getInterfaceItemByUserId,
+  getUserInfo,
 };

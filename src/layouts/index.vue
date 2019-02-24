@@ -8,7 +8,17 @@
     <van-button to="/field4">外勤打卡4</van-button>
     <van-button to="/field5">外勤打卡5</van-button>
     <van-button to="/login">退出系统</van-button>
-    <div v-for="(x, index) in menuList" :key="index">{{x.title}}</div>
+    <div v-if="!menuList.length">
+      <!-- 骨架屏 -->
+      <ul class="skeleton-tabs">
+        <li v-for="i in 8" class="skeleton-tabs-item" :key="i">
+          <span></span>
+        </li>
+      </ul>
+    </div>
+    <div v-else>
+      <div v-for="(x, index) in menuList" :key="index">{{x.title}}</div>
+    </div>
   </div>
 </template>
 
@@ -29,6 +39,9 @@ export default {
     },
   },
   created() {
+    if ( !this.$store.state.userId ) {
+      this.$store.dispatch('getUserInfo');
+    }
     if (this.$store.state.userAccess.length === 0 || this.$store.state.menu.length === 0) {
       this.$store.dispatch('updateAccess');
     }
@@ -39,3 +52,21 @@ export default {
   },
 };
 </script>
+
+<style>
+.skeleton-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 15px 15px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.skeleton-tabs-item {
+  width: 33%;
+  /* height: 55px; */
+  box-sizing: border-box;
+  text-align: center;
+  margin-bottom: 15px;
+}
+</style>
+

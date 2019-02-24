@@ -1,8 +1,9 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { getInterfaceItemByUserId } from '../api/login';
+import { getInterfaceItemByUserId, getUserInfo } from '../api/login';
 import { PageRouter } from '../router/routes';
 import fieldDetail from '../page/field/store';
 
@@ -15,11 +16,13 @@ export default new Vuex.Store({
     userRole: [],
     userAccess: [],
     menu: [],
+    aliasCode: '',
   },
   mutations: {
     setUserInfo(state, info) {
       state.userId = info.id;
       state.userName = info.realname;
+      state.aliasCode = info.currentDepart.aliasCode;
     },
     setUserRole(state, role) {
       state.userRole = role;
@@ -53,6 +56,18 @@ export default new Vuex.Store({
         }
       }
       commit('updateMenu', tempMenu);
+    },
+    async getUserInfo({ commit, dispatch }) {
+      console.log('getUserInfo');
+      // const { id, realname, currentDepart } = await getUserInfo();
+      const info = {
+        id: 10059,
+        realname: 'realname',
+        currentDepart: { aliasCode: 'depart' },
+      };
+      console.log(info);
+      commit('setUserInfo', info);
+      dispatch('updateAccess');
     },
   },
   modules: {
