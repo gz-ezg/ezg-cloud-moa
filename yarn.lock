@@ -2354,6 +2354,11 @@ commander@^2.12.1, commander@^2.18.0:
   resolved "http://registry.npm.taobao.org/commander/download/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
   integrity sha1-9hmKqE5bg8RgVLlN3tv+1e6f8So=
 
+commander@~2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
+  integrity sha512-MVuS359B+YzaWqjCL/c+22gfryv+mCBPHAv3zyVI2GN8EY6IRP8VwtasXn8jyyhvvq84R4ImN1OKRtcbIasjYA==
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/commondir/download/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
@@ -5235,6 +5240,11 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
+lodash._reinterpolate@~3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
+  integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
+
 lodash.defaultsdeep@^4.6.0:
   version "4.6.0"
   resolved "http://registry.npm.taobao.org/lodash.defaultsdeep/download/lodash.defaultsdeep-4.6.0.tgz#bec1024f85b1bd96cbea405b23c14ad6443a6f81"
@@ -5259,6 +5269,21 @@ lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "http://registry.npm.taobao.org/lodash.memoize/download/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
+
+lodash.template@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.template/-/lodash.template-4.4.0.tgz#e73a0385c8355591746e020b99679c690e68fba0"
+  integrity sha1-5zoDhcg1VZF0bgILmWecaQ5o+6A=
+  dependencies:
+    lodash._reinterpolate "~3.0.0"
+    lodash.templatesettings "^4.0.0"
+
+lodash.templatesettings@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.templatesettings/-/lodash.templatesettings-4.1.0.tgz#2b4d4e95ba440d915ff08bc899e4553666713316"
+  integrity sha1-K01OlbpEDZFf8IvImeRVNmZxMxY=
+  dependencies:
+    lodash._reinterpolate "~3.0.0"
 
 lodash.transform@^4.6.0:
   version "4.6.0"
@@ -5469,8 +5494,8 @@ mimic-fn@^1.0.0:
 
 mini-css-extract-plugin@^0.5.0:
   version "0.5.0"
-  resolved "http://registry.npm.taobao.org/mini-css-extract-plugin/download/mini-css-extract-plugin-0.5.0.tgz#ac0059b02b9692515a637115b0cc9fed3a35c7b0"
-  integrity sha1-rABZsCuWklFaY3EVsMyf7To1x7A=
+  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-0.5.0.tgz#ac0059b02b9692515a637115b0cc9fed3a35c7b0"
+  integrity sha512-IuaLjruM0vMKhUUT51fQdQzBYTX49dLj8w68ALEAe2A4iYNpIC4eMac67mt3NzycvjOlf07/kYxJDc0RTl1Wqw==
   dependencies:
     loader-utils "^1.1.0"
     schema-utils "^1.0.0"
@@ -6215,6 +6240,11 @@ path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "http://registry.npm.taobao.org/path-to-regexp/download/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
+
+path-to-regexp@^2.1.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-2.4.0.tgz#35ce7f333d5616f1c1e1bfe266c3aba2e5b2e704"
+  integrity sha512-G6zHoVqC6GGTQkZwF4lkuEyMbVOjoBKAEybQUypI1WTkqinCOrq2x6U2+phkJ1XsEMTy4LjtwPI7HW+NVrRR2w==
 
 path-type@^2.0.0:
   version "2.0.0"
@@ -7159,7 +7189,7 @@ resolve-url@^0.2.1:
   resolved "http://registry.npm.taobao.org/resolve-url/download/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
-resolve@^1.10.0, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.5.0, resolve@^1.8.1, resolve@^1.9.0:
+resolve@^1.10.0, resolve@^1.2.0, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.5.0, resolve@^1.8.1, resolve@^1.9.0:
   version "1.10.0"
   resolved "http://registry.npm.taobao.org/resolve/download/resolve-1.10.0.tgz#3bdaaeaf45cc07f375656dfd2e54ed0810b101ba"
   integrity sha1-O9qur0XMB/N1ZW39LlTtCBCxAbo=
@@ -7312,7 +7342,7 @@ send@0.16.2:
     range-parser "~1.2.0"
     statuses "~1.4.0"
 
-serialize-javascript@^1.4.0:
+serialize-javascript@^1.3.0, serialize-javascript@^1.4.0:
   version "1.6.1"
   resolved "http://registry.npm.taobao.org/serialize-javascript/download/serialize-javascript-1.6.1.tgz#4d1f697ec49429a847ca6f442a2a755126c4d879"
   integrity sha1-TR9pfsSUKahHym9EKip1USbE2Hk=
@@ -7521,6 +7551,11 @@ source-map-url@^0.4.0:
   version "0.4.0"
   resolved "http://registry.npm.taobao.org/source-map-url/download/source-map-url-0.4.0.tgz#3e935d7ddd73631b97659956d55128e87b5084a3"
   integrity sha1-PpNdfd1zYxuXZZlW1VEo6HtQhKM=
+
+source-map@0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
+  integrity sha1-dc449SvwczxafwwRjYEzSiu19BI=
 
 source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6:
   version "0.5.7"
@@ -8131,6 +8166,14 @@ typescript@^3.3.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.3.tgz#f1657fc7daa27e1a8930758ace9ae8da31403221"
   integrity sha512-Y21Xqe54TBVp+VDSNbuDYdGw0BpoR/Q6wo/+35M8PAU0vipahnyduJWirxxdxjsAkS7hue53x2zp8gz7F05u0A==
 
+uglify-es@^3.3.4:
+  version "3.3.9"
+  resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.3.9.tgz#0c1c4f0700bed8dbc124cdb304d2592ca203e677"
+  integrity sha512-r+MU0rfv4L/0eeW3xZrd16t4NZfK8Ld4SWVglYBb7ez5uXFWHuVRs6xCTrf1yirs9a4j4Y27nn7SRfO6v67XsQ==
+  dependencies:
+    commander "~2.13.0"
+    source-map "~0.6.1"
+
 uglify-js@3.4.x:
   version "3.4.9"
   resolved "http://registry.npm.taobao.org/uglify-js/download/uglify-js-3.4.9.tgz#af02f180c1207d76432e473ed24a28f4a782bae3"
@@ -8429,6 +8472,31 @@ vue-router@^3.0.1:
   resolved "http://registry.npm.taobao.org/vue-router/download/vue-router-3.0.2.tgz#dedc67afe6c4e2bc25682c8b1c2a8c0d7c7e56be"
   integrity sha1-3txnr+bE4rwlaCyLHCqMDXx+Vr4=
 
+vue-server-renderer@^2.3.4:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/vue-server-renderer/-/vue-server-renderer-2.6.7.tgz#ff40f69a439da8993a6e171b7d58575bfbeefb79"
+  integrity sha512-CVtGR+bE63y4kyIeOcCEF2UNKquSquFQAsTHZ5R1cGM4L4Z0BXgAUEcngTOy8kN+tubt3c1zpRvbrok/bHKeDg==
+  dependencies:
+    chalk "^1.1.3"
+    hash-sum "^1.0.2"
+    he "^1.1.0"
+    lodash.template "^4.4.0"
+    lodash.uniq "^4.5.0"
+    resolve "^1.2.0"
+    serialize-javascript "^1.3.0"
+    source-map "0.5.6"
+
+vue-skeleton-webpack-plugin@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/vue-skeleton-webpack-plugin/-/vue-skeleton-webpack-plugin-1.2.2.tgz#4601ef0eb7e5446c4b30347b4a0ef414e6dc883e"
+  integrity sha512-wWEWtqXaNt+w/0UehdC4MgdafXfSSuRzrmqfizqYwDclO73BUycszDgxCLdRz9sH4TFlQGppv46q+xjEo22NDA==
+  dependencies:
+    loader-utils "^1.1.0"
+    path-to-regexp "^2.1.0"
+    uglify-es "^3.3.4"
+    vue-server-renderer "^2.3.4"
+    webpack-node-externals "^1.6.0"
+
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "http://registry.npm.taobao.org/vue-style-loader/download/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
@@ -8437,10 +8505,10 @@ vue-style-loader@^4.1.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-template-compiler@^2.5.21:
-  version "2.6.6"
-  resolved "http://registry.npm.taobao.org/vue-template-compiler/download/vue-template-compiler-2.6.6.tgz#a807acbf3d51971d3721d75ecb1b927b517c1a02"
-  integrity sha1-qAesvz1Rlx03IddeyxuSe1F8GgI=
+vue-template-compiler@^2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.6.7.tgz#7f6c14eacf3c912d28d33b029cde706d9756e00c"
+  integrity sha512-ZjxJLr6Lw2gj6aQGKwBWTxVNNd28/qggIdwvr5ushrUHUvqgbHD0xusOVP2yRxT4pX3wRIJ2LfxjgFT41dEtoQ==
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
@@ -8450,10 +8518,10 @@ vue-template-es2015-compiler@^1.8.2:
   resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.8.2.tgz#dd73e80ba58bb65dd7a8aa2aeef6089cf6116f2a"
   integrity sha1-3XPoC6WLtl3XqKoq7vYInPYRbyo=
 
-vue@^2.6.6:
-  version "2.6.6"
-  resolved "http://registry.npm.taobao.org/vue/download/vue-2.6.6.tgz#dde41e483c11c46a7bf523909f4f2f816ab60d25"
-  integrity sha1-3eQeSDwRxGp79SOQn08vgWq2DSU=
+vue@2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.7.tgz#254f188e7621d2d19ee28d0c0442c6d21b53ae2d"
+  integrity sha512-g7ADfQ82QU+j6F/bVDioVQf2ccIMYLuR4E8ev+RsDBlmwRkhGO3HhgF4PF9vpwjdPpxyb1zzLur2nQ2oIMAMEg==
 
 vuex@^3.0.1:
   version "3.1.0"
@@ -8586,6 +8654,11 @@ webpack-merge@^4.1.0, webpack-merge@^4.2.1:
   integrity sha512-4p8WQyS98bUJcCvFMbdGZyZmsKuWjWVnVHnAS3FFg0HDaRVrPbkivx2RYCre8UiemD67RsiFFLfn4JhLAin8Vw==
   dependencies:
     lodash "^4.17.5"
+
+webpack-node-externals@^1.6.0:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/webpack-node-externals/-/webpack-node-externals-1.7.2.tgz#6e1ee79ac67c070402ba700ef033a9b8d52ac4e3"
+  integrity sha512-ajerHZ+BJKeCLviLUUmnyd5B4RavLF76uv3cs6KNuO8W+HuQaEs0y0L7o40NQxdPy5w0pcv8Ew7yPUAQG0UdCg==
 
 webpack-sources@^1.0.1, webpack-sources@^1.1.0, webpack-sources@^1.3.0:
   version "1.3.0"

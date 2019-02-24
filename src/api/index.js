@@ -7,6 +7,7 @@ import router from '../router/index.js';
 axios.interceptors.request.use(
   (config) => {
     Toast.loading({
+      duration: 0,
       mask: true,
       message: '加载中...',
     });
@@ -18,9 +19,9 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-  // Toast.clear(),
   (response) => {
     console.log(response);
+    Toast.clear();
     if (response.data.msgCode === '50003') {
       Toast.fail('登录失效！');
       router.push({

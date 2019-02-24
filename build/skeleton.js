@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import Skeleton from './index.vue';
+import Skeleton from '../src/skeleton/skeleton';
 
 export default new Vue({
   components: {
     Skeleton,
   },
-  template: '<skeleton />',
+  render: h => h(Skeleton),
 });

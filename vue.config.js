@@ -4,6 +4,7 @@ const merge = require('webpack-merge');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
+const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -23,6 +24,9 @@ module.exports = {
         },
       },
     },
+    extract: true,
+    sourceMap: false,
+    modules: false,
   },
   devServer: {
     proxy: {
@@ -86,7 +90,16 @@ module.exports = {
           ],
         },
       }),
-      new BundleAnalyzerPlugin(),
+      // new BundleAnalyzerPlugin(),
+      new SkeletonWebpackPlugin({
+        webpackConfig: {
+          entry: {
+            app: path.join(__dirname, './build/skeleton.js'),
+          },
+        },
+        minimize: true,
+        quiet: true,
+      }),
     );
   },
 };
