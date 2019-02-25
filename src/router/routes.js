@@ -1,6 +1,7 @@
 import Index from '../layouts/index.vue';
 import Login from '../layouts/login.vue';
 import fieldRouter from '../page/field/router.js';
+import DeviceError from '../layouts/deviceError';
 
 export const loginRouter = {
   path: '/login',
@@ -17,6 +18,12 @@ export const IndexRouter = {
   path: '/index',
   name: 'Index',
   component: Index,
+};
+
+export const DeviceErrorRouter = {
+  path: '/deviceError',
+  name: 'DeviceError',
+  component: DeviceError,
 };
 
 export const PageRouter = [
@@ -67,5 +74,6 @@ export const routers = [
   loginRouter,
   BaseRouter,
   IndexRouter,
+  DeviceErrorRouter,
   ...PageRouter,
 ];

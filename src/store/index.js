@@ -17,6 +17,7 @@ export default new Vuex.Store({
     userAccess: [],
     menu: [],
     aliasCode: '',
+    deviceType: '',
   },
   mutations: {
     setUserInfo(state, info) {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
       state.userRole = [];
       state.userAccess = [];
       state.menu = [];
+    },
+    setDeviceType( state, type) {
+      state.deviceType = type;
     },
   },
   actions: {
