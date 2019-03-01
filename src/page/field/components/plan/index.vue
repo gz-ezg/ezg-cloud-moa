@@ -1,7 +1,7 @@
 <template>
     <van-row style="overflow-x: hidden">
         <van-row style="padding-bottom:2rem">
-            <van-nav-bar title="普通外勤打卡" left-arrow @click-left="$backTo()"/>
+            <van-nav-bar title="普通外勤打卡" left-arrow @click-left="$backTo(-2)"/>
                 <local-init></local-init>
                 <van-cell-group style="width:80%;margin:auto;margin-top:1rem">
                     <van-field

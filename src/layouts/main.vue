@@ -1,11 +1,19 @@
 <template>
   <div>
-    <router-view/>
+    <!-- <keep-alive> -->
+    <!-- 需要写一个函数控制是否缓存页面 -->
+    <!-- <router-view/> -->
+    <!-- </keep-alive> -->
     <!-- <van-button>点击</van-button> -->
     <!-- <div v-if="id"> -->
-      <company-list></company-list>
-      <customer-list></customer-list>
-      <type-list></type-list>
+
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <company-list></company-list>
+    <customer-list></customer-list>
+    <type-list></type-list>
     <!-- </div> -->
   </div>
 </template>

@@ -1,6 +1,7 @@
 import Index from '../layouts/index.vue';
 import Login from '../layouts/login.vue';
 import fieldRouter from '../page/field/router.js';
+import resumeRouter from '../page/resume/router.js';
 import DeviceError from '../layouts/deviceError';
 
 export const loginRouter = {
@@ -28,6 +29,7 @@ export const DeviceErrorRouter = {
 
 export const PageRouter = [
   fieldRouter,
+  resumeRouter,
   {
     path: '/field1',
     meta: {
@@ -36,7 +38,8 @@ export const PageRouter = [
     access: 6002,
     title: '外勤管理1',
   },
-  {path: '/field2',
+  {
+    path: '/field2',
     meta: {
       access: 60000,
     },
