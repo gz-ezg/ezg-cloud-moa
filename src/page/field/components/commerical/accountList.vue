@@ -20,52 +20,55 @@
 </template>
 
 <script>
+import { getAccountList } from '../../api/common/index';
+
 export default {
   data() {
     return {
-      searchaccountname: "",
+      searchaccountname: '',
       type_open: false,
-      select_type_id: "",
+      select_type_id: '',
       account_list: [
 
-      ]
-    }
+      ],
+    };
   },
   methods: {
-    search() {
-      const _self = this,
-      const url = 'api/legwork/apiCheckAccountMsg',
-      let formdata = new FormData(),
-      formdata.append('realname', _self.searchaccountname),
-
-      this.$http.post(url, formdata).then(function (res) {
-        if (res.data.msgCode == "40000") {
-          _self.account_list = res.data.data
-        } else {
-          _self.$toast.fail('系统错误！')
-        }
-      }).catch(function (err) {
-        _self.$toast.fail('网络错误！')
-      })
-
+    async search() {
+      // eslint-disable-next-line no-underscore-dangle
+      // const _self = this;
+      // const url = 'api/legwork/apiCheckAccountMsg';
+      const formdata = new FormData();
+      formdata.append('realname', this.searchaccountname);
+      const data = await getAccountList();
+      this.account_list = data;
+      // this.$http.post(url, formdata).then(function (res) {
+      //   if (res.data.msgCode == "40000") {
+      //     _self.account_list = res.data.data;
+      //   } else {
+      //     _self.$toast.fail('系统错误！');
+      //   }
+      // }).catch(function (err) {
+      //   _self.$toast.fail('网络错误！');
+      // })
     },
     //  点击全行选中
     choose(e) {
-      this.$bus.emit('update_account', e)
-      this.select_type_id = e.id
-      this.type_open = false
+      this.$bus.emit('update_account', e);
+      this.select_type_id = e.id;
+      this.type_open = false;
     },
 
   },
   created() {
-    let _self = this
+    let _self = this;
     this.$bus.on('open_account_list', (e) => {
-      _self.type_open = true
-      _self.search()
-    })
+      _self.type_open = true;
+      _self.search();
+    });
   },
   watch: {
-    'searchaccountname': 'search'
+    'searchaccountname': 'search',
   }
-}
+};
 </script>

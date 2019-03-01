@@ -1,6 +1,10 @@
 <template>
   <div>
-    <van-button to="marketIndex">点击</van-button>
+    <van-nav-bar title="普通外勤打卡"/>
+    <van-row class="field-skeleton-head"></van-row>
+    <van-row class="field-skeleton-body"></van-row>
+    <van-row class="field-skeleton-footer"></van-row>
+    <van-row class="field-skeleton-button"></van-row>
   </div>
 </template>
 
@@ -34,7 +38,7 @@ export default class Login extends Vue {
   ]);
 
   get roleArray() {
-    return this.$store.state.user.roleArray;
+    return this.$store.state.userRole;
   }
   // async login() {
   //   let config = {
@@ -59,7 +63,8 @@ export default class Login extends Vue {
 
   async get_role(id) {
     let roleArray = await loginApi.checkUserRoleByUserId(id);
-    this.$store.commit("set_roleArray", roleArray);
+    // console.log(roleArray);
+    this.$store.commit("setUserRole", roleArray);
     this.check_unfinish();
   }
   async check_unfinish() {
@@ -161,9 +166,46 @@ export default class Login extends Vue {
     }
   }
   created() {
-    this.loading();
+    // this.loading();
+    this.get_role(this.$store.state.userId);
   }
   mounted() {}
 }
 </script>
+
+<style scoped>
+.field-skeleton-head{
+  width: 80%;
+  height: 2.5rem;
+  margin: auto;
+  background-color: #eee;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+.field-skeleton-body{
+  width: 80%;
+  height: 4rem;
+  margin: auto;
+  background-color: #eee;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+.field-skeleton-footer{
+  width: 80%;
+  height: 2rem;
+  margin: auto;
+  background-color: #eee;
+  border-radius: 10px;
+  margin-top: 0.6rem;
+}
+.field-skeleton-button{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1.33333rem;
+  background-color: #eee;
+  border-radius: 5px;
+}
+</style>
 

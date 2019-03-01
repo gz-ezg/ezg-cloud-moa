@@ -70,5 +70,5 @@ export {
   getWxTicker,
   getRealAdd,
   getWorkOrderByCompanyId,
-  getAccountList
+  getAccountList,
 }

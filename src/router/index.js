@@ -14,6 +14,8 @@ const router = new Router({
   routes: routers,
 });
 
+const currentDeviceType = 'mobile';
+
 //  微信端判断
 function isWeixn() {
   const ua = navigator.userAgent.toLowerCase();
@@ -68,7 +70,7 @@ router.beforeEach((to, from, next) => {
   // } else {
   //   next();
   // }
-  if (store.state.deviceType === 'wx' || to.name === 'DeviceError') {
+  if (store.state.deviceType === currentDeviceType || to.name === 'DeviceError') {
     if (to.meta.access && !store.state.userAccess.includes(to.meta.access)) {
       Toast.fail('权限不足！');
       next(false);
