@@ -49,25 +49,6 @@ export default {
       }
     },
   },
-  //   // 获取当前用户角色
-  //   getRole(e) {
-  //     let _self = this
-  //     this.$http.get('/api/user/checkUserRoleByUserId?userId=' + e).then(function (res) {
-  //       if (res.data.msgCode == "40000") {
-  //         let temp = []
-  //         for (let i = 0; i < res.data.data.length; i++) {
-  //           temp.push(res.data.data[i].rolecode)
-  //         }
-  //         let str = JSON.stringify(temp)
-  //         localStorage.setItem('role', str)
-  //       } else {
-  //         _self.$toast.fail("系统错误！")
-  //       }
-  //     }).catch(function (err) {
-  //       _self.$toast.fail("网络异常！")
-  //     })
-  //   },
-
   //   autologin(code) {
   //     let _self = this
   //     let url = `api/legwork/apiLoginByWechatCode`
@@ -107,24 +88,6 @@ export default {
   //       this.autologin(params[1])
   //     }
   //   },
-  //   get_menu(e) {
-  //     let _self = this
-  //     let url = `api/menu/getInterfaceItemByUserId`
-  //     let config = {
-  //       params: {
-  //         userId: e
-  //       }
-  //     }
-
-  //     function success(res) {
-  //       // console.log(res.data.data.interfaces)
-  //       Cookies.set('access', (res.data.data.interfaces).join());
-  //       localStorage.setItem("access_array", JSON.stringify(res.data.data.interfaces))
-  //     }
-
-  //     this.$Get(url, config, success)
-  //   }
-  // },
   // created() {
   //   // this.autologin()
   //   this.loading()

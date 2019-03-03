@@ -2,7 +2,6 @@
 /* eslint-disable func-names */
 /**
  * title：压缩图片库
- * 回调函数机制还是比较好用，高深的promise待定
  * @param {图片对象} file
  * @param {压缩后图片置入} files_array
  */

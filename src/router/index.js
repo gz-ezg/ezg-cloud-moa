@@ -7,6 +7,7 @@ import Toast from 'vant/lib/toast';
 import 'vant/lib/toast/style';
 import { routers } from './routes';
 import store from '../store/index';
+import { getUserInfo } from '../api/login';
 
 Vue.use(Router);
 
@@ -14,6 +15,7 @@ const router = new Router({
   routes: routers,
 });
 
+//  允许使用的设备类型
 const currentDeviceType = 'mobile';
 
 //  微信端判断
@@ -41,7 +43,8 @@ function browserType() {
   return flag;
 }
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  //  缓存设备信息
   if (!store.state.deviceType) {
     let type;
     type = browserType() ? 'pc' : 'mobile';
@@ -49,27 +52,31 @@ router.beforeEach((to, from, next) => {
       type = isWeixn() ? 'wx' : 'mobile';
     }
     store.commit('setDeviceType', type);
-    console.log(store.state.deviceType);
   }
 
-  console.log(store.state);
+  //  进入登录页清空缓存
   if (to.name === 'Login') {
     store.commit('clearAll');
     Cookies.remove('userId');
     next();
   }
+
+  //  首页判断
+  //  待优化，后端如何返回还未决定
+  //  当cookie获取不到时，应该在路由拦截器中执行获取登录信息登录，如果无登录信息，则跳回login，有登录信息则设置cookie并跳过拦截器
   if (!Cookies.get('userId') && to.name !== 'Login') {
-    next({
-      name: 'Login',
-    });
+    try {
+      const data = await getUserInfo();
+      if (data.id) {
+        store.commit('setUserInfo', data);
+        Cookies.set('userId', '10000');
+      }
+    } catch (error) {
+      next('/login');
+    }
   }
-  // if (to.meta.access && !store.state.userAccess.includes(to.meta.access)) {
-  //   Toast.fail('权限不足！');
-  //   next(false);
-  // }
-  // } else {
-  //   next();
-  // }
+
+  //  权限及设备拦截器
   if (store.state.deviceType === currentDeviceType || to.name === 'DeviceError') {
     if (to.meta.access && !store.state.userAccess.includes(to.meta.access)) {
       Toast.fail('权限不足！');

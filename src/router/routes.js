@@ -1,8 +1,9 @@
 import Index from '../layouts/index.vue';
 import Login from '../layouts/login.vue';
+import DeviceError from '../layouts/deviceError';
+//  引入自定义业务路由
 import fieldRouter from '../page/field/router.js';
 import resumeRouter from '../page/resume/router.js';
-import DeviceError from '../layouts/deviceError';
 
 export const loginRouter = {
   path: '/login',
@@ -30,6 +31,7 @@ export const DeviceErrorRouter = {
 export const PageRouter = [
   fieldRouter,
   resumeRouter,
+  //  以下代码为测试使用
   {
     path: '/field1',
     meta: {

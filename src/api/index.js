@@ -6,6 +6,7 @@ import router from '../router/index.js';
 
 axios.interceptors.request.use(
   (config) => {
+    //  菊花转
     Toast.loading({
       duration: 0,
       mask: true,
@@ -22,6 +23,7 @@ axios.interceptors.response.use(
   (response) => {
     console.log(response);
     Toast.clear();
+    //  检测是否未登录
     if (response.data.msgCode === '50003') {
       Toast.fail('登录失效！');
       router.push({
@@ -35,6 +37,7 @@ axios.interceptors.response.use(
   },
 );
 
+//  默认异常处理方法
 function commonFail(err) {
   console.log('=== fail ===');
   console.log(err);
@@ -46,6 +49,7 @@ function commonFail(err) {
   // return false
 }
 
+//  通用get方法
 function AjaxGet(url, config, success, fail = commonFail) {
   const baseUrl = `api/${url}`;
   return new Promise((resolve, reject) => {
@@ -62,6 +66,7 @@ function AjaxGet(url, config, success, fail = commonFail) {
   });
 }
 
+//  通用post方法
 function AjaxPost(url, config, success, fail = commonFail) {
   const baseUrl = `api/${url}`;
   return new Promise((resolve, reject) => {
@@ -85,6 +90,7 @@ function AjaxPost(url, config, success, fail = commonFail) {
   });
 }
 
+//  通用获取数据字典方法
 function AjaxDic(params, fail = commonFail) {
   const config = {
     params: {

@@ -40,27 +40,7 @@ export default class Login extends Vue {
   get roleArray() {
     return this.$store.state.userRole;
   }
-  // async login() {
-  //   let config = {
-  //     username: this.username,
-  //     password: this.password
-  //   };
-
-  //   // console.log(this.$store)
-  //   try {
-  //     let { status, data } = await loginApi.userLogin(config);
-  //     if (status) {
-  //       Cookies.set("user", this.username);
-  //       Cookies.set("password", this.password);
-  //       this.$store.commit("set_realName", data.data.user.realname);
-  //       this.$store.commit("set_id", data.data.user.id);
-  //       this.get_role(data.data.user.id);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
+  //  后期可以迁移至store中，角色部分
   async get_role(id) {
     let roleArray = await loginApi.checkUserRoleByUserId(id);
     // console.log(roleArray);
@@ -135,38 +115,7 @@ export default class Login extends Vue {
       }
     });
   }
-  // async autologin(code) {
-  //   let formdata = new FormData();
-  //   formdata.append("agentId", "1000022");
-  //   formdata.append("code", code);
-  //   let { status, data } = await loginApi.loginByWechatCode(formdata);
-  //   if (status) {
-  //     Cookies.set("user", this.username);
-  //     Cookies.set("password", this.password);
-  //     this.$store.commit("set_realName", data.data.user.realname);
-  //     this.$store.commit("set_id", data.data.user.id);
-  //     this.get_role(data.data.user.id);
-  //   } else {
-  //     this.$toast.fail("免登陆失效，请登录！");
-  //   }
-  // }
-
-  loading() {
-    let _self = this;
-    let str = location.href;
-    if (str.indexOf("?")) {
-      let query = str.split("?");
-      let queryItem = str.split("&");
-      let params = queryItem[0].split("=");
-      if (params[1] == "null") {
-        this.$toast.fail("免登陆失效，请登录！");
-      } else {
-        // this.autologin(params[1]);
-      }
-    }
-  }
   created() {
-    // this.loading();
     this.get_role(this.$store.state.userId);
   }
   mounted() {}

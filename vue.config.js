@@ -28,6 +28,7 @@ module.exports = {
     sourceMap: false,
     modules: false,
   },
+  //  开发设置
   devServer: {
     proxy: {
       '/api': {
@@ -41,6 +42,7 @@ module.exports = {
     },
   },
   chainWebpack: (config) => {
+    //  删除预渲染，预加载等
     config.plugins.delete('preload');
     config.plugins.delete('prefetch');
     config.plugins.delete('SplitChunksPlugin');
@@ -61,17 +63,18 @@ module.exports = {
         });
         return options;
       });
-    config.plugin('copy')
-      .tap((args) => {
-        args[0].push({
-          from: resolve('./WW_verify_z793ZwW9R5YytI0x.txt'),
-          to: resolve('./dist'),
-        });
-        return args;
-      });
+    // config.plugin('copy')
+    //   .tap((args) => {
+    //     args[0].push({
+    //       from: resolve('./WW_verify_z793ZwW9R5YytI0x.txt'),
+    //       to: resolve('./dist'),
+    //     });
+    //     return args;
+    //   });
   },
   configureWebpack: (config) => {
     config.plugins.push(
+      //  自动打包动态链接库
       new AutoDllPlugin({
         inject: true, // will inject the DLL bundle to index.html
         debug: true,
@@ -90,7 +93,9 @@ module.exports = {
           ],
         },
       }),
+      //  分析打包详情
       // new BundleAnalyzerPlugin(),
+      //  骨架屏渲染
       new SkeletonWebpackPlugin({
         webpackConfig: {
           entry: {

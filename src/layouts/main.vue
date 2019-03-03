@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!-- <keep-alive> -->
-    <!-- 需要写一个函数控制是否缓存页面 -->
-    <!-- <router-view/> -->
-    <!-- </keep-alive> -->
-    <!-- <van-button>点击</van-button> -->
-    <!-- <div v-if="id"> -->
-
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
@@ -19,6 +12,7 @@
 </template>
 
 <script>
+//  以下三个页面可以改为通用，大部分业务需要用到
 import companyList from '../page/field/components/common/function-components/companyList.vue';
 import customerList from '../page/field/components/common/function-components/customerList.vue';
 import TypeList from '../page/field/components/common/function-components/typeList.vue';

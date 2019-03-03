@@ -32,7 +32,16 @@ function getInterfaceItemByUserId() {
 }
 
 function getUserInfo() {
-  const url = 'user/login/detail';
+  const url = 'user/findUserDetail';
+  return new Promise((resolve) => {
+    resolve(AjaxGet(url));
+  }).catch((err) => {
+    return err;
+  });
+}
+
+function logOut() {
+  const url = 'user/logOut';
   return new Promise((resolve) => {
     resolve(AjaxGet(url));
   }).catch((err) => {
@@ -45,4 +54,5 @@ export {
   checkUserRoleByUserId,
   getInterfaceItemByUserId,
   getUserInfo,
+  logOut,
 };
