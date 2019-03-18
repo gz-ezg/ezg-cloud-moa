@@ -13,14 +13,14 @@ function userLogin(config) {
   });
 }
 
-function checkUserRoleByUserId(id) {
-  const url = `user/checkUserRoleByUserId?userId=${id}`;
-  return new Promise((resolve) => {
-    resolve(AjaxGet(url));
-  }).catch((err) => {
-    return err;
-  });
-}
+// function checkUserRoleByUserId(id) {
+//   const url = `user/checkUserRoleByUserId?userId=${id}`;
+//   return new Promise((resolve) => {
+//     resolve(AjaxGet(url));
+//   }).catch((err) => {
+//     return err;
+//   });
+// }
 
 function getInterfaceItemByUserId() {
   const url = 'menu/getInterfaceItemByUserId';
@@ -32,7 +32,7 @@ function getInterfaceItemByUserId() {
 }
 
 function getUserInfo() {
-  const url = 'user/findUserDetail';
+  const url = 'user/login/detail';
   return new Promise((resolve) => {
     resolve(AjaxGet(url));
   }).catch((err) => {

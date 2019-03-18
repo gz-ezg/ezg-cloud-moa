@@ -39,6 +39,8 @@ export default {
       };
 
       const { status, data } = await userLogin(config);
+			console.log(status)
+			console.log(data)
       if (status) {
         this.$store.commit('setUserInfo', data.data.user);
         //  设置标志位表示已登录，用于首页跳转
@@ -47,6 +49,9 @@ export default {
           name: 'Index',
         });
       }
+			this.$router.push({
+			  name: 'Index',
+			});
     },
   },
   //   autologin(code) {

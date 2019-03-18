@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import * as loginApi from "./api/login/index.js";
+import { getUserInfo } from '@/api/login.js';
 import { Component, Prop, Emit, Vue, Watch } from "vue-property-decorator";
 
 @Component
@@ -42,22 +43,30 @@ export default class Login extends Vue {
   }
   //  后期可以迁移至store中，角色部分
   async get_role(id) {
-    let roleArray = await loginApi.checkUserRoleByUserId(id);
+		const {roles, user, departs} = await getUserInfo();
+		if (user.id) {
+		  this.$store.commit('setUserInfo', user);
+		  // Cookies.set('userId', '10000');
+		}
+		this.$store.commit("setUserRole", roles);
+    // let roleArray = await loginApi.checkUserRoleByUserId(id);
     // console.log(roleArray);
-    this.$store.commit("setUserRole", roleArray);
+    // this.$store.commit("setUserRole", roleArray);
     this.check_unfinish();
+		// console.log(this.$store)
   }
   async check_unfinish() {
+		// console.log(this.$store.state)
+		// console.log("123456")
     try {
-      let {
-        status,
-        data
-      } = await loginApi.checkLoginUserlegworkPunchcardStatus();
+			// this.to_index()
+			// console.log(this.roleArray)
+      let data = await loginApi.checkLoginUserlegworkPunchcardStatus();
       console.log(data);
-      if (status) {
-        if (data.data == "unfinished") {
+      // if (status) {
+        if (data == "unfinished") {
           this.to_leave();
-        } else if (data.data == "affirm") {
+        } else if (data == "affirm") {
           setTimeout(() => {
             this.$router.push({
               name: "accountComfirm"
@@ -66,13 +75,15 @@ export default class Login extends Vue {
         } else {
           this.to_index();
         }
-      }
+      // }
     } catch (error) {
       console.log(error);
     }
   }
   to_index() {
     this.roleArray.every((item, index) => {
+			// console
+			// console.log(this.roleMapIndex.get(item.rolecode))
       if (this.roleMapIndex.get(item.rolecode)) {
         setTimeout(() => {
           this.$router.push({

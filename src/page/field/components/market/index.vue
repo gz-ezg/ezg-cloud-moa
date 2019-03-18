@@ -13,6 +13,14 @@
                         @click.native="open_company_select(company)"
                     />
                     <van-field
+                        :value="company.customerName"
+                        required
+                        clearable
+                        readonly
+                        placeholder="客户名称"
+                        @click.native="open_customer_select(customer)"
+                    />
+                    <van-field
                         :value="fieldType.typename"
                         required
                         clearable
@@ -27,7 +35,7 @@
                         <van-field
                             v-model="memo"
                             type="textarea"
-                            placeholder="打卡说明（选填）"
+                            placeholder="打卡说明（必填）"
                             rows="3"
                             autosize
                         />
@@ -64,6 +72,10 @@ export default class marketIndex extends Vue {
     get company(){
         return this.$store.state.fieldDetail.company
     }
+    get customer(){
+      return this.$store.state.fieldDetail.customer
+    }
+	
     get fieldType(){
         return this.$store.state.fieldDetail.fieldType
     }
@@ -73,6 +85,10 @@ export default class marketIndex extends Vue {
     open_company_select(id){
         this.$store.commit("fieldDetail/change_company_modal_status")
     }
+	
+	open_customer_select(id){
+		this.$store.commit("fieldDetail/change_customer_modal_status")
+	}
 
     open_fieldType_select(){
         this.$store.commit("fieldDetail/change_fieldType_modal_status")
@@ -118,28 +134,33 @@ export default class marketIndex extends Vue {
       let _self = this
       this.buttonLoading = true
       let formdata = new FormData()
-      formdata.append('companyid', _self.company.companyid)
-      formdata.append('address1', this.$store.state.fieldDetail.addr)
-      formdata.append('customerid', _self.company.customerid)
-      formdata.append('fieldtype', _self.fieldType.typecode)
-      formdata.append('clockshows',_self.memo)
+      formdata.append('companyId', _self.company.companyid)
+      formdata.append('beginAddress', this.$store.state.fieldDetail.addr)
+      formdata.append('customerId', _self.company.customerid)
+      formdata.append('synergyFlag', _self.fieldType.typecode)
+      formdata.append('beginMemo',_self.memo)
       for(let i = 0;i<_self.uploadImg.length;i++){
-        formdata.append('file',_self.uploadImg[i],"file_" + new Date() + ".jpg")
+        formdata.append('files',_self.uploadImg[i],"file_" + new Date() + ".jpg")
       }
-      let { status, data} = await clockApi.saveLegworkVisitMsg(formdata)
-      if(status){
-        console.log(data)
-        _self.$toast.loading({
-          message: "正在跳转至离开打卡界面...",
-          duration: 1000
-        })
-        this.$store.commit("fieldDetail/remove_all")
-        setTimeout(()=>{
-          this.$router.push({
-            name: "marketLeave"
+      try {
+        let { status, data } = await clockApi.saveLegworkVisitMsg(formdata)
+        if(status){
+          console.log(data)
+          _self.$toast.loading({
+            message: "正在跳转至离开打卡界面...",
+            duration: 1000
           })
-        }, 1000)
+          this.$store.commit("fieldDetail/remove_all")
+          setTimeout(()=>{
+            this.$router.push({
+              name: "marketLeave"
+            })
+          }, 1000)
+        }
+      } catch (error) {
+        console.log(error)
       }
+      this.buttonLoading = false
     }
 }
 </script>

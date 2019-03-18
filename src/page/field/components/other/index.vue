@@ -9,7 +9,7 @@
                         required
                         clearable
                         readonly
-                        placeholder="请选择服务企业"
+                        placeholder="请填写公司"
                         @click.native="open_company_select(company)"
                     />
                     <van-field
@@ -17,7 +17,7 @@
                         required
                         clearable
                         readonly
-                        placeholder="请选择外勤类型"
+                        placeholder="客户名或手机"
                         @click.native="open_fieldType_select"
                     />
                 </van-cell-group>

@@ -7,13 +7,13 @@
         @cancel="close"
         >
         <form action="/">
-            <van-search placeholder="请输入公司名称搜索" v-model="searchCompanyname" @click="get_data"/>
+            <van-search placeholder="请输入客户名称或电话" v-model="searchParams" @click="get_data"/>
         </form>
-        <van-radio-group :value="selectCompany.companyid">
+        <van-radio-group :value="selectCustomer.ID">
             <van-cell-group>
-                <van-cell v-for="item in companyList" :key="item.companyid" clickable @click="choose(item)">
-                    <van-col span="22"><div>{{item.name}}</div></van-col>
-                    <van-col span="2"><van-radio :name="item.companyid" /></van-col>
+                <van-cell v-for="item in customerList" :key="item.id" clickable @click="choose(item)">
+                    <van-col span="22"><div>{{item.NAME}}</div></van-col>
+                    <van-col span="2"><van-radio :name="item.ID" /></van-col>
                 </van-cell>
             </van-cell-group>
         </van-radio-group>
@@ -26,35 +26,40 @@ import * as commonApi from '../../../api/common/index.js'
 
 @Component
 export default class customerList extends Vue{
-    searchCompanyname:String = ""
-    companyList:Object[] = []
+    searchParams = ""
+    customerList:Object[] = []
 
-    get selectCompany(){
-        return this.$store.state.fieldDetail.company
+    get selectCustomer(){
+		// console.log(this.$store.state.fieldDetail.company)
+        return this.$store.state.fieldDetail.customer
     }
 
     get OpenCustomer(){
         return this.$store.state.fieldDetail.customerModalStatus
     }
 
-    choose(company){
-        this.$store.commit("fieldDetail/set_company", company)
+    choose(customer){
+        this.$store.commit("fieldDetail/set_customer", customer)
         this.$store.commit("fieldDetail/change_customer_modal_status")
+		this.$store.commit("fieldDetail/change_company_modal_status")
+		this.$store.commit("fieldDetail/change_customer_ID",customer.ID)
     }
 
     close(){
         this.$store.commit("fieldDetail/change_customer_modal_status")
     }
 
-    @Watch('searchCompanyname', {immediate: true})
+    @Watch('searchParams', {immediate: true})
     async get_data(){
         let config = {
             params: {
-                companyname: this.searchCompanyname
+                telOrName: this.searchParams,
+				page: 1,
+				pageSize: 5,
             }
         }
-        let data = await commonApi.fieldCompanyList(config)
-        this.companyList = data
+        let {rows} = await commonApi.fieldCustomerList(config)
+        this.customerList = rows
     }
 }
 </script>

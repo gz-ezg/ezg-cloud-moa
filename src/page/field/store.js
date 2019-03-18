@@ -8,8 +8,10 @@ const fieldDetail = {
     fieldTypeList: [],
     fieldDetail: {},
     company: {},
+    customer: {},
     clockTime: '',
     finalTime: '',
+    customerID: '',
     companyModalStatus: false,
     customerModalStatus: false,
     fieldTypeModalStatus: false,
@@ -47,6 +49,7 @@ const fieldDetail = {
       state.fieldType = {};
       state.fieldTypeList = [];
       state.company = {};
+      state.customer = {};
     },
     set_fieldTypeList(state, List) {
       state.fieldTypeList = List;
@@ -60,11 +63,24 @@ const fieldDetail = {
     set_company(state, company) {
       state.company = company;
     },
+    set_customer(state, customer) {
+      state.customer = customer;
+    },
     update_clockTime(state, time) {
       state.clockTime = time;
     },
     set_finalTime(state, finalTime) {
       state.finalTime = finalTime;
+    },
+    change_customer_ID(state, customerID) {
+      state.customerID = customerID;
+      state.company = {};
+    },
+    // remove_customer_ID(){
+    //   state.customerID = ''
+    // },
+    remove_customer_ID(state) {
+      state.customerID = '';
     },
   },
   actions: {

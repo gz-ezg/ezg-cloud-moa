@@ -11,7 +11,8 @@ import {
  * @param {*} fail
  */
 function saveLegworkVisitMsg(config) {
-  let url = 'zuul/legwork/apiSaveLegworkVisitMsg'
+  // let url = 'zuul/legwork/apiSaveLegworkVisitMsg'
+	let url = 'user/legwork/begin/customer/maintain'
   return new Promise((resolve, reject) => {
     resolve(AjaxPost(url, config))
   }).catch((err) => {
@@ -29,7 +30,8 @@ function saveLegworkLeaveVisitMsg(config) {
 }
 
 function queryUnfinishedPunchCard() {
-  let url = `legwork/apiQueryUnfinishedPunchCard`
+  // let url = `legwork/apiQueryUnfinishedPunchCard`
+	let url = `user/legwork/check/status`
   return new Promise((resolve, reject) => {
     resolve(AjaxPost(url))
   }).catch((err) => {

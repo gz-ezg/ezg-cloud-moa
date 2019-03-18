@@ -13,6 +13,8 @@ Vue.use(Vant);
 Vue.use(Toast);
 
 // eslint-disable-next-line func-names
+Vue.config.devtools = true;
+
 Vue.prototype.$backTo = function (reback = -1) {
   this.$router.go(reback);
 };

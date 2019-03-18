@@ -28,6 +28,7 @@ function userLogin(config) {
  */
 function checkUserRoleByUserId(id) {
   let url = 'user/checkUserRoleByUserId?userId=' + id
+	//let url = 'user/login/detail'
   return new Promise((resolve, reject) => {
     resolve(AjaxGet(url))
   }).catch((err) => {
@@ -42,9 +43,10 @@ function checkUserRoleByUserId(id) {
  * @param {*} fail 
  */
 function checkLoginUserlegworkPunchcardStatus() {
-  let url = `legwork/apiCheckLoginUserlegworkPunchcardStatus`
+  // let url = `legwork/apiCheckLoginUserlegworkPunchcardStatus`
+	let url = `user/legwork/check/status`
   return new Promise((resolve, reject) => {
-    resolve(AjaxPost(url))
+    resolve(AjaxGet(url))
   }).catch((err) => {
     return err
   })

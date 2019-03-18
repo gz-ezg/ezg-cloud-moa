@@ -11,7 +11,18 @@ import {
  * @param {*} fail
  */
 function fieldCompanyList(config) {
-  let url = 'legwork/apiQueryCompanyOrCustomerMsg'
+  // let url = 'legwork/apiQueryCompanyOrCustomerMsg'
+	let url = 'customer/company/list'
+  return new Promise((resolve, reject) => {
+    resolve(AjaxGet(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
+function fieldCustomerList(config) {
+  // let url = 'legwork/apiQueryCompanyOrCustomerMsg'
+	let url = 'customer/list'
   return new Promise((resolve, reject) => {
     resolve(AjaxGet(url, config))
   }).catch((err) => {
@@ -66,6 +77,7 @@ function getAccountList(config) {
 
 export {
   fieldCompanyList,
+	fieldCustomerList,
   getDictionary,
   getWxTicker,
   getRealAdd,

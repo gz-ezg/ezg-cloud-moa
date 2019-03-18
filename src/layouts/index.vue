@@ -30,7 +30,7 @@ import { logOut } from '@api/login';
 export default {
   data() {
     return {
-      // menuList: [],
+      menuList: [{title:"外勤打卡",path:"/field"}],
     };
   },
   methods: {
@@ -44,14 +44,14 @@ export default {
     },
   },
   computed: {
-    menuList() {
-      return this.$store.state.menu;
-    },
+    // menuList() {
+      // return this.$store.state.menu;
+    // },
   },
   created() {
-    if (this.$store.state.userAccess.length === 0 || this.$store.state.menu.length === 0) {
-      this.$store.dispatch('updateAccess');
-    }
+//     if (this.$store.state.userAccess.length === 0 || this.$store.state.menu.length === 0) {
+//       this.$store.dispatch('updateAccess');
+//     }
     // if (this.$store.state.menu.length === 0) {
     //   this.$store.dispatch('updateMenu');
     //   console.log('需要渲染菜单！');

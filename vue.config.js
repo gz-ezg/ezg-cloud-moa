@@ -32,7 +32,9 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://192.168.0.220:9000',
+        // target: 'http://192.168.0.220:9000',
+        target: 'http://192.168.0.224:9000',
+        // target: 'http://cloud.zgcfo.com/api/',
         pathRewrite: {
           '^/api': '',
         },
