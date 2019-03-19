@@ -30,7 +30,10 @@ import * as commonApi from '../../../api/common/index.js'
 @Component
 export default class companyList extends Vue{
     searchCompanyname:String = ""
-    companyList:Array<Object> = []
+    // companyList:Array<Object> = []
+	get companyList(){
+		return this.$store.state.fieldDetail.companyList
+	}
 
     get selectCompany(){
         return this.$store.state.fieldDetail.company
@@ -41,9 +44,16 @@ export default class companyList extends Vue{
     }
 
     choose(company){
-		console.log(company)
-        this.$store.commit("fieldDetail/set_company", company)
         this.$store.commit("fieldDetail/change_company_modal_status")
+		if(company.companyname != "空"){
+			this.$store.commit("fieldDetail/set_company", company)
+			this.$store.commit("fieldDetail/set_company_ID", company.id)
+			this.$store.commit("fieldDetail/set_customer_ID", company.customerId)
+		}else{
+			let customer = this.$store.state.fieldDetail.customer
+			// console.log(customer)
+			this.$store.commit("fieldDetail/set_company",{companyname:'空',id:'',customerName:customer.NAME,id:customer.ID})
+		}
     }
 
     close(){
@@ -61,13 +71,15 @@ export default class companyList extends Vue{
         let config = {
             params: {
 				page: 1,
-				pageSize: 5,
+				pageSize: 4,
                 companyname: this.searchCompanyname,
 				customerId:this.customerId
             }
         }
         let {rows, total } = await commonApi.fieldCompanyList(config)
-        this.companyList = rows
+//      this.companyList = rows
+		this.$store.commit("fieldDetail/set_company_list",rows)
+		this.companyList.push({companyname:'空',id:''})
     }
 
     

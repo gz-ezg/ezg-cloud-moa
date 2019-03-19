@@ -27,10 +27,13 @@ import * as commonApi from '../../../api/common/index.js'
 @Component
 export default class customerList extends Vue{
     searchParams = ""
-    customerList:Object[] = []
+    // customerList:Object[] = []
+	get customerList(){
+		 return this.$store.state.fieldDetail.customerList
+	}
 
     get selectCustomer(){
-		// console.log(this.$store.state.fieldDetail.company)
+		// console.log(this.$store.state.fieldDetail.customer)
         return this.$store.state.fieldDetail.customer
     }
 
@@ -39,10 +42,16 @@ export default class customerList extends Vue{
     }
 
     choose(customer){
-        this.$store.commit("fieldDetail/set_customer", customer)
-        this.$store.commit("fieldDetail/change_customer_modal_status")
-		this.$store.commit("fieldDetail/change_company_modal_status")
-		this.$store.commit("fieldDetail/change_customer_ID",customer.ID)
+		this.$store.commit("fieldDetail/set_customer", customer)
+		this.$store.commit("fieldDetail/change_customer_modal_status")
+		
+        if(customer.NAME != "空"){
+			this.$store.commit("fieldDetail/change_company_modal_status")
+			this.$store.commit("fieldDetail/change_customer_ID",customer.ID)
+		}else{
+			console.log(customer)
+			this.$store.commit("fieldDetail/set_company",{companyname:'空',id:'',customerName:'空',id:''})
+		}
     }
 
     close(){
@@ -55,11 +64,13 @@ export default class customerList extends Vue{
             params: {
                 telOrName: this.searchParams,
 				page: 1,
-				pageSize: 5,
+				pageSize: 4,
             }
         }
         let {rows} = await commonApi.fieldCustomerList(config)
-        this.customerList = rows
+        // this.customerList = rows
+		this.$store.commit("fieldDetail/set_customer_list",rows)
+		this.customerList.push({NAME:'空',ID:''})
     }
 }
 </script>

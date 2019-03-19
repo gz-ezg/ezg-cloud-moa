@@ -20,14 +20,23 @@
                         placeholder="客户名称"
                         @click.native="open_customer_select(customer)"
                     />
-                    <van-field
+                    <!-- <van-field
                         :value="fieldType.typename"
                         required
                         clearable
                         readonly
                         placeholder="请选择外勤类型"
                         @click.native="open_fieldType_select"
-                    />
+                    /> -->
+					<van-button 
+						type="default" 
+						v-for="(item,index) of fieldTypeList"
+						@click="choose_radio(index,item)"
+						:class="index===current?'buttonCurrent':null"
+						:key="index"
+					>
+						{{item.name}}
+					</van-button>
                 </van-cell-group>
                 <upload-img></upload-img>
                 <div style="width:80%;margin:auto;margin-top:0.6rem">
@@ -68,7 +77,10 @@ import { Toast } from 'vant';
 export default class marketIndex extends Vue {
     buttonLoading: boolean = false
     memo = ""
-
+	current = 0
+	get fieldTypeList(){
+	    return this.$store.state.fieldDetail.fieldTypeList
+	}
     get company(){
         return this.$store.state.fieldDetail.company
     }
@@ -90,26 +102,33 @@ export default class marketIndex extends Vue {
 		this.$store.commit("fieldDetail/change_customer_modal_status")
 	}
 
-    open_fieldType_select(){
-        this.$store.commit("fieldDetail/change_fieldType_modal_status")
-    }
+//     open_fieldType_select(){
+//         this.$store.commit("fieldDetail/change_fieldType_modal_status")
+//     }
+	
+	choose_radio(index,item){
+		this.current = index
+		this.$store.commit("fieldDetail/set_fieldType", item.type)
 
-    async created(){
-        let config = {
-            params: {
-                groupCodes:"market_field_type"
-            }
-        }
-        let { market_field_type } = await commonApi.getDictionary(config)
-        this.$store.commit("fieldDetail/set_fieldTypeList", market_field_type)
-    }
+		//console.log(this.$store.state.fieldDetail.fieldType.typecode)
+	}
+
+//     async created(){
+//         let config = {
+//             params: {
+//                 groupCodes:"market_field_type"
+//             }
+//         }
+//         let { market_field_type } = await commonApi.getDictionary(config)
+//         this.$store.commit("fieldDetail/set_fieldTypeList", market_field_type)
+//     }
 
     data_check(){
       let _self = this
       //  表单验证
       var descriptor = {
         // company: { type: "number", required: true, message: "请选择服务企业！"},
-        type_typecode: { type: "string", required: true, message: "请选择外勤类型！"},
+        // type_typecode: { type: "string", required: true, message: "请选择外勤类型！"},
         img_array: { type: "array", required:true, message: "请选择照片！"},
         // addr: {type: "string", required:true, message: "获取定位失效，请重开窗口！"}
       }
@@ -117,7 +136,7 @@ export default class marketIndex extends Vue {
       validator.validate(
         {
         //   company: _self.company.companyid,
-          type_typecode: _self.fieldType.typecode,
+          // type_typecode: _self.fieldType.typecode,
           img_array: _self.$store.state.fieldDetail.showImg,
           // addr: _self.$store.state.filedDetail.addr,
         }, (errors, fields) => {
@@ -134,18 +153,23 @@ export default class marketIndex extends Vue {
       let _self = this
       this.buttonLoading = true
       let formdata = new FormData()
-      formdata.append('companyId', _self.company.companyid)
+      formdata.append('companyId', this.$store.state.fieldDetail.companyID)
       formdata.append('beginAddress', this.$store.state.fieldDetail.addr)
-      formdata.append('customerId', _self.company.customerid)
-      formdata.append('synergyFlag', _self.fieldType.typecode)
+      formdata.append('customerId', this.$store.state.fieldDetail.customerID)
+      formdata.append('synergyFlag', this.$store.state.fieldDetail.fieldType)
       formdata.append('beginMemo',_self.memo)
+	  
+	  
+	  
+	  
       for(let i = 0;i<_self.uploadImg.length;i++){
         formdata.append('files',_self.uploadImg[i],"file_" + new Date() + ".jpg")
       }
       try {
         let { status, data } = await clockApi.saveLegworkVisitMsg(formdata)
+		console.log(status)
         if(status){
-          console.log(data)
+          
           _self.$toast.loading({
             message: "正在跳转至离开打卡界面...",
             duration: 1000
@@ -171,5 +195,8 @@ export default class marketIndex extends Vue {
 }
 #address .van-cell__value--alone{
   text-align: center
+}
+.buttonCurrent{
+	background: yellowgreen;
 }
 </style>

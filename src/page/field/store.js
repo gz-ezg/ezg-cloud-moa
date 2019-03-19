@@ -5,13 +5,17 @@ const fieldDetail = {
     showImg: [],
     uploadImg: [],
     fieldType: {},
-    fieldTypeList: [],
+    fieldTypeList: [{name:"非陪同外勤",type:"no"},{name:"陪同外勤",type:"yes"}],
+		typecode:"",
     fieldDetail: {},
     company: {},
+		companyList:[],
     customer: {},
+		customerList:[],
     clockTime: '',
     finalTime: '',
     customerID: '',
+		companyID:'',
     companyModalStatus: false,
     customerModalStatus: false,
     fieldTypeModalStatus: false,
@@ -27,7 +31,7 @@ const fieldDetail = {
       state.fieldTypeModalStatus = !state.fieldTypeModalStatus;
     },
     set_accout_status(state, item) {
-      state.fieldType = item;
+      state.fieldType = item; 
     },
     update_addr(state, addr) {
       state.addr = addr;
@@ -76,12 +80,27 @@ const fieldDetail = {
       state.customerID = customerID;
       state.company = {};
     },
-    // remove_customer_ID(){
-    //   state.customerID = ''
-    // },
     remove_customer_ID(state) {
       state.customerID = '';
     },
+		set_company_ID(state,companyID){
+			state.companyID = companyID
+		},
+		set_customer_ID(state,customerID){
+			state.customerID = customerID
+		},
+		set_company_list(state,companyList){
+			state.companyList = companyList
+		},
+		remove_company_list(state){
+			state.companyList = []
+		},
+		set_customer_list(state,customerList){
+			state.customerList = customerList
+		},
+		remove_customer_list(state){
+			state.customerList = []
+		}
   },
   actions: {
 
