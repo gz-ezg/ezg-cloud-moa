@@ -5,7 +5,7 @@ const fieldDetail = {
     showImg: [],
     uploadImg: [],
     fieldType: {},
-    fieldTypeList: [{name:"非陪同外勤",type:"no"},{name:"陪同外勤",type:"yes"}],
+    fieldTypeList: [],
 		typecode:"",
     fieldDetail: {},
     company: {},
@@ -56,6 +56,8 @@ const fieldDetail = {
       state.customer = {};
     },
     set_fieldTypeList(state, List) {
+			console.log("List")
+			console.log(List)
       state.fieldTypeList = List;
     },
     set_fieldType(state, fieldType) {

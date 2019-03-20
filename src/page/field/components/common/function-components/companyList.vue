@@ -15,7 +15,7 @@
                     <van-col span="22"><div>{{item.companyname}}</div></van-col>
                     <van-col span="2"><van-radio :name="item.id" /></van-col>
                 </van-cell>
-            </van-cell-group>
+            </van-cell-group> 
         </van-radio-group>
     </van-dialog>
 </template>
@@ -30,10 +30,10 @@ import * as commonApi from '../../../api/common/index.js'
 @Component
 export default class companyList extends Vue{
     searchCompanyname:String = ""
-    // companyList:Array<Object> = []
-	get companyList(){
-		return this.$store.state.fieldDetail.companyList
-	}
+    companyList:Array<Object> = []
+// 	get companyList(){
+// 		return this.$store.state.fieldDetail.companyList
+// 	}
 
     get selectCompany(){
         return this.$store.state.fieldDetail.company
@@ -78,7 +78,10 @@ export default class companyList extends Vue{
         }
         let {rows, total } = await commonApi.fieldCompanyList(config)
 //      this.companyList = rows
-		this.$store.commit("fieldDetail/set_company_list",rows)
+// 		this.$store.commit("fieldDetail/set_company_list",rows)
+// 		this.companyList.push({companyname:'空',id:''})
+		
+		this.companyList = rows
 		this.companyList.push({companyname:'空',id:''})
     }
 

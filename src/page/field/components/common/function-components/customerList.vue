@@ -14,7 +14,7 @@
                 <van-cell v-for="item in customerList" :key="item.id" clickable @click="choose(item)">
                     <van-col span="22"><div>{{item.NAME}}</div></van-col>
                     <van-col span="2"><van-radio :name="item.ID" /></van-col>
-                </van-cell>
+                </van-cell> 
             </van-cell-group>
         </van-radio-group>
     </van-dialog>
@@ -27,10 +27,10 @@ import * as commonApi from '../../../api/common/index.js'
 @Component
 export default class customerList extends Vue{
     searchParams = ""
-    // customerList:Object[] = []
-	get customerList(){
-		 return this.$store.state.fieldDetail.customerList
-	}
+    customerList:Object[] = []
+// 	get customerList(){
+// 		 return this.$store.state.fieldDetail.customerList
+// 	}
 
     get selectCustomer(){
 		// console.log(this.$store.state.fieldDetail.customer)
@@ -68,8 +68,8 @@ export default class customerList extends Vue{
             }
         }
         let {rows} = await commonApi.fieldCustomerList(config)
-        // this.customerList = rows
-		this.$store.commit("fieldDetail/set_customer_list",rows)
+        this.customerList = rows
+		// this.$store.commit("fieldDetail/set_customer_list",rows)
 		this.customerList.push({NAME:'空',ID:''})
     }
 }

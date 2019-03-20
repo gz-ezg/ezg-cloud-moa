@@ -78,9 +78,8 @@ export default class marketIndex extends Vue {
     buttonLoading: boolean = false
     memo = ""
 	current = 0
-	get fieldTypeList(){
-	    return this.$store.state.fieldDetail.fieldTypeList
-	}
+	fieldTypeList = [{name:"非陪同外勤",type:"no"},{name:"陪同外勤",type:"yes"}]
+	
     get company(){
         return this.$store.state.fieldDetail.company
     }
@@ -166,7 +165,7 @@ export default class marketIndex extends Vue {
         formdata.append('files',_self.uploadImg[i],"file_" + new Date() + ".jpg")
       }
       try {
-        let { status, data } = await clockApi.saveLegworkVisitMsg(formdata)
+        let { status, data } = await clockApi.saveLegworkVisitMsg(formdata) 
 		console.log(status)
         if(status){
           

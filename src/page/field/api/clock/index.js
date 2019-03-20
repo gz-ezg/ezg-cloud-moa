@@ -21,7 +21,8 @@ function saveLegworkVisitMsg(config) {
 }
 
 function saveLegworkLeaveVisitMsg(config) {
-  let url = 'zuul/legwork/apiSaveLegworkLeaveVisitMsg'
+  // let url = 'zuul/legwork/apiSaveLegworkLeaveVisitMsg'
+	let url = 'user/legwork/end/customer/maintain'
   return new Promise((resolve, reject) => {
     resolve(AjaxPost(url, config))
   }).catch((err) => {
@@ -31,9 +32,9 @@ function saveLegworkLeaveVisitMsg(config) {
 
 function queryUnfinishedPunchCard() {
   // let url = `legwork/apiQueryUnfinishedPunchCard`
-	let url = `user/legwork/check/status`
+	let url = `user/legwork/check/status` 
   return new Promise((resolve, reject) => {
-    resolve(AjaxPost(url))
+    resolve(AjaxGet(url))
   }).catch((err) => {
     return err
   })

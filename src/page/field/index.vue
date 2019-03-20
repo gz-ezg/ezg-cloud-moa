@@ -62,19 +62,29 @@ export default class Login extends Vue {
 			// this.to_index()
 			// console.log(this.roleArray)
       let data = await loginApi.checkLoginUserlegworkPunchcardStatus();
-      console.log(data);
+// 				console.log("是否有未完成的打卡")
+// 				console.log(data)
       // if (status) {
-        if (data == "unfinished") {
-          this.to_leave();
-        } else if (data == "affirm") {
-          setTimeout(() => {
-            this.$router.push({
-              name: "accountComfirm"
-            });
-          }, 500);
-        } else {
-          this.to_index();
-        }
+				
+//         if (data == "unfinished") {
+//           this.to_leave();
+//         } else if (data == "affirm") {
+//           setTimeout(() => {
+//             this.$router.push({
+//               name: "accountComfirm"
+//             });
+//           }, 500);
+//         } else {
+//           this.to_index();
+//         }
+				
+				if(data == null){
+					console.log("没有未完成的打卡")
+					this.to_index();
+				}else{
+					console.log("有未完成的打卡")
+					this.to_leave();
+				}
       // }
     } catch (error) {
       console.log(error);
