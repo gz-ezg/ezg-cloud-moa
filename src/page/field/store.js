@@ -19,6 +19,10 @@ const fieldDetail = {
     companyModalStatus: false,
     customerModalStatus: false,
     fieldTypeModalStatus: false,
+		workOrderCompany:'',
+		workOrderCompanyList:[],
+		workOrderCompanyModalStatus:false,
+		workOrderList:[]
   },
   mutations: {
     change_company_modal_status(state) {
@@ -30,6 +34,9 @@ const fieldDetail = {
     change_fieldType_modal_status(state) {
       state.fieldTypeModalStatus = !state.fieldTypeModalStatus;
     },
+		change_workOrder_company_modal_status(state){
+			state.workOrderCompanyModalStatus = !state.workOrderCompanyModalStatus
+		},
     set_accout_status(state, item) {
       state.fieldType = item; 
     },
@@ -54,10 +61,9 @@ const fieldDetail = {
       state.fieldTypeList = [];
       state.company = {};
       state.customer = {};
+			state.workOrderCompany = {};
     },
     set_fieldTypeList(state, List) {
-			console.log("List")
-			console.log(List)
       state.fieldTypeList = List;
     },
     set_fieldType(state, fieldType) {
@@ -72,6 +78,9 @@ const fieldDetail = {
     set_customer(state, customer) {
       state.customer = customer;
     },
+		set_workOrder_company(state,workOrderCompany){
+			state.workOrderCompany = workOrderCompany
+		},
     update_clockTime(state, time) {
       state.clockTime = time;
     },
@@ -102,6 +111,14 @@ const fieldDetail = {
 		},
 		remove_customer_list(state){
 			state.customerList = []
+		},
+		add_workOrderList(state,item){
+			if(state.workOrderList.indexOf(item) == -1){
+				state.workOrderList.push(item)
+			}
+		},
+		remove_oreder_work(state,i){
+			state.workOrderList.splice(i,1)
 		}
   },
   actions: {

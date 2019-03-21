@@ -170,10 +170,10 @@ export default class marketLeave extends Vue {
 			    groupCodes:"legwork_customer_maintain_type,market_status"
 			}
 		}
-// 		外勤类型:button_status
+// 		外勤类型:legwork_customer_maintain_type
 // 		外勤结果:market_status
-		let { button_status , market_status } = await commonApi.getDictionary(config)
-		this.buttonList = button_status.legwork_customer_maintain_type
+		let { legwork_customer_maintain_type , market_status } = await commonApi.getDictionary(config)
+		this.buttonList = legwork_customer_maintain_type.legwork_customer_maintain_type
 		this.$store.commit("fieldDetail/set_fieldTypeList", market_status)
   }
 }

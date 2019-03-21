@@ -27,7 +27,12 @@ export default {
     },
     methods: {
         close() {
-            window.close()
+            // window.close()
+			setTimeout(()=>{
+			  this.$router.push({
+			    path: "/"
+			  })
+			}, 500)
         },
     },
     computed: {

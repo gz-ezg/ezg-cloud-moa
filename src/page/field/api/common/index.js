@@ -20,6 +20,16 @@ function fieldCompanyList(config) {
   })
 }
 
+function fieldWorkOrderCompanyList(config) {
+  // let url = 'legwork/apiQueryCompanyOrCustomerMsg'
+	let url = 'order/workorder/legwork/list'
+  return new Promise((resolve, reject) => {
+    resolve(AjaxGet(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
 function fieldCustomerList(config) {
   // let url = 'legwork/apiQueryCompanyOrCustomerMsg'
 	let url = 'customer/list'
@@ -31,6 +41,15 @@ function fieldCustomerList(config) {
 }
 
 function getDictionary(config) {
+  let url = `system/tsType/queryTsTypeByGroupCodes`
+  return new Promise((resolve, reject) => {
+    resolve(AjaxGet(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
+function getFieldTypeList(config) {
   let url = `system/tsType/queryTsTypeByGroupCodes`
   return new Promise((resolve, reject) => {
     resolve(AjaxGet(url, config))
@@ -58,9 +77,10 @@ function getRealAdd(config) {
 }
 
 function getWorkOrderByCompanyId(config) {
-  let url = `legwork/apiCheckWorkorderByCompanyid`
+  // let url = `legwork/apiCheckWorkorderByCompanyid`
+	let url = `order/workorder/legwork/list`
   return new Promise((resolve, reject) => {
-    resolve(AjaxPost(url, config))
+    resolve(AjaxGet(url, config))
   }).catch((err) => {
     return err
   })
@@ -83,4 +103,6 @@ export {
   getRealAdd,
   getWorkOrderByCompanyId,
   getAccountList,
+	fieldWorkOrderCompanyList,
+	getFieldTypeList
 }

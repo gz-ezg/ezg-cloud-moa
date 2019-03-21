@@ -1,6 +1,6 @@
 <template>
     <van-dialog
-        :value="OpenCompany"
+        :value="OpenWorkOrderCompany"
         :show-confirm-button="false"
         :close-on-click-overlay="false"
         show-cancel-button
@@ -36,54 +36,41 @@ export default class companyList extends Vue{
 // 	}
 
     get selectCompany(){
-        return this.$store.state.fieldDetail.company
+        return this.$store.state.fieldDetail.workOrderCompany
     }
 
-    get OpenCompany(){
-        return this.$store.state.fieldDetail.companyModalStatus
+    get OpenWorkOrderCompany(){
+        return this.$store.state.fieldDetail.workOrderCompanyModalStatus
     }
-	
-	get customerId(){
-		return this.$store.state.fieldDetail.customerID
-	}
 
     choose(company){
-        this.$store.commit("fieldDetail/change_company_modal_status")
-		if(company.companyname != "空"){
-			this.$store.commit("fieldDetail/set_company", company)
-			this.$store.commit("fieldDetail/set_company_ID", company.id)
-			this.$store.commit("fieldDetail/set_customer_ID", company.customerId)
-		}else{
-			let customer = this.$store.state.fieldDetail.customer
-			// console.log(customer)
-			this.$store.commit("fieldDetail/set_company",{companyname:'空',id:'',customerName:customer.NAME,id:customer.ID})
-		}
+        this.$store.commit("fieldDetail/change_workOrder_company_modal_status")
+		this.$store.commit("fieldDetail/set_workOrder_company", company)
+		this.$store.commit("fieldDetail/add_workOrderList", company)
     }
 
     close(){
-        this.$store.commit("fieldDetail/change_company_modal_status")
-		this.$store.commit("fieldDetail/remove_customer_ID")
+        this.$store.commit("fieldDetail/change_workOrder_company_modal_status")
     }
-	
+
     
     @Watch('searchCompanyname', {immediate: true})
-    @Watch('customerId', {immediate: true})
     async get_data(){
-        let config = {
-            params: {
-				page: 1,
-				pageSize: 4,
-                companyname: this.searchCompanyname,
-				customerId:this.customerId
-            }
+        try{
+        	let config = {
+        	    params: {
+        			page: 1,
+        			pageSize: 5,
+        	        companyname: this.searchCompanyname
+        	    }
+        	}
+        	let {rows , total} = await commonApi.fieldWorkOrderCompanyList(config)
+        	this.companyList = rows
+			// console.log(rows)
+        }catch(e){
+			console.log("error")
+        	console.log(e)
         }
-        let {rows, total } = await commonApi.fieldCompanyList(config)
-//      this.companyList = rows
-// 		this.$store.commit("fieldDetail/set_company_list",rows)
-// 		this.companyList.push({companyname:'空',id:''})
-		
-		this.companyList = rows
-		this.companyList.push({companyname:'空',id:''})
     }
 
     

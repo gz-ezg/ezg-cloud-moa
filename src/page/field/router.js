@@ -57,7 +57,7 @@ const fieldRouter = {
       },
       path: 'commericalLeave',
       name: 'commericalLeave',
-      component: () => import( /* webpackChunkName: "commerical" */ './components/commerical/index.vue'),
+      component: () => import( /* webpackChunkName: "commerical" */ './components/commerical/leave.vue'),
     },
     // //  会计部门
     {
@@ -133,7 +133,7 @@ const fieldRouter = {
       },
       path: 'Success',
       name: 'Success',
-      component: () => import( /* webpackChunkName: "market" */ './components/market/index.vue'),
+      component: () => import( /* webpackChunkName: "market" */ './components/common/field_success.vue'),
     },
   ],
 };

@@ -30,6 +30,16 @@ function saveLegworkLeaveVisitMsg(config) {
   })
 }
 
+function saveLegworkVisitMsgWorkOrder(config) {
+  // let url = 'zuul/legwork/apiSaveLegworkLeaveVisitMsg'
+	let url = 'user/legwork/begin/work/order'
+  return new Promise((resolve, reject) => {
+    resolve(AjaxPost(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
 function queryUnfinishedPunchCard() {
   // let url = `legwork/apiQueryUnfinishedPunchCard`
 	let url = `user/legwork/check/status` 
@@ -39,6 +49,7 @@ function queryUnfinishedPunchCard() {
     return err
   })
 }
+
 
 function saveAccountAffirmLegworkMsg(config) {
   let url = `legwork/apiSaveAccountAffirmLegworkMsg`
@@ -73,5 +84,6 @@ export {
   queryUnfinishedPunchCard,
   getAccountAffirmLegworkMsg,
   saveAccountAffirmLegworkMsg,
-  orderNext
+  orderNext,
+	saveLegworkVisitMsgWorkOrder
 }

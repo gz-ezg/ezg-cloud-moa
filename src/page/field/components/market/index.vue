@@ -77,8 +77,8 @@ import { Toast } from 'vant';
 export default class marketIndex extends Vue {
     buttonLoading: boolean = false
     memo = ""
-	current = 0
-	fieldTypeList = [{name:"非陪同外勤",type:"no"},{name:"陪同外勤",type:"yes"}]
+		current = 0
+		fieldTypeList = [{name:"非陪同外勤",type:"no"},{name:"陪同外勤",type:"yes"}]
 	
     get company(){
         return this.$store.state.fieldDetail.company
@@ -157,10 +157,7 @@ export default class marketIndex extends Vue {
       formdata.append('customerId', this.$store.state.fieldDetail.customerID)
       formdata.append('synergyFlag', this.$store.state.fieldDetail.fieldType)
       formdata.append('beginMemo',_self.memo)
-	  
-	  
-	  
-	  
+
       for(let i = 0;i<_self.uploadImg.length;i++){
         formdata.append('files',_self.uploadImg[i],"file_" + new Date() + ".jpg")
       }
