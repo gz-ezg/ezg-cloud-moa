@@ -60,8 +60,14 @@ const fieldDetail = {
       state.fieldType = {};
       state.fieldTypeList = [];
       state.company = {};
+			state.companyID = '';
+			state.companyList = [];
       state.customer = {};
+			state.customerID = '';
+			state.customerList = [];
 			state.workOrderCompany = {};
+			state.workOrderCompanyList = [];
+			state.workOrderList = [];
     },
     set_fieldTypeList(state, List) {
       state.fieldTypeList = List;

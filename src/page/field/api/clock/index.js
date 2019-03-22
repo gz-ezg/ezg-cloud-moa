@@ -30,6 +30,16 @@ function saveLegworkLeaveVisitMsg(config) {
   })
 }
 
+function saveLegworkLeaveMsgWorkOrder(config) {
+  // let url = 'zuul/legwork/apiSaveLegworkLeaveVisitMsg'
+	let url = 'user/legwork/end/work/order'
+  return new Promise((resolve, reject) => {
+    resolve(AjaxPost(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
 function saveLegworkVisitMsgWorkOrder(config) {
   // let url = 'zuul/legwork/apiSaveLegworkLeaveVisitMsg'
 	let url = 'user/legwork/begin/work/order'
@@ -85,5 +95,6 @@ export {
   getAccountAffirmLegworkMsg,
   saveAccountAffirmLegworkMsg,
   orderNext,
-	saveLegworkVisitMsgWorkOrder
+	saveLegworkVisitMsgWorkOrder,
+	saveLegworkLeaveMsgWorkOrder
 }

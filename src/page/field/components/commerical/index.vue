@@ -3,76 +3,17 @@
         <van-row style="padding-bottom:2rem">
             <van-nav-bar title="普通外勤打卡" left-arrow @click-left="$backTo(-2)"/>
                 <local-init></local-init>
-                <van-cell-group style="width:80%;margin:auto;margin-top:1rem">
-                    <van-field
-                        :value="workOrderCompany.companyname"
-                        required
-                        clearable
-                        readonly
-                        placeholder="请填写公司"
-                        @click.native="open_workorder_company_select(company)"
-                    />
-					<van-field
-					    :value="workOrderCompany.alisname"
-					    required
-					    clearable
-					    readonly
-					    placeholder="选择工单"
-					/>
-					<!-- <van-button 
-						type="default" 
-						v-for="(item,index) of fieldTypeList"
-						@click="choose_radio(index,item)"
-						:class="index===current?'buttonCurrent':null"
-						:key="index"
-					>
-						{{item.name}}
-					</van-button> -->
-                    <!-- <van-field
-                        :value="company.name"
-                        required
-                        clearable
-                        readonly
-                        placeholder="客户名称"
-                        @click.native="open_company_select(company)"
-                    />
-                    <van-field
-                        :value="company.tel"
-                        required
-                        clearable
-                        readonly
-                        placeholder="客户联系方式"
-                        @click.native="open_company_select(company)"
-                    />
-                    <van-field
-                        :value="workOrder.product"
-                        required
-                        clearable
-                        readonly
-                        placeholder="请选择工单"
-                        @click.native="workOrderListStatus=true"
-                        type="textarea"
-                    />
-                    <van-field
-                        :value="fieldType.typename"
-                        required
-                        clearable
-                        readonly
-                        placeholder="请选择外勤类型"
-                        @click.native="open_fieldType_select"
-                    /> -->
-					
-                </van-cell-group>
 				
-				<div>
-					<van-icon 
-						name="add" 
-						@click.native="open_workorder_company_select(company)" 
-					/>增加公司及工单
+				<div style="width:80%;margin:0.5rem auto;">
+					<van-button plain type="primary" @click.native="open_workorder_company_select(company)" >
+						增加公司及工单
+					</van-button>
 				</div>
 				
-				<van-cell-group>
+				
+				<van-cell-group style="width:80%;margin:auto;">
 				  <van-cell
+					style="text-align: left;"
 					v-for="(item,i) of workOrderList"
 					:title="item.companyname" 
 					:label="item.alisname"
@@ -82,27 +23,10 @@
 				  
 				</van-cell-group>
 				
-                <!-- <div style="width:80%;margin:auto;margin-top:20px" v-if="workOrder.product=='空'">
-                    <van-cell-group>
-                        <van-cell>
-                            <van-radio-group v-model="assiststatus">
-                                <van-col span="12"><van-radio name="Y">协助外勤</van-radio></van-col>
-                                <van-col span="12"><van-radio name="N">非协助外勤</van-radio></van-col>
-                            </van-radio-group>
-                        </van-cell>
-                        <van-field
-                            v-if="assiststatus == 'Y'"
-                            :value="account.realname"
-                            required
-                            clearable
-                            readonly
-                            placeholder="请选择协助会计"
-                            @click.native="accoutList=true"
-                        />
-                    </van-cell-group>
-                </div> -->
-				<van-cell-group>
-					<van-button 
+                
+				<van-cell-group style="width:80%;margin:auto;margin-top:1rem;display:flex;align-content:center;flex-wrap:wrap; padding: 0.3rem 0;">
+					<van-button
+						size="small"
 						type="default" 
 						v-for="(item,index) of buttonList"
 						@click="choose_radio(index,item)"
@@ -113,13 +37,15 @@
 					</van-button>
 				</van-cell-group>
 				
-                <upload-img></upload-img>
+				<upload-img></upload-img>
+				
+				
                 <div style="width:80%;margin:auto;margin-top:0.6rem">
                     <van-cell-group>
                         <van-field
                             v-model="memo"
                             type="textarea"
-                            placeholder="打卡说明（选填）"
+                            placeholder="打卡说明（必填）"
                             rows="3"
                             autosize
                         />
@@ -129,18 +55,7 @@
         <van-tabbar style="margin-top:1rem;">
             <van-button type="primary" bottom-action style="font-size:20px;border-radius:5px" :loading="buttonLoading" @click="data_check">开始打卡</van-button>
         </van-tabbar>
-        <!-- <work-order-list
-          v-if="workOrderListStatus"
-          :companyId="company.companyid"
-          @chooseWordOrder="change_workorder"
-          @close="workOrderListStatus = false"
-          :select="workOrder"
-        ></work-order-list>
-        <account-list
-          v-if="accoutList"
-          @close="accoutList = false"
-          @change-account="change_account"
-        ></account-list> -->
+        
 		<work-order-companyList></work-order-companyList>
   </van-row>
 </template>
@@ -247,18 +162,20 @@ export default class commericalIndex extends Vue {
       //  表单验证
       var descriptor = {
         // company: { type: "number", required: true, message: "请选择服务企业！"},
-        // workorder: {required:true, message: "请选择工单！"},
+        workorder: {required:true, message: "请选择工单！"},
         legworkSubtype: { type: "string", required: true, message: "请选择外勤类型！"},
         img_array: { type: "array", required:true, message: "请选择照片！"},
+		memo:{required:true,message:"请填写打卡说明！"}
         // addr: {type: "string", required:true, message: "获取定位失效，请重开窗口！"}
       }
       var validator = new schema(descriptor);
       validator.validate(
         {
         //   company: _self.company.companyid,
-          // workorder: _self.workOrder,
+          workorder: _self.workOrderList,
           legworkSubtype: _self.buttonType.typecode,
           img_array: _self.$store.state.fieldDetail.showImg,
+		  memo: _self.memo,
           // addr: _self.$store.state.filedDetail.addr,
         }, (errors, fields) => {
         if(errors) {
@@ -274,31 +191,27 @@ export default class commericalIndex extends Vue {
       let _self = this
       this.buttonLoading = true
       let formdata = new FormData()
-      // formdata.append('workOrderIds', _self.workOrderIDS) //工单的Ids
+      
       formdata.append('beginAddress', this.$store.state.fieldDetail.addr) //开始打卡的地址
       formdata.append('legworkSubtype', _self.buttonType.typecode) //外勤的类型
       formdata.append('beginMemo',_self.memo) //开始打卡的备注
 
-//       if(this.workOrder.id){
-//         formdata.append('workorderid',this.workOrder.id)
-//       }
-//       formdata.append('assiststatus',this.assiststatus)
-//       if(this.account.id){
-//         formdata.append("accountid",this.account.id)
-//       }
-//       if(this.workOrder.product == "空"){
-//         formdata.append('productname',"")
-//       }else{
-//         formdata.append('productname',this.workOrder.product)
-//       }
+
 
       for(let i = 0;i<_self.uploadImg.length;i++){
         formdata.append('files',_self.uploadImg[i],"file_" + new Date() + ".jpg") //照片
       }
 	  
+	  let str = ''
+	  let arr = []
+	  
 	  for(let i = 0;i<_self.workOrderList.length;i++){
-		formdata.append('workOrderIds', _self.workOrderList[i].id)  //工单的Ids
+	  		arr.push(_self.workOrderList[i].id)
 	  }
+	  
+	  str = arr.join(",")
+	  
+	  formdata.append('workOrderIds', str)  //工单的Ids
 	  
       let { status, data} = await clockApi.saveLegworkVisitMsgWorkOrder(formdata)
       if(status){

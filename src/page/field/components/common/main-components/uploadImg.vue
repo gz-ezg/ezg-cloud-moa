@@ -7,7 +7,7 @@
                 </van-uploader>
             </center>
         </div>
-        <div style="margin-top:0.333rem">
+        <div style="margin-top:0.333rem; display: flex; justify-content: space-around;">
             <van-row>
                 <van-col v-for="(item,index) in showImg" :key="index" style="margin-left:3px;margin-right:3px">
                     <div class="img-content" >

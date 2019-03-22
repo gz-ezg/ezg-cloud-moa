@@ -20,15 +20,10 @@
                         placeholder="客户名称"
                         @click.native="open_customer_select(customer)"
                     />
-                    <!-- <van-field
-                        :value="fieldType.typename"
-                        required
-                        clearable
-                        readonly
-                        placeholder="请选择外勤类型"
-                        @click.native="open_fieldType_select"
-                    /> -->
-					<van-button 
+
+					<van-button
+						style="margin: 0.3rem auto;"
+						size="small"
 						type="default" 
 						v-for="(item,index) of fieldTypeList"
 						@click="choose_radio(index,item)"
@@ -37,6 +32,7 @@
 					>
 						{{item.name}}
 					</van-button>
+					
                 </van-cell-group>
                 <upload-img></upload-img>
                 <div style="width:80%;margin:auto;margin-top:0.6rem">
