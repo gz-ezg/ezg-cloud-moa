@@ -13,10 +13,12 @@
 						<p class="workOrder">{{item.alisname}}</p>
 					</div>
 					<div class="right" style="text-align: center;">
+						<!-- :type="index===current && item.legwork_work_order_id === group?'primary':'default'" -->
 						<van-button 
 							style="display: block; margin: 0 auto;" 
 							round 
-							:type="index===current && item.legwork_work_order_id === group?'primary':'default'" 
+							
+							:type="item.status == radioItem.typecode?'primary':'default'"
 							size="mini" 
 							v-for="(radioItem,index) of radioList"
 							:key="radioItem.typecode"
@@ -133,8 +135,8 @@
 			this.workOrderList[i].status = typecode
 			this.current = index
 			this.typestatus = typecode
-			this.group = this.workOrderList[i].legwork_work_order_id
-			console.log("this.workOrderList.legwork_work_order_id")
+// 			this.group = this.workOrderList[i].legwork_work_order_id
+// 			console.log("this.workOrderList.legwork_work_order_id")
 		}
 		change_local(e) {
 			console.log(e)
