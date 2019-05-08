@@ -2,27 +2,26 @@
   <div class="main" style="padding-top:1.2rem;">
     <!-- <van-nav-bar title="我的任务" left-arrow @click-left="$backTo(-1)"/> -->
     <Xheader back="-1" title="我的任务"/>
-    <Mtab style="position:fixed;top:1.2rem;left:0;width:100%;z-index:5"/>
-    <!-- 今日完成任务 -->
-    <ul class="finishTask" v-show="get_tab==='finishTask'?true:false">
+    <Mtab :remainingTaskCount="remainingTaskCount" finishTaskCount=0 style="position:fixed;top:1.2rem;left:0;width:100%;z-index:5"/>
+    <!-- 今日剩余 -->
+    <ul class="remainingTask" v-show="get_tab==='remainingTask'?true:false">
       <li v-for="(item,i) in list" :key="i" @click="select(item.taskId,i)" :class="selected.indexOf(item.taskId)===-1?'':'selected'">
         <div class="checkbox"></div>
-        <div class="li_title">{{item.taskName}}</div>
-        <div class="li_con">{{item.taskKind}}</div>
+        <div class="li_title">{{item.taskKind+'-'+item.taskName}}</div>
+        <div class="li_con">{{任务详情}}</div>
         <div class="li_btn" @click="btn_click(item.taskId)" @click.stop>详情</div>
       </li>
       <div class="btn" :class="btnActive?'btnActive':''" @click="btnActive && start()">去完成</div>
     </ul>
-    <!-- 今日剩余 -->
-    <ul class="remainingTask" v-show="get_tab==='remainingTask'?true:false">
-      <li v-for="(item,i) in list" :key="i">
+    <!-- 今日完成任务 -->
+    <ul class="finishTask" v-show="get_tab==='finishTask'?true:false">
+      <!-- <li v-for="(item,i) in list" :key="i">
         <div class="li_title">{{item.taskName}}</div>
         <div class="li_con">{{item.taskKind}}</div>
         <div class="li_btn" @click="btn_click(item.taskId)" @click.stop>详情</div>
-        <!-- 完成状态 -->
         <div class="li_state" v-if="item.state==='finished'">{{item.state}}</div>
         <div class="li_state" style="color:red" v-else-if="item.state==='unfinished'">{{item.state}}</div>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
@@ -40,24 +39,27 @@ export default {
   computed: {
     get_tab() {
       return this.$store.state.myTaskDetail.tab;
+    },
+    remainingTaskCount(){
+      return this.list.length
     }
   },
   data() {
     return {
       btnActive: false,
       selected:[],
-      list:[{
-        taskId:291,
-        taskName: "CA代办", 
-        taskKind: "tkLegBus"
-      }]
+      list:[
+      //   {
+      //   taskId:0,
+      //   taskName: "", 
+      //   taskKind: ""
+      // }
+      ]
     }
   },
   methods: {
     select(id,i){
-      console.log(id,i)
       this.selected.indexOf(id)===-1?this.selected.push(id):this.selected.splice(this.selected.indexOf(id),1);
-      console.log(this.selected)
       if(this.selected.length>0){
         this.btnActive = true;
       }else {
@@ -68,7 +70,7 @@ export default {
       this.get_taskPropertyDetailByTaskId(taskId);
     },
     start(){
-      console.log("去完成");
+      console.log(this.selected);
     },
     async get_userInfo() {
       const user = await getUserInfo();
@@ -76,18 +78,17 @@ export default {
     },
     async get_toDoTaskListByUserId() {
       const config = {
-        // userId: '10059',
-        // date: '2019-05-08'
+        userId: '10059',
+        date: '2019-05-07'
       }
       let res = await api.getToDoTaskListByUserId(config);
       console.log(res);
       this.list = JSON.parse(JSON.stringify(res));
     },
     async get_taskPropertyDetailByTaskId(taskId){
-      console.log(taskId);
       const config = {
-        taskId : String(taskId)
-      }
+        taskId: taskId
+      };
       let res = await api.getTaskPropertyDetailByTaskId(config);
       console.log(res);
     }
@@ -113,7 +114,7 @@ export default {
     box-sizing: border-box;
     transition: all 0.2s ease;
   }   
-  .finishTask {
+  .remainingTask {
     padding: 1.45rem 0.2rem 1.4rem 0.2rem;
     li {
       border-radius: 0.15rem;
@@ -210,8 +211,7 @@ export default {
       background-color: rgb(156, 36, 0);
     }
   }
-  
-  .remainingTask {
+  .finishTask {
     padding: 1.45rem 0.2rem 1.4rem 0.2rem;
     li {
       border-radius: 0.15rem;

@@ -1,21 +1,25 @@
 <template>
     <div>
         <ul class="main">
-            <li v-for="(item,i) in list" :key="i" :class="item.name===get_tab?'active':''" @click="change_tab(item.name)">{{item.title}}个</li>
+            <li v-for="(item,i) in list" :key="i" :class="item.name===get_tab?'active':''" @click="change_tab(item.name)">{{item.title}}<span v-show="item.name==='remainingTask'">{{remainingTaskCount}}</span><span v-show="item.name==='finishTask'">{{finishTaskCount}}</span>个</li>
         </ul>
     </div>
 </template>
 <script>
 export default {
+    props:{
+        remainingTaskCount:Number,
+        finishTaskCount:Number
+    },
     data(){
         return {
             active:0,
             list:[{
                 title: "今日剩余：",
-                name: 'remainingTask'
+                name: 'remainingTask',
             },{
                 title: "今日完成任务：",
-                name: 'finishTask'
+                name: 'finishTask',
             }]
         }
     },

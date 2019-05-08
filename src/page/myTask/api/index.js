@@ -1,5 +1,6 @@
 import {
   AjaxGet,
+  AjaxGet2,
   AjaxDic,
   AjaxPost
 } from '@api/index';
@@ -14,16 +15,16 @@ import {
 function getToDoTaskListByUserId(config) {
 	let url = '/task/getToDoTaskListByUserId';
   return new Promise((resolve, reject) => {
-    resolve(AjaxGet(url, config))
+    resolve(AjaxGet2(url, config))
   }).catch((err) => {
     return err
   })
 }
 
 function getTaskPropertyDetailByTaskId(config) {
-	let url = '/task/getTaskPropertyDetailByTaskId';
+	let url = `/task/getTaskPropertyDetailByTaskId`;
   return new Promise((resolve, reject) => {
-    resolve(AjaxGet(url, config))
+    resolve(AjaxGet2(url, config))
   }).catch((err) => {
     return err
   })

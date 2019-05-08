@@ -9,6 +9,8 @@ import 'amfe-flexible';
 //  引入字体图标
 import './iconfont/iconfont.css';
 
+// import { $Get,$Post } from './api/index';
+
 Vue.config.productionTip = false;
 
 Vue.use(Vant);
@@ -20,6 +22,10 @@ Vue.config.devtools = true;
 Vue.prototype.$backTo = function (reback = -1) {
   this.$router.go(reback);
 };
+
+//$Get & $Post
+// Vue.prototype.$Get = $Get;
+// Vue.prototype.$Post = $Post;
 
 new Vue({
   router,
