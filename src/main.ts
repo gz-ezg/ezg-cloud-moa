@@ -6,6 +6,8 @@ import store from './store/index';
 import 'vant/lib/index.css';
 //  引入rem插件
 import 'amfe-flexible';
+//  引入字体图标
+import './iconfont/iconfont.css';
 
 Vue.config.productionTip = false;
 

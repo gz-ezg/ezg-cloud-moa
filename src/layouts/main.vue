@@ -7,7 +7,6 @@
     <company-list></company-list>
     <customer-list></customer-list>
     <type-list></type-list>
-    <!-- </div> -->
   </div>
 </template>
 

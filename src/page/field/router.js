@@ -22,7 +22,7 @@ const fieldRouter = {
         access: 6001,
       },
       path: 'index',
-      name: 'fieldIndex',
+      name: 'myTaskIndex',
       component: () => import( /* webpackChunkName: "market" */ './index.vue'),
     },
     // 市场部分

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import * as loginApi from "./api/login/index.js";
-import { getUserInfo } from '@/api/login.js';
+import { getUserInfo } from '../../api/login.js';
 import { Component, Prop, Emit, Vue, Watch } from "vue-property-decorator";
 
 @Component

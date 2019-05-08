@@ -6,7 +6,7 @@ import Vuex from 'vuex';
 import { getInterfaceItemByUserId } from '../api/login';
 import { PageRouter } from '../router/routes';
 import fieldDetail from '../page/field/store';
-
+import myTaskDetail from '../page/myTask/store';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -68,5 +68,6 @@ export default new Vuex.Store({
   },
   modules: {
     fieldDetail,
+    myTaskDetail
   },
 });

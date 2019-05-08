@@ -51,7 +51,7 @@ function logOut() {
 
 export {
   userLogin,
-  checkUserRoleByUserId,
+  // checkUserRoleByUserId,
   getInterfaceItemByUserId,
   getUserInfo,
   logOut,

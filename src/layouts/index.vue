@@ -3,11 +3,7 @@
     <van-nav-bar title="移动亿账柜" left-arrow @click-left="$backTo()"/>
     <!-- <van-button to="/field">外勤打卡</van-button>
     <van-button to="/resume">简历管理</van-button>
-    <van-button to="/field1">外勤打卡1</van-button>
-    <van-button to="/field2">外勤打卡2</van-button>
-    <van-button to="/field3">外勤打卡3</van-button>
-    <van-button to="/field4">外勤打卡4</van-button>
-    <van-button to="/field5">外勤打卡5</van-button> -->
+    <van-button to="/field1">外勤打卡1</van-button> -->
     <div v-if="!menuList.length">
       <!-- 骨架屏 -->
       <ul class="skeleton-tabs">
@@ -18,8 +14,15 @@
     </div>
     <div v-else>
       <!-- 页面效果待补充 -->
-      <van-button v-for="(x, index) in menuList" :key="index" :to="x.path">{{x.title}}</van-button>
-      <van-button to="/login" @click="logout">退出系统</van-button>
+      <ul class="menuList">
+        <router-link v-for="(item,i) in menuList" :key="i" :to="item.path">
+          <p class="iconfont" :class="`icon-${item.icon}`"></p>
+          <p style="color:#333;" class="item_title">{{item.title}}</p>
+        </router-link>
+        <!-- <router-link to="/login" @click="logout">退出系统</router-link> -->
+      </ul>
+      <!-- <van-button v-for="(x, index) in menuList" :key="index" :to="x.path">{{x.title}}</van-button>
+      <van-button to="/login" @click="logout">退出系统</van-button> -->
     </div>
   </div>
 </template>
@@ -30,7 +33,19 @@ import { logOut } from '@api/login';
 export default {
   data() {
     return {
-      menuList: [{title:"外勤打卡",path:"/field"}],
+      menuList: [{
+        title:"外勤打卡",
+        path:"/field",
+        icon:"weizhi"
+        },{
+        title:"我的任务",
+        path:"/myTask",
+        icon:"renwu"
+        },{
+        title:"资料管理",
+        path:"",
+        icon:"ziliaoku"
+        }],
     };
   },
   methods: {
@@ -60,7 +75,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .skeleton-tabs {
   list-style: none;
   padding: 0;
@@ -74,5 +89,30 @@ export default {
   box-sizing: border-box;
   text-align: center;
   margin-bottom: 15px;
+}
+.menuList {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+.menuList a{
+  width:33.3%;
+  height: 3rem;
+  font-size: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.iconfont {
+  font-size: 1.3rem; 
+  margin: 0;
+  padding: 0;
+  color:rgba(211, 58, 2, 0.842);
+}
+.item_title {
+  margin:0;
+  padding:0;
+  font-size: 0.5rem;
 }
 </style>

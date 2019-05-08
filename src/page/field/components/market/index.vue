@@ -46,7 +46,6 @@
             <van-button type="primary" bottom-action style="font-size:20px;border-radius:5px" :loading="buttonLoading" @click="data_check">开始打卡</van-button>
         </van-tabbar>
         </van-row>
-    </van-row>
 </template>
 
 <script lang="ts">

@@ -7,11 +7,11 @@ import router from '../router/index.js';
 axios.interceptors.request.use(
   (config) => {
     //  菊花转
-    Toast.loading({
-      duration: 0,
-      mask: true,
-      message: '加载中...',
-    });
+    // Toast.loading({
+    //   duration: 0,
+    //   mask: true,
+    //   message: '加载中...',
+    // });
     return config;
   },
   (error) => {
