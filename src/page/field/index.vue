@@ -1,6 +1,7 @@
 <template>
   <div>
     <van-nav-bar title="普通外勤打卡"/>
+    <!-- <Xheader title="外勤打卡" back=-2></Xheader> -->
     <van-row class="field-skeleton-head"></van-row>
     <van-row class="field-skeleton-body"></van-row>
     <van-row class="field-skeleton-footer"></van-row>
@@ -11,9 +12,11 @@
 <script lang="ts">
 import * as loginApi from "./api/login/index.js";
 import { getUserInfo } from '../../api/login.js';
+// import Xheader from '../../layouts/Xheader.vue';
 import { Component, Prop, Emit, Vue, Watch } from "vue-property-decorator";
 
-@Component
+@Component({
+})
 export default class Login extends Vue {
   username = "";
   password = "";

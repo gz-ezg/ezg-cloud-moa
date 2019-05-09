@@ -66,30 +66,6 @@ function AjaxGet(url, config, success, fail = commonFail) {
   });
 }
 
-function AjaxGet2(url, config, success, fail = commonFail) {
-  let str = '?';
-  let count = 0;
-  for(let key in config){
-    if(count>0){
-      str+='&';
-    }
-    str=str+key+'='+config[key];
-    count++;
-  }
-  const baseUrl = `api/${url}${str}`;
-  return new Promise((resolve, reject) => {
-    axios.get(baseUrl).then((res) => {
-      if (res.status === 200 && res.data.msgCode === '40000') {
-        Toast.clear();
-        resolve(res.data.data);
-      } else {
-        fail(res);
-      }
-    }).catch((err) => {
-      reject(fail(err));
-    });
-  });
-}
 //  通用post方法
 function AjaxPost(url, config, success, fail = commonFail) {
   const baseUrl = `api/${url}`;
@@ -114,45 +90,6 @@ function AjaxPost(url, config, success, fail = commonFail) {
   });
 }
 
-//$Get & $Post
-// function $Get(url, config, success, fail = commonFail){
-//   let _self = this
-//   axios.get(url,config).then(function(res){
-//       if(res.data.msgCode == "40000"){
-//           success(res)
-//       }else{
-//           if(res.data.msg){
-//               fail(res.data.msg)
-//           }else{
-//               console.error(res)
-//           }
-//       }
-//   }).catch(function(err){
-//       fail(err)
-//       console.error(err)
-//   })
-// }
-
-// function $Post(url, config, success, fail = commonFail){
-//   let _self = this
-//   axios.post(url,config).then(function(res){
-//       if(res.data.msgCode == "40000"){
-//           if(res.data.msg){
-//               _self.$Message.success(res.data.msg)
-//           }
-//           success(res)
-//       }else{
-//         Toast.fail(res.data.msg);
-//         resolve({
-//           status: false,
-//           data: res.data,
-//         });
-//       }
-//   }).catch((err) => {
-//     reject(fail(err));
-//   });
-// }
-
 //  通用获取数据字典方法
 function AjaxDic(params, fail = commonFail) {
   const config = {
@@ -176,7 +113,6 @@ function AjaxDic(params, fail = commonFail) {
 
 export {
   AjaxGet,
-  AjaxGet2,
   AjaxDic,
   AjaxPost
 };

@@ -7,8 +7,8 @@
     <ul class="remainingTask" v-show="get_tab==='remainingTask'?true:false">
       <li v-for="(item,i) in list" :key="i" @click="select(item.taskId,i)" :class="selected.indexOf(item.taskId)===-1?'':'selected'">
         <div class="checkbox"></div>
-        <div class="li_title">{{item.taskKind+'-'+item.taskName}}</div>
-        <div class="li_con">{{任务详情}}</div>
+        <div class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
+        <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
         <div class="li_btn" @click="btn_click(item.taskId)" @click.stop>详情</div>
       </li>
       <div class="btn" :class="btnActive?'btnActive':''" @click="btnActive && start()">去完成</div>
@@ -42,18 +42,21 @@ export default {
     },
     remainingTaskCount(){
       return this.list.length
-    }
+    },
   },
   data() {
     return {
       btnActive: false,
       selected:[],
       list:[
-      //   {
-      //   taskId:0,
-      //   taskName: "", 
-      //   taskKind: ""
-      // }
+        // {
+        //   taskId:347,
+        //   taskName:"123456789",
+        //   taskKind:"tkLegBus",
+        //   taskKindName:"商事外勤",
+        //   taskContent:"123456789",
+        //   companyName:"广州云馨心理卫生服务中心有限公司"
+        // }
       ]
     }
   },
@@ -71,6 +74,12 @@ export default {
     },
     start(){
       console.log(this.selected);
+      this.set_selected(this.selected);
+      console.log(this.$router);
+      this.$router.push({path:'/field'})
+    },
+    set_selected(i){
+      this.$store.commit("myTaskDetail/set_selected",i)
     },
     async get_userInfo() {
       const user = await getUserInfo();
@@ -78,8 +87,10 @@ export default {
     },
     async get_toDoTaskListByUserId() {
       const config = {
-        userId: '10059',
-        date: '2019-05-07'
+        params:{
+          userId: '10059',
+          date: '2019-05-07'
+        }
       }
       let res = await api.getToDoTaskListByUserId(config);
       console.log(res);
@@ -87,7 +98,9 @@ export default {
     },
     async get_taskPropertyDetailByTaskId(taskId){
       const config = {
-        taskId: taskId
+        params:{
+          taskId: taskId
+        }
       };
       let res = await api.getTaskPropertyDetailByTaskId(config);
       console.log(res);

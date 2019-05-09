@@ -1,9 +1,11 @@
 <template>
+  <div>
     <van-row style="overflow-x: hidden">
-        <van-row style="padding-bottom:2rem">
-            <van-nav-bar title="普通外勤打卡" left-arrow @click-left="$backTo(-2)"/>
+        <van-row style="padding-bottom:2rem;padding-top:0.2rem">
+            <!-- <van-nav-bar title="普通外勤打卡" left-arrow @click-left="$backTo(-2)"/> -->
+            <Xheader title="外勤打卡" back=-2></Xheader>
                 <local-init></local-init>
-                <van-cell-group style="width:80%;margin:auto;margin-top:1rem">
+                <!-- <van-cell-group style="width:80%;margin:auto;margin-top:1.2rem">
                     <van-field
                         :value="company.companyname"
                         required
@@ -20,7 +22,8 @@
                         placeholder="客户名或手机"
                         @click.native="open_fieldType_select"
                     />
-                </van-cell-group>
+                </van-cell-group> -->
+                <excutoryTask></excutoryTask>
                 <upload-img></upload-img>
                 <div style="width:80%;margin:auto;margin-top:0.6rem">
                     <van-cell-group>
@@ -37,15 +40,16 @@
         <van-tabbar style="margin-top:1rem;">
             <van-button type="primary" bottom-action style="font-size:20px;border-radius:5px" :loading="buttonLoading" @click="data_check">开始打卡</van-button>
         </van-tabbar>
-        </van-row>
     </van-row>
+  </div>
 </template>
 
 <script lang="ts">
 import uploadImg from '../common/main-components/uploadImg.vue'
 import localInit from '../common/main-components/localInit.vue'
 import schema from 'async-validator'
-
+import Xheader from '../../../../layouts/Xheader.vue'
+import excutoryTask from '../common/main-components/excutoryTask.vue'
 import { Component, Vue, Watch, Mixins } from 'vue-property-decorator'
 import * as commonApi from '../../api/common/index'
 import * as clockApi from '../../api/clock/index'
@@ -53,8 +57,10 @@ import { Toast } from 'vant';
 
 @Component({
     components: {
+        Xheader,
         uploadImg,
-        localInit
+        localInit,
+        excutoryTask
     }
 })
 export default class OtherIndex extends Vue {
@@ -141,6 +147,14 @@ export default class OtherIndex extends Vue {
         }, 1000)
       }
     }
+  beforeCreate() {
+    //背景色变灰
+    document.querySelector('body').setAttribute('style', 'background-color:rgb(247, 247, 247)')
+  }
+  beforeDestroy() {
+    //背景色清除
+    document.querySelector('body').removeAttribute('style')
+  }
 }
 </script>
 
