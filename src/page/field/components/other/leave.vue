@@ -1,8 +1,9 @@
 <template>
     <van-row style="overflow-x: hidden">
         <van-row style="padding-bottom:1.75rem">
-            <van-nav-bar title="普通外勤打卡" />
-                <local-init style="margin-top:-0.8rem;"></local-init>
+            <!-- <van-nav-bar title="普通外勤打卡" /> -->
+            <Xheader back=-1 title="外勤打卡"></Xheader>
+                <local-init></local-init>
                 <OngoingTask></OngoingTask>
                 <!-- <van-row>
                     <center style="padding:20px;font-size: 16px">{{clockDetail.companyname}}</center>
@@ -31,6 +32,7 @@
 import uploadImg from '../common/main-components/uploadImg.vue'
 import localInit from '../common/main-components/localInit.vue'
 import OngoingTask from '../common/main-components/OngoingTask.vue'
+import Xheader from '../../../../layouts/Xheader.vue'
 import { Component, Vue, Watch, Mixins } from 'vue-property-decorator'
 import * as clockApi from '../../api/clock/index'
 import schema from 'async-validator'
@@ -39,7 +41,8 @@ import schema from 'async-validator'
     components: {
         uploadImg,
         localInit,
-        OngoingTask
+        OngoingTask,
+        Xheader
     }
 })
 export default class OtherLeave extends Vue {

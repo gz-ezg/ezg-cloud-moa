@@ -29,17 +29,17 @@
                     </div>
                 </div>
                 <van-cell-group v-show="showDesc(item.status)">
-                    <van-field v-model="item.desc" type="textarea" placeholder="请描述原因"/>
+                    <van-field v-model="item.desc" type="textarea" :placeholder="`请描述任务${item.status}原因（必填）`"/>
                 </van-cell-group>
             </li>
         </ul>
         <!-- 详情弹出框 -->
         <van-dialog v-model="showDialog" :title="taskPropertyDetail.taskName" >
-        <ul class="taskDetail">
-            <li>任务时间：{{taskPropertyDetail.planDate}}</li>
-            <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
-            <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
-        </ul>
+            <ul class="taskDetail">
+                <li>任务时间：{{taskPropertyDetail.planDate}}</li>
+                <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
+                <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
+            </ul>
         </van-dialog>
         <!-- 状态弹出层 -->
         <van-popup v-model="showPopup" position="bottom" overlay="true">
@@ -160,6 +160,21 @@ export default {
             let _self = this;
             let img = await yasuo(e);
             this.list[i].uploadingImg.push(img);
+            
+            let formdata = new FormData();
+            console.log(this.list[i].taskId,this.list[i].uploadingImg)
+            formdata.append('legwork_task_id',this.list[i].taskId)
+            formdata.append('legwork_id',666)
+            formdata.append('files',this.list[i].uploadingImg,"file_" + new Date() + ".jpg")
+            console.log(formdata)
+            try{
+                let res = await commonApi.taskImgUpload(formdata)
+                console.log(res);
+                this.list[i].uploadingImg = [];
+            }catch{
+
+            }
+            
             let reader = new FileReader();
             reader.readAsDataURL(e);
             let filename = e.name;

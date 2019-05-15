@@ -93,6 +93,15 @@ function beginLegwork(config) {
   })
 }
 
+function taskImgUpload(config) {
+  let url = '/user/task/imag/upload';
+  return new Promise((resolve, reject) => {
+    resolve(AjaxPost(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
 export {
   fieldCompanyList,
 	fieldCustomerList,
@@ -102,5 +111,6 @@ export {
   getWorkOrderByCompanyId,
   getAccountList,
   getTaskPropertyDetailByTaskId,
-  beginLegwork
+  beginLegwork,
+  taskImgUpload
 }
