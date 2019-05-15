@@ -124,7 +124,7 @@ const fieldRouter = {
       },
       path: 'otherLeave',
       name: 'otherLeave',
-      component: () => import( /* webpackChunkName: "other" */ './components/other/index.vue'),
+      component: () => import( /* webpackChunkName: "other" */ './components/other/leave.vue'),
     },
     //  结束打卡
     {

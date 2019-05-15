@@ -8,8 +8,9 @@ const myTaskDetail = {
         change_tab(state,tab){
             state.tab = tab;
         },
-        set_selected(state,arr){
-            state.selected = Array.from(new Set(state.selected.concat(arr)));
+        set_selected(state,id){
+            state.selected.indexOf(id)===-1?state.selected.push(id):state.selected.splice(state.selected.indexOf(id),1);
+            state.selected = Array.from(new Set(state.selected));
         }
     },
     getters:{

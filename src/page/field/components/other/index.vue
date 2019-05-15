@@ -99,7 +99,7 @@ export default class OtherIndex extends Vue {
       //  表单验证
       var descriptor = {
         // company: { type: "number", required: true, message: "请选择服务企业！"},
-        type_typecode: { type: "string", required: true, message: "请选择外勤类型！"},
+        // type_typecode: { type: "string", required: true, message: "请选择外勤类型！"},
         img_array: { type: "array", required:true, message: "请选择照片！"},
         // addr: {type: "string", required:true, message: "获取定位失效，请重开窗口！"}
       }
@@ -107,9 +107,10 @@ export default class OtherIndex extends Vue {
       validator.validate(
         {
         //   company: _self.company.companyid,
-          type_typecode: _self.fieldType.typecode,
+          // type_typecode: _self.fieldType.typecode,
           img_array: _self.$store.state.fieldDetail.showImg,
           // addr: _self.$store.state.filedDetail.addr,
+
         }, (errors, fields) => {
         if(errors) {
           console.log(errors)
@@ -124,21 +125,37 @@ export default class OtherIndex extends Vue {
       let _self = this
       this.buttonLoading = true
       let formdata = new FormData()
-      formdata.append('companyid', _self.company.companyid)
-      formdata.append('address1', this.$store.state.fieldDetail.addr)
-      formdata.append('customerid', _self.company.customerid)
-      formdata.append('fieldtype', _self.fieldType.typecode)
-      formdata.append('clockshows',_self.memo)
+      formdata.append('task_ids',this.$store.state.myTaskDetail.selected)
+      // formdata.append('companyid', _self.company.companyid)
+      formdata.append('begin_address', this.$store.state.fieldDetail.addr)
+      // formdata.append('customerid', _self.company.customerid)
+      // formdata.append('fieldtype', _self.fieldType.typecode)
+      formdata.append('begin_memo',_self.memo)
       for(let i = 0;i<_self.uploadImg.length;i++){
-        formdata.append('file',_self.uploadImg[i],"file_" + new Date() + ".jpg")
+        formdata.append('files',_self.uploadImg[i],"file_" + new Date() + ".jpg")
       }
-      let { status, data} = await clockApi.saveLegworkVisitMsg(formdata)
-      if(status){
-        console.log(data)
+      // let { status, data} = await clockApi.saveLegworkVisitMsg(formdata)
+      let res = await commonApi.beginLegwork(formdata)
+      // if(status){
+      //   console.log(data)
+      //   _self.$toast.loading({
+      //     message: "正在跳转至离开打卡界面...",
+      //     duration: 1000
+      //   })
+      //   this.$store.commit("fieldDetail/remove_all")
+      //   setTimeout(()=>{
+      //     this.$router.push({
+      //       name: "otherLeave"
+      //     })
+      //   }, 1000)
+      // }
+      console.log(res)
+      if(res.status){
         _self.$toast.loading({
           message: "正在跳转至离开打卡界面...",
           duration: 1000
         })
+        this.$store.commit("fieldDetail/setOngoingTask",this.$store.state.myTaskDetail.selected)
         this.$store.commit("fieldDetail/remove_all")
         setTimeout(()=>{
           this.$router.push({
@@ -147,7 +164,7 @@ export default class OtherIndex extends Vue {
         }, 1000)
       }
     }
-  beforeCreate() {
+  mounted() {
     //背景色变灰
     document.querySelector('body').setAttribute('style', 'background-color:rgb(247, 247, 247)')
   }

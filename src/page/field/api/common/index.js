@@ -75,6 +75,24 @@ function getAccountList(config) {
   })
 }
 
+function getTaskPropertyDetailByTaskId(config) {
+	let url = `/task/getTaskPropertyDetailByTaskId`;
+  return new Promise((resolve, reject) => {
+    resolve(AjaxGet(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
+function beginLegwork(config) {
+  let url = '/user/legwork/begin';
+  return new Promise((resolve, reject) => {
+    resolve(AjaxPost(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
 export {
   fieldCompanyList,
 	fieldCustomerList,
@@ -83,4 +101,6 @@ export {
   getRealAdd,
   getWorkOrderByCompanyId,
   getAccountList,
+  getTaskPropertyDetailByTaskId,
+  beginLegwork
 }

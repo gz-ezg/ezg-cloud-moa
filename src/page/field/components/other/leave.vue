@@ -2,23 +2,24 @@
     <van-row style="overflow-x: hidden">
         <van-row style="padding-bottom:1.75rem">
             <van-nav-bar title="普通外勤打卡" />
-                <local-init></local-init>
-                <van-row>
+                <local-init style="margin-top:-0.8rem;"></local-init>
+                <OngoingTask></OngoingTask>
+                <!-- <van-row>
                     <center style="padding:20px;font-size: 16px">{{clockDetail.companyname}}</center>
                     <van-col span="12" offset="6" style="font-size: 16px">本次外勤时间：{{timeTamp}}</van-col>
-                </van-row>
-                <div style="width:80%;margin:auto;margin-top:20px">
+                </van-row> -->
+                <!-- <div style="width:80%;margin:auto;margin-top:20px">
                     <van-cell-group>
                         <van-field
-                            v-model="remark"
+                            v-model="remark"          /
                             type="textarea"
                             placeholder="本次外勤总结（必填）"
                             rows="3"
                             autosize
                         />
                     </van-cell-group>
-                </div>
-                <upload-img></upload-img>
+                </div> -->
+                <!-- <upload-img></upload-img> -->
         </van-row>
         <van-tabbar style="margin-top:1.25rem;">
             <van-button type="primary" bottom-action style="font-size:20px;border-radius:5px" @click="data_check" :loading="buttonLoading">结束打卡</van-button>
@@ -29,6 +30,7 @@
 <script lang="ts">
 import uploadImg from '../common/main-components/uploadImg.vue'
 import localInit from '../common/main-components/localInit.vue'
+import OngoingTask from '../common/main-components/OngoingTask.vue'
 import { Component, Vue, Watch, Mixins } from 'vue-property-decorator'
 import * as clockApi from '../../api/clock/index'
 import schema from 'async-validator'
@@ -36,7 +38,8 @@ import schema from 'async-validator'
 @Component({
     components: {
         uploadImg,
-        localInit
+        localInit,
+        OngoingTask
     }
 })
 export default class OtherLeave extends Vue {
@@ -101,23 +104,23 @@ export default class OtherLeave extends Vue {
     this.buttonLoading = false
   }
   async created(){
-    let { status, data } = await clockApi.queryUnfinishedPunchCard()
+    // let { status, data } = await clockApi.queryUnfinishedPunchCard()
 
-    if(status){
-      console.log(data.data.unfinishedPunchCard.date)
-      this.clockDetail = data.data.unfinishedPunchCard.date
-      let time = new Date(this.clockDetail.clocktime.replace(/\-/g, "/"))
-      this.$store.commit("fieldDetail/update_clockTime", time)
-      let time1 = setInterval(()=>{
-        let now = new Date()
-        let tampDateTime = new Date(now.getTime() - time.getTime())
-        this.timeTamp = `${tampDateTime.getHours()-8>=0?tampDateTime.getHours()-8:tampDateTime.getHours()+16}时${tampDateTime.getMinutes()}分`
-      },1000)
+    // if(status){
+    //   console.log(data.data.unfinishedPunchCard.date)
+    //   this.clockDetail = data.data.unfinishedPunchCard.date
+    //   let time = new Date(this.clockDetail.clocktime.replace(/\-/g, "/"))
+    //   this.$store.commit("fieldDetail/update_clockTime", time)
+    //   let time1 = setInterval(()=>{
+    //     let now = new Date()
+    //     let tampDateTime = new Date(now.getTime() - time.getTime())
+    //     this.timeTamp = `${tampDateTime.getHours()-8>=0?tampDateTime.getHours()-8:tampDateTime.getHours()+16}时${tampDateTime.getMinutes()}分`
+    //   },1000)
 
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(time1);
-      })
-    }
+    //   this.$once('hook:beforeDestroy', () => {
+    //     clearInterval(time1);
+    //   })
+    // }
   }
 }
 </script>

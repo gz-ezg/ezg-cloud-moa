@@ -5,7 +5,7 @@
     <Mtab :remainingTaskCount="remainingTaskCount" finishTaskCount=0 style="position:fixed;top:1.2rem;left:0;width:100%;z-index:5"/>
     <!-- 今日剩余 -->
     <ul class="remainingTask" v-show="get_tab==='remainingTask'?true:false">
-      <li v-for="(item,i) in list" :key="i" @click="select(item.taskId,i)" :class="selected.indexOf(item.taskId)===-1?'':'selected'">
+      <li v-for="(item,i) in list" :key="i" @click="select(item.taskId)" :class="selected.indexOf(item.taskId)===-1?'':'selected'">
         <div class="checkbox"></div>
         <div class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
         <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
@@ -23,6 +23,15 @@
         <div class="li_state" style="color:red" v-else-if="item.state==='unfinished'">{{item.state}}</div>
       </li> -->
     </ul>
+    <!-- 弹出框 -->
+    <van-dialog v-model="showDialog" :title="taskPropertyDetail.taskName" @confirm="select(taskPropertyDetail.taskId)" show-cancel-button :confirm-button-text="dialogBtn">
+      <ul class="taskDetail">
+        <li>任务时间：{{taskPropertyDetail.planDate}}</li>
+        <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
+        <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
+      </ul>
+    </van-dialog>
+    
   </div>
 </template>
 <script>
@@ -43,11 +52,20 @@ export default {
     remainingTaskCount(){
       return this.list.length
     },
+    selected() {
+      if(this.$store.state.myTaskDetail.selected.length>0){
+        this.btnActive = true;
+      }else {
+        this.btnActive = false;
+      }
+      return this.$store.state.myTaskDetail.selected;
+    },
   },
   data() {
     return {
       btnActive: false,
-      selected:[],
+      showDialog: false,
+      dialogBtn: '添加任务',
       list:[
         // {
         //   taskId:347,
@@ -57,34 +75,28 @@ export default {
         //   taskContent:"123456789",
         //   companyName:"广州云馨心理卫生服务中心有限公司"
         // }
-      ]
+      ],
+      taskPropertyDetail: {}
     }
   },
   methods: {
-    select(id,i){
-      this.selected.indexOf(id)===-1?this.selected.push(id):this.selected.splice(this.selected.indexOf(id),1);
-      if(this.selected.length>0){
-        this.btnActive = true;
-      }else {
-        this.btnActive = false;
-      }
+    select(id){
+      this.$store.commit("myTaskDetail/set_selected",id)
     },
-    btn_click(taskId){
-      this.get_taskPropertyDetailByTaskId(taskId);
+    async btn_click(taskId){
+      let res = await this.show_taskPropertyDetailByTaskId(taskId);
+      if(this.$store.state.myTaskDetail.selected.indexOf(taskId)===-1?this.dialogBtn="添加任务":this.dialogBtn="删除任务")
+      this.showDialog = true;
     },
     start(){
-      console.log(this.selected);
-      this.set_selected(this.selected);
-      console.log(this.$router);
       this.$router.push({path:'/field'})
     },
-    set_selected(i){
-      this.$store.commit("myTaskDetail/set_selected",i)
-    },
+    
     async get_userInfo() {
       const user = await getUserInfo();
       console.log(user);
     },
+    //获取任务
     async get_toDoTaskListByUserId() {
       const config = {
         params:{
@@ -96,21 +108,23 @@ export default {
       console.log(res);
       this.list = JSON.parse(JSON.stringify(res));
     },
-    async get_taskPropertyDetailByTaskId(taskId){
+    //获取任务详情并展示
+    async show_taskPropertyDetailByTaskId(taskId){
       const config = {
         params:{
           taskId: taskId
         }
       };
       let res = await api.getTaskPropertyDetailByTaskId(config);
-      console.log(res);
+      this.taskPropertyDetail = JSON.parse(JSON.stringify(res[0]));
+      console.log(this.taskPropertyDetail)
     }
   },
   created(){
     this.get_userInfo();
     this.get_toDoTaskListByUserId();
   },
-  beforeCreate() {
+  mounted() {
     //背景色
     document.querySelector('body').setAttribute('style', 'background-color:rgb(247, 247, 247)')
   },
@@ -295,5 +309,15 @@ export default {
       }
     }
   }
-
+  .taskDetail{
+    margin-bottom: 0.7rem;
+    padding-left: 1rem;
+    padding-top: 0.7rem;
+    li {
+      text-align: left;
+      height:0.7rem;
+      line-height: 0.7rem;
+      overflow:hidden;
+    }
+  }
 </style>
