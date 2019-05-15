@@ -12,7 +12,7 @@
                     <div style="float:left;width:1rem;height:1rem;">
                         <center>
                             <van-uploader accept="image/*" :before-read="upload" :name="{i:i}" capture="camera" style="font-size:1rem;">
-                                <van-icon name="photograph" style="font-size:1rem;width:1rem;height:1rem;line-height:1rem;color:rgb(56, 55, 58)" />
+                                <van-icon name="photograph" style="font-size:1rem;width:1rem;height:1rem;line-height:1rem;color:rgb(56, 55, 58)"/>
                                 <span v-if="item.showImg.length===0" style="position:absolute;font-size:0.4rem;width:2rem;top:0.2rem;">拍摄照片</span>
                             </van-uploader>
                         </center>
@@ -34,14 +34,14 @@
             </li>
         </ul>
         <!-- 详情弹出框 -->
-        <van-dialog v-model="showDialog" :title="taskPropertyDetail.taskName" >
+        <van-dialog v-model="showDialog" :title="taskPropertyDetail.taskName">
             <ul class="taskDetail">
                 <li>任务时间：{{taskPropertyDetail.planDate}}</li>
                 <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
                 <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
             </ul>
         </van-dialog>
-        <!-- 状态弹出层 -->
+        <!-- 状态弹出层(完成、未完成) -->
         <van-popup v-model="showPopup" position="bottom" overlay="true">
             <van-picker :columns="selectStatusColums" default-index="0" show-toolbar @cancel="showPopup=false" @confirm="onConfirmStatus" @change="onChange"/>
         </van-popup>
@@ -53,11 +53,11 @@ import * as commonApi from '../../../api/common/index.js'
 export default {
     data(){
         return {
-            showDialog: false,
-            taskPropertyDetail: {},
-            showPopup: false,
-            selectStatusColums:['完成','未完成'],
-            selectStatusCurrent:0,
+            showDialog: false,//详情弹出
+            taskPropertyDetail: {},//详情属性
+            showPopup: false,//状态弹出
+            selectStatusColums:['完成','未完成'],//状态
+            selectStatusCurrent:0,//状态当前任务
             list:[
                 {
                   taskId:343,
@@ -159,14 +159,17 @@ export default {
             let i = detail.name.i;
             let _self = this;
             let img = await yasuo(e);
+            console.log(img)
             this.list[i].uploadingImg.push(img);
-            
+            console.log(this.list[i].uploadingImg)
             let formdata = new FormData();
             console.log(this.list[i].taskId,this.list[i].uploadingImg)
-            formdata.append('legwork_task_id',this.list[i].taskId)
-            formdata.append('legwork_id',666)
-            formdata.append('files',this.list[i].uploadingImg,"file_" + new Date() + ".jpg")
-            console.log(formdata)
+            formdata.append('legwork_task_id',10059)
+            formdata.append('legwork_id',9)
+            formdata.append('files',this.list[i].uploadingImg[0],"file_" + this.list[i].taskId + new Date() + ".jpg")
+            console.log(formdata.get("legwork_task_id"))
+            console.log(formdata.get("legwork_id"))
+            console.log(formdata.get("files"))
             try{
                 let res = await commonApi.taskImgUpload(formdata)
                 console.log(res);
@@ -195,11 +198,11 @@ export default {
         console.log(this.$store.state.fieldDetail.ongoingTask)
     },
     mounted() {
-        //背景色
+        //背景色变灰
         document.querySelector('body').setAttribute('style', 'background-color:rgb(247, 247, 247)')
     },
     beforeDestroy() {
-        //背景色
+        //背景色清除
         document.querySelector('body').removeAttribute('style')
     }
 }
@@ -272,9 +275,6 @@ export default {
                 text-align: center;
                 line-height: 1rem;
                 font-size: 0.5rem;
-            }
-            .li_desc {
-
             }
         }
         .selected {

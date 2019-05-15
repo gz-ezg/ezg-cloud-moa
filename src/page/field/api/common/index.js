@@ -94,7 +94,7 @@ function beginLegwork(config) {
 }
 
 function taskImgUpload(config) {
-  let url = '/user/task/imag/upload';
+  let url = '/user/legwork/task/img/upload';
   return new Promise((resolve, reject) => {
     resolve(AjaxPost(url, config))
   }).catch((err) => {
