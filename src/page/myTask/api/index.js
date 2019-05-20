@@ -29,7 +29,17 @@ function getTaskPropertyDetailByTaskId(config) {
   })
 }
 
+function getCheckTaskLegwork(config){
+  let url = `/user/legwork/check/status`;
+  return new Promise((resolve, reject) => {
+    resolve(AjaxGet(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
 export {
   getToDoTaskListByUserId,
-  getTaskPropertyDetailByTaskId
+  getTaskPropertyDetailByTaskId,
+  getCheckTaskLegwork
 }

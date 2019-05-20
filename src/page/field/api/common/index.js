@@ -102,6 +102,24 @@ function taskImgUpload(config) {
   })
 }
 
+function endLegwork(config) {
+  let url = '/user/legwork/end';
+  return new Promise((resolve, reject) => {
+    resolve(AjaxPost(url, config))
+  }).catch((err) => {
+    return err
+  })
+}
+
+function getCheckTaskLegwork(config){
+  let url = `/user/legwork/check/status`;
+  return new Promise((resolve, reject) => {
+    resolve(AjaxGet(url,config))
+  }).catch((err) => {
+    return err
+  })
+}
+
 export {
   fieldCompanyList,
 	fieldCustomerList,
@@ -112,5 +130,7 @@ export {
   getAccountList,
   getTaskPropertyDetailByTaskId,
   beginLegwork,
-  taskImgUpload
+  taskImgUpload,
+  endLegwork,
+  getCheckTaskLegwork
 }

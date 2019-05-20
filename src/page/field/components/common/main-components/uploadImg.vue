@@ -28,7 +28,7 @@ import { yasuo } from './img_beforeUpload'
 export default class uploadImg extends Vue {
     async upload(e){
         let _self = this
-        let img = await yasuo(e)
+        let img = await yasuo(e)//压缩图片
         this.$store.commit("fieldDetail/push_upload_img", img)
         let reader = new FileReader()
         reader.readAsDataURL(e)

@@ -4,7 +4,7 @@
         <van-row style="padding-bottom:2rem;padding-top:0.2rem">
             <!-- <van-nav-bar title="普通外勤打卡" left-arrow @click-left="$backTo(-2)"/> -->
             <Xheader title="外勤打卡" back=-2></Xheader>
-                <local-init></local-init>
+                <local-init></local-init><!-- //获取地址 -->
                 <!-- <van-cell-group style="width:80%;margin:auto;margin-top:1.2rem">
                     <van-field
                         :value="company.companyname"
@@ -23,8 +23,8 @@
                         @click.native="open_fieldType_select"
                     />
                 </van-cell-group> -->
-                <excutoryTask></excutoryTask>
-                <upload-img></upload-img>
+                <excutoryTask></excutoryTask><!-- //待完成任务 -->
+                <upload-img></upload-img><!-- 上传图片 -->
                 <div style="width:80%;margin:auto;margin-top:0.6rem">
                     <van-cell-group>
                         <van-field
@@ -35,7 +35,7 @@
                             autosize
                         />
                     </van-cell-group>
-                </div>
+                </div><!-- 打卡说明 -->
         </van-row>
         <van-tabbar style="margin-top:1rem;">
             <van-button type="primary" bottom-action style="font-size:20px;border-radius:5px" :loading="buttonLoading" @click="data_check">开始打卡</van-button>
@@ -97,7 +97,7 @@ export default class OtherIndex extends Vue {
     data_check(){
       let _self = this
       //  表单验证
-      var descriptor = {
+      var descriptor = {//表单验证，需要哪项必填就打开
         // company: { type: "number", required: true, message: "请选择服务企业！"},
         // type_typecode: { type: "string", required: true, message: "请选择外勤类型！"},
         img_array: { type: "array", required:true, message: "请选择照片！"},
@@ -156,7 +156,9 @@ export default class OtherIndex extends Vue {
           duration: 1000
         })
         this.$store.commit("fieldDetail/setOngoingTask",this.$store.state.myTaskDetail.selected)
+        //选中的任务变为已开始任务
         this.$store.commit("fieldDetail/remove_all")
+        // 清除选中的任务
         setTimeout(()=>{
           this.$router.push({
             name: "otherLeave"
