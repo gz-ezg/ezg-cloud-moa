@@ -5,7 +5,7 @@
         <center style="padding:0.25rem"><van-loading type="spinner" size="30px" /></center>
       </van-cell-group>
       <van-cell-group v-else>
-        <center style="padding-top:0.5rem;display: flex;justify-content:center;align-items:center;"><van-icon name="aim" style="padding-right:0.1333rem;font-size:0.5rem"/><span style="font-size:0.333rem">当前定位地址</span></center>
+        <center style="padding-top:0.5rem;display: flex;justify-content:center;align-items:center;"><van-icon name="aim" style="padding-right:0.1333rem;font-size:0.5rem"/><span style="font-size:0.4rem">当前定位地址</span></center>
         <van-cell :value="addr"  style="text-align:center" id="address"/>
       </van-cell-group>
     </div>

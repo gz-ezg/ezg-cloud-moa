@@ -19,7 +19,7 @@ export default {
         height: 1.2rem; 
         font-size: 0.5rem;
         line-height: 1.2rem;
-        background-color: rgb(156, 36, 0);
+        background-color: rgba(199, 0, 0, 0.883);
         color:#fff;
         z-index:999;
         top: 0;

@@ -20,7 +20,6 @@
                         />
                     </van-cell-group>
       </div>-->
-      <!-- <upload-img></upload-img> -->
     </van-row>
     <van-tabbar style="margin-top:1.25rem;">
       <van-button
@@ -29,7 +28,7 @@
         style="font-size:20px;border-radius:5px"
         @click="data_check"
         :loading="buttonLoading"
-      >结束打卡</van-button>
+      >{{legworkStatus=='begin'?'结束打卡':'上传图片'}}</van-button>
     </van-tabbar>
   </van-row>
 </template>
@@ -61,6 +60,8 @@ export default class OtherLeave extends Vue {
     id: "",
     clocktime: ""
   };
+
+  legworkStatus = localStorage.getItem("legwork_status");
   get uploadImg() {
     return this.$store.state.fieldDetail.uploadImg;
   }
@@ -90,14 +91,43 @@ export default class OtherLeave extends Vue {
     // );
 
     const { OngoingTask } = this.$refs;
-    console.log('OngoingTask',OngoingTask)
+    let taskData = JSON.parse(OngoingTask["legwork_task_json"]) || [];
+
+    // 上传图片校验
+    if (
+      this.legworkStatus !== "begin" &&
+      taskData.filter(v => {
+        return !v.imgList.length;
+      }).length
+    ) {
+      return this.$toast.fail("请上传图片");
+    }
+
+    // 描述内容校验
+
+    if (
+      taskData.filter(e => {
+        if (e.required && !e.memo) {
+          return true;
+        }
+      }).length
+    ) {
+      console.log(taskData);
+      return this.$toast.fail("请填写任务描述原因");
+    }
+
     let formdata = new FormData();
-    formdata.append("legwork_id", OngoingTask['taskId']);
+    formdata.append("legwork_id", OngoingTask["taskId"]);
     formdata.append(
       "legwork_task_json",
-      OngoingTask["legwork_task_json"]
+      JSON.stringify(
+        taskData.map(v => {
+          return { legwork_task_id: v.legwork_task_id, memo: v.memo };
+        })
+      )
     );
-    formdata.append("end_address", "广州市天河区");
+    // formdata.append("end_address", this.$store.state.fieldDetail.addr);
+    formdata.append("end_address", this.$store.state.fieldDetail.addr);
 
     // let config = {
     //   legwork_id:65,
@@ -105,15 +135,38 @@ export default class OtherLeave extends Vue {
     //   end_address:'广州'
     // }
     // console.log(config)
-    let res = await commonApi.endLegwork(formdata);
-    console.log(res);
-    if (res.status) {
+
+    try {
+      let res = await commonApi.endLegwork(formdata);
+      this.$toast.success('打卡成功');
       setTimeout(() => {
         this.$router.push({
-          // name: "Success"
+          path: "/myTask"
         });
       }, 500);
-    }
+    } catch (error) {}
+  }
+
+  async handleStartWork() {
+    let config = {
+      task_ids: 65,
+      files: this.$store.state.fieldDetail.uploadImg,
+      begin_address: "广州"
+    };
+    let formdata = new FormData();
+    this.$store.state.fieldDetail.uploadImg.forEach((e, i) => {
+      formdata.append(
+        "files",
+        e,
+        "file_" + i + new Date() + ".jpg"
+      );
+    });
+
+    formdata.append("task_ids", "65");
+    formdata.append("begin_address", "广州");
+
+    let res = await commonApi.beginLegwork(config);
+    console.log(formdata);
   }
 
   async finish_clock_work() {
@@ -132,9 +185,9 @@ export default class OtherLeave extends Vue {
       this.$store.commit("fieldDetail/remove_all");
       this.$store.commit("fieldDetail/set_finalTime", this.timeTamp);
       setTimeout(() => {
-        this.$router.push({
-          // name:
-        });
+        // this.$router.push({
+        //   name:
+        // });
       }, 500);
     }
 
@@ -162,9 +215,16 @@ export default class OtherLeave extends Vue {
 
 <style>
 .select {
-  color: red;
+  color: rgba(214, 2, 2, 0.966);
 }
 #address .van-cell__value--alone {
   text-align: center;
+}
+
+.van-button--primary {
+  background-color: rgba(199, 0, 0, 0.883) !important;
+}
+.upload {
+  padding-bottom: 1.75rem;
 }
 </style>

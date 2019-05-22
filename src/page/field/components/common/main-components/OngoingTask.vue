@@ -48,17 +48,18 @@
               >
                 <div class="img-content" style="margin-bottom:0.1rem;">
                   <img
-                    :src="item.src"
+                    :src="item.src||item"
                     alt="Ballade"
                     style="max-width:2rem;max-height:1.5rem;margin-bottom:0.1rem;"
                   >
-                  <div class="remove" @click="remove(index,i)">&times;</div>
+                  <!-- <div class="remove" @click="remove(index,i)">&times;</div> -->
                 </div>
               </van-col>
               <!-- 展示图片 -->
             </van-row>
           </div>
         </div>
+
         <van-cell-group v-show="showDesc(item.status)">
           <!-- 是否显示描述任务失败原因 -->
           <van-field
@@ -69,12 +70,28 @@
         </van-cell-group>
       </li>
     </ul>
+<!-- 
+    <ul v-if="startList.length" class="ongoingTask">
+      <li v-for="(item,i) in startList" :key="i">
+        <div class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
+
+        <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
+        <div class="li_btns" @click="showDetail(item.taskId)" @click.stop>详情</div> -->
+        <!-- <van-cell-group>
+          <van-field v-model="item.desc" type="textarea" :placeholder="`请描述任务描述`"/>
+        </van-cell-group> -->
+      <!-- </li>
+    </ul> -->
+
+
     <!-- 详情弹出框 -->
     <van-dialog v-model="showDialog" :title="taskPropertyDetail.taskName">
       <ul class="taskDetail">
         <li>任务时间：{{taskPropertyDetail.planDate}}</li>
         <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
         <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
+        <li>任务地点：{{taskPropertyDetail.taskArea}}</li>
+        <li>公司名称：{{taskPropertyDetail.taskKindName}}</li>
       </ul>
     </van-dialog>
     <!-- 状态弹出层(完成、未完成) -->
@@ -95,9 +112,18 @@ import { yasuo } from "./img_beforeUpload"; //引入压缩图片库
 import * as commonApi from "../../../api/common/index.js"; //commonApi封装请求数据
 import { setTimeout } from "timers";
 import { Toast } from "vant";
+import { constants } from "crypto";
+
+const dict = {
+  命中: "mingzhong",
+  无效: "wuxiao",
+  有效: "youxiao"
+};
 export default {
   data() {
     return {
+      startShowImg: [],
+      startList: [],
       taskId: "",
       showDialog: false, //详情弹出
       taskPropertyDetail: {}, //详情属性
@@ -148,13 +174,19 @@ export default {
       let arr = [];
       for (let i = 0; i < this.list.length; i++) {
         let obj = {};
+        // if( && this.list[i].status !== '命中' || this.this.list[i].status == '无效' || this.this.list[i].status == '未完成') {
+        //   obj.required = true
+        // }
+
         obj.legwork_task_id = this.list[i].taskId;
         obj.memo = this.list[i].desc;
-        obj.finish_status = this.list[i].status;
+        this.list[i].required && (obj.required = true);
+        obj.imgList = this.list[i].showImg;
+        obj.finish_status = dict[this.list[i].status];
         arr.push(obj);
       }
       return JSON.stringify(arr);
-    }
+    },
   },
   methods: {
     statusColor(status) {
@@ -191,6 +223,7 @@ export default {
         return true;
       }
     },
+
     showDetail(taskId) {
       //任务详情模态框展示
       this.show_taskPropertyDetailByTaskId(taskId);
@@ -224,7 +257,15 @@ export default {
     },
     onConfirmStatus(value, i) {
       //确定状态
+
       this.list[this.selectStatusCurrent].status = value;
+      if (
+        value == "无效" ||
+        (this.list[this.selectStatusCurrent].taskKind == "tkLegBusAss" &&
+          value == "有效")
+      ) {
+        this.list[this.selectStatusCurrent].required = true;
+      }
       this.showPopup = false;
     },
     async upload(e, detail) {
@@ -277,7 +318,19 @@ export default {
 
   async created() {
     // console.log(this.$store.state.fieldDetail.ongoingTask)
-    let res = await commonApi.getCheckTaskLegwork(); //初始化数据
+    let res = await commonApi.getCheckTaskLegwork(); 
+    // console.log("res", res);
+    // if (res) {
+    //   console.log(this.$store.state.myTaskDetail.selected);
+    //   let listTemp = JSON.parse(localStorage.getItem("STARTTASK")) || [];
+    //   console.log("listTemp", listTemp);
+    //   this.startList = listTemp.filter(v => {
+    //     return this.$store.state.myTaskDetail.selected.indexOf(v.taskId) !== -1;
+    //   });
+    //   console.log("startList", this.startList);
+    //   this.list = [];
+    //   return;
+    // }
     this.taskId = res.id;
     for (let i = 0; i < res.details.length; i++) {
       let obj = {};
@@ -288,7 +341,10 @@ export default {
       obj.taskKindName = this.$taskKindToChinese(res.details[i].task_kind);
       obj.taskContent = res.details[i].task_content;
       obj.uploadingImg = [];
-      obj.showImg = [];
+      obj.showImg = res.details[i].realpaths.split(",").map(v => {
+        // return { src: "/api/assets/" + v };
+        return "/api/assets/" + v;
+      });
       obj.status = "命中";
       obj.desc = "";
       this.list.push(obj);
@@ -363,6 +419,20 @@ export default {
       background-color: rgb(214, 54, 5);
       color: #fff;
     }
+    .li_btns {
+      position: absolute;
+      right: 0.1rem;
+      top: 0.3rem;
+      width: 1.5rem;
+      height: 0.7rem;
+      line-height: 0.7rem;
+      /* border: 0.03rem solid rgb(214, 54, 5); */
+      border-radius: 0.5rem;
+      text-align: center;
+      /* color: rgb(214, 54, 5); */
+      background-color: rgb(214, 54, 5);
+      color: #fff;
+    }
     .state {
       position: absolute;
       right: 2rem;
@@ -378,13 +448,14 @@ export default {
     }
   }
   .selected {
-    background-color: rgba(0, 0, 0, 0.055);
+    background-color: rgba(250, 11, 11, 0.055);
     .checkbox {
       background-color: rgb(214, 54, 5);
       border: 0 none;
     }
   }
 }
+
 .img-content {
   position: relative;
   .remove {

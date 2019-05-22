@@ -28,6 +28,7 @@ export default new Vuex.Store({
       // 每当刷新用户数据之后，就将权限值置空
       state.menu = [];
       state.userAccess = [];
+      localStorage.setItem('user',JSON.stringify(info))
     },
     setUserRole(state, role) {
       state.userRole = role;

@@ -19,7 +19,7 @@
           <p class="iconfont" :class="`icon-${item.icon}`"></p>
           <p style="color:#333;" class="item_title">{{item.title}}</p>
         </router-link>
-        <!-- <router-link to="/login" @click="logout">退出系统</router-link> -->
+        <!-- <router-link to="/login" @click="logout"></router-link> -->
       </ul>
       <!-- <van-button v-for="(x, index) in menuList" :key="index" :to="x.path">{{x.title}}</van-button>
       <van-button to="/login" @click="logout">退出系统</van-button>-->
@@ -34,11 +34,6 @@ export default {
   data() {
     return {
       menuList: [
-        // {
-        //   title: "外勤打卡",
-        //   path: "/field",
-          // icon: "weizhi"
-        // },
         {
           title: "外勤打卡",
           path: "/myTask",
@@ -48,7 +43,12 @@ export default {
           title: "资料管理",
           path: "",
           icon: "ziliaoku"
-        }
+        },
+        // {
+        //   title: "退出系统",
+        //   path: "/field",
+        //   icon: "weizhi"
+        // }
       ]
     };
   },

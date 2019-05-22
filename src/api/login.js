@@ -6,10 +6,10 @@ import {
 
 function userLogin(config) {
   const url = 'user/login';
-  return new Promise((resolve) => {
+  return new Promise((resolve,reject) => {
     resolve(AjaxPost(url, config));
   }).catch((err) => {
-    return err;
+    reject(err) ;
   });
 }
 

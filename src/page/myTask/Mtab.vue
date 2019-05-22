@@ -1,10 +1,10 @@
 <template>
-  <div v-if="loading">
+  <div>
     <ul class="main">
       <li
         v-for="(item,i) in list"
         :key="i"
-        :class="item.name===get_tab?'active':''"
+        :class="item.name===get_tab?'':'active'"
         @click="change_tab(item.name)"
       >
         {{item.title}}
@@ -24,7 +24,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       active: 0,
       list: [
         {

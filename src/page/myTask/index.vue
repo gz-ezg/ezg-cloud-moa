@@ -1,16 +1,16 @@
 <template>
   <div class="main" style="padding-top:1.2rem;">
     <!-- <van-nav-bar title="我的任务" left-arrow @click-left="$backTo(-1)"/> -->
-    <Xheader back="-1" title="我的任务"/>
+    <Xheader back="-1" title="外勤打卡"/>
     <Mtab
       :remainingTaskCount="remainingTaskCount"
-      finishTaskCount="0"
+      :finishTaskCount="finishTaskCount"
       style="position:fixed;top:1.2rem;left:0;width:100%;z-index:5"
     />
     <!-- 今日剩余 -->
     <ul class="remainingTask" v-show="get_tab==='remainingTask'?true:false">
       <li
-        v-for="(item,i) in list"
+        v-for="(item,i) in remainList"
         :key="i"
         @click="select(item.taskId)"
         :class="selected.indexOf(item.taskId)===-1?'':'selected'"
@@ -28,16 +28,21 @@
 
     <!-- 今日完成任务 -->
     <ul class="finishTask" v-show="get_tab==='finishTask'?true:false">
-      <!-- <li v-for="(item,i) in list" :key="i">
-        <div class="li_title">{{item.taskName}}</div>
-        <div class="li_con">{{item.taskKind}}</div>
-        <div class="li_btn" @click="btn_click(item.taskId)" @click.stop>详情</div>
-        <div class="li_state" v-if="item.state==='finished'">{{item.state}}</div>
-        <div class="li_state" style="color:red" v-else-if="item.state==='unfinished'">{{item.state}}</div>
-      </li>-->
+      <li v-for="(item,i) in finishList" :key="i">
+        <div class="li_title">{{item.task_name}}</div>
+        <div class="li_con">{{item.task_content}}</div>
+        <div
+          class="li_btn"
+          style="background-color:#d63605"
+          @click="btn_click(item.task_id)"
+          @click.stop
+        >详情</div>
+        <div class="li_state">{{taskState[item.finish_status]}}</div>
+      </li>
     </ul>
     <!-- 详情弹出框 -->
     <van-dialog
+      v-if="get_tab==='remainingTask'"
       v-model="showDialog"
       :title="taskPropertyDetail.taskName"
       @confirm="select(taskPropertyDetail.taskId)"
@@ -48,6 +53,22 @@
         <li>任务时间：{{taskPropertyDetail.planDate}}</li>
         <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
         <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
+        <li>任务地点：{{taskPropertyDetail.taskArea}}</li>
+        <li>公司名称：{{taskPropertyDetail.taskKindName}}</li>
+      </ul>
+    </van-dialog>
+
+    <van-dialog
+      v-if="get_tab==='finishTask'"
+      v-model="showDialog"
+      :title="taskPropertyDetail.taskName"
+    >
+      <ul class="taskDetail">
+        <li>任务时间：{{taskPropertyDetail.planDate}}</li>
+        <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
+        <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
+        <li>任务地点：{{taskPropertyDetail.taskArea}}</li>
+        <li>公司名称：{{taskPropertyDetail.taskKindName}}</li>
       </ul>
     </van-dialog>
   </div>
@@ -57,13 +78,22 @@ import { getUserInfo } from "../../api/login.js";
 import * as api from "./api/index.js";
 import Xheader from "../../layouts/Xheader.vue";
 import Mtab from "./Mtab.vue";
+import { constants } from "crypto";
+let _this = this;
 export default {
   async beforeRouteEnter(to, from, next) {
-    let { details } = await api.getCheckTaskLegwork();
-    if (details.length) {
-      next({ path: "/field/otherLeave" });
+    try {
+      let resp = await api.getCheckTaskLegwork();
+      if (!resp) {
+        next();
+      }
+      localStorage.setItem('legwork_status',resp.legwork_status);
+      next(vm => {
+        vm.$router.replace({ path: "/field/otherLeave" });
+      });
+    } catch (error) {
+      console.log(error);
     }
-
   },
   components: {
     Xheader,
@@ -76,7 +106,10 @@ export default {
     },
     remainingTaskCount() {
       //今日剩余任务数量
-      return this.list.length;
+      return this.remainList.length;
+    },
+    finishTaskCount() {
+      return this.finishList.length;
     },
     selected() {
       //获取已选的任务，并确定按钮是否高亮
@@ -90,10 +123,15 @@ export default {
   },
   data() {
     return {
+      taskState: {
+        youxiao: "命中",
+        wuxiao: "无效",
+        mingzhong: "命中"
+      },
       btnActive: false, //完成按钮高亮
       showDialog: false, //详情展示
       dialogBtn: "添加任务", //详情按钮内容
-      list: [
+      remainList: [
         // {
         //   taskId:347,
         //   taskName:"123456789",
@@ -103,6 +141,17 @@ export default {
         //   companyName:"广州云馨心理卫生服务中心有限公司"
         // }
       ],
+      finishList: [
+        {
+          taskId: 347,
+          taskName: "123456789",
+          taskKind: "tkLegBus",
+          taskKindName: "商事外勤",
+          taskContent: "123456789",
+          companyName: "广州云馨心理卫生服务中心有限公司",
+          state: "finished"
+        }
+      ],
       taskPropertyDetail: {} //详情弹出框内容
     };
   },
@@ -111,6 +160,8 @@ export default {
       // 以任务ID选中即commit进仓库
       this.$store.commit("myTaskDetail/set_selected", id);
     },
+    async handleFinishTaskDetail(id) {},
+
     async btn_click(taskId) {
       //点击，反选
       let res = await this.show_taskPropertyDetailByTaskId(taskId);
@@ -121,16 +172,18 @@ export default {
       )
         this.showDialog = true;
     },
+
     async start() {
+      this.$router.push({ path: "/field" });
       //去完成按钮事件，如果有未完成的任务，跳转到外勤打卡结束页面，如果没有，跳转到即将开始打卡页面
-      let res = await api.getCheckTaskLegwork();
-      console.log(res);
-      if (res) {
-        this.$router.push({ path: "/field/otherLeave" }); //otherLeave
-      } else {
-        console.log(res);
-        this.$router.push({ path: "/field" });
-      }
+      // let res = await api.getCheckTaskLegwork();
+
+      // if (res) {
+      //   this.$router.push({ path: "/field/otherLeave" }); //otherLeave
+      // } else {
+      //   console.log(res);
+      //   this.$router.push({ path: "/field" });
+      // }
     },
 
     async get_userInfo() {
@@ -146,9 +199,27 @@ export default {
           date: "2019-05-07"
         }
       };
+      // let date = new Date();
+      // const config = {
+      //   params: {
+      //     userId: JSON.parse(localStorage.getItem("user")).id,
+      //     date: `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+      //   }
+      // };
+      console.log("$store", this.$store.state.userId);
       let res = await api.getToDoTaskListByUserId(config);
-      console.log(res);
-      this.list = JSON.parse(JSON.stringify(res));
+      this.remainList = JSON.parse(JSON.stringify(res));
+      console.log("this.remainList", this.remainList);
+      localStorage.setItem("STARTTASK", JSON.stringify(this.remainList));
+    },
+    async get_FinishTaskListByUserId() {
+      const config = {
+        params: {
+          date: "2019-05-21"
+        }
+      };
+      let res = await api.getFinishedLegworkTask(config);
+      this.finishList = JSON.parse(JSON.stringify(res));
     },
 
     async show_taskPropertyDetailByTaskId(taskId) {
@@ -166,8 +237,9 @@ export default {
     }
   },
   created() {
-    this.get_userInfo();
+    // this.get_userInfo();
     this.get_toDoTaskListByUserId();
+    this.get_FinishTaskListByUserId();
   },
   mounted() {
     //背景色
@@ -188,7 +260,8 @@ export default {
   box-sizing: border-box;
   transition: all 0.2s ease;
 }
-.remainingTask {
+.remainingTask,
+.finishTask {
   padding: 1.45rem 0.2rem 1.4rem 0.2rem;
   li {
     border-radius: 0.15rem;
@@ -282,7 +355,7 @@ export default {
     margin-left: -0.2rem;
   }
   .btnActive {
-    background-color: rgb(156, 36, 0);
+    background-color: rgb(185, 2, 2);
   }
 }
 .finishTask {
@@ -331,7 +404,7 @@ export default {
       border-radius: 0.5rem;
       text-align: center;
       /* color: rgb(214, 54, 5); */
-      background-color: rgb(214, 54, 5);
+      background-color: rgb(131, 117, 113);
       color: #fff;
     }
     .li_state {

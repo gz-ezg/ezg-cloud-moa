@@ -34,12 +34,22 @@ function getCheckTaskLegwork(config){
   return new Promise((resolve, reject) => {
     resolve(AjaxGet(url, config))
   }).catch((err) => {
-    return err
+    reject(err)
+  })
+}
+
+function getFinishedLegworkTask(config) {
+  let url = `user/legwork/finished/list`;
+  return new Promise((resolve, reject) => {
+    resolve(AjaxGet(url, config))
+  }).catch((err) => {
+    reject(err)
   })
 }
 
 export {
   getToDoTaskListByUserId,
   getTaskPropertyDetailByTaskId,
-  getCheckTaskLegwork
+  getCheckTaskLegwork,
+  getFinishedLegworkTask
 }

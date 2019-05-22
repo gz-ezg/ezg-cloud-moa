@@ -8,8 +8,8 @@
       </div>
       <div style="width:80%;margin:auto">
         <van-cell-group>
-          <van-field v-model="username" label="用户名" placeholder="请输入用户名"/>
-          <van-field v-model="password" type="password" label="密码" placeholder="请输入密码"/>
+          <van-field required v-model="username" label="用户名" placeholder="请输入用户名"/>
+          <van-field required v-model="password" type="password" label="密码" placeholder="请输入密码"/>
         </van-cell-group>
       </div>
       <van-row style="width:80%;margin:auto;margin-top:60px">
@@ -20,44 +20,39 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie';
-import { userLogin } from '@api/login';
-
+import Cookies from "js-cookie";
+import { userLogin } from "@api/login";
 
 export default {
   data() {
     return {
-      username: '',
-      password: '',
+      username: "",
+      password: ""
     };
   },
   methods: {
     async login() {
+      if (!this.username || !this.password) {
+        return this.$toast.fail("账号或密码不能为空");
+      }
       const config = {
         username: this.username,
-        password: this.password,
+        password: this.password
       };
-
-      const { status, data } = await userLogin(config);
-      // const resp = await userLogin(config);
-      // console.log(resp)
-			// console.log(status)
-			// console.log(data)
-      if (status) {
-        this.$store.commit('setUserInfo', data.data.user);
+      try {
+        const { data } = await userLogin(config);
+  
+        this.$store.commit("setUserInfo", data.data.user);
         //  设置标志位表示已登录，用于首页跳转
-        Cookies.set('userId', '10000');
+        Cookies.set("userId", "10000");
         this.$router.push({
-          name: 'Index',
+          name: "Index"
         });
+      } catch (error) {
+        return this.$toast.fail(error);
       }
-
-      // TODO 逻辑问题
-			this.$router.push({
-			  name: 'Index',
-			});
-    },
-  },
+    }
+  }
   //   autologin(code) {
   //     let _self = this
   //     let url = `api/legwork/apiLoginByWechatCode`
@@ -97,9 +92,5 @@ export default {
   //       this.autologin(params[1])
   //     }
   //   },
-  // created() {
-  //   // this.autologin()
-  //   this.loading()
-  // }
 };
 </script>
