@@ -21,8 +21,8 @@
         </router-link>
         <!-- <router-link to="/login" @click="logout"></router-link> -->
       </ul>
-      <!-- <van-button v-for="(x, index) in menuList" :key="index" :to="x.path">{{x.title}}</van-button>
-      <van-button to="/login" @click="logout">退出系统</van-button>-->
+       <!-- <van-button v-for="(x, index) in menuList" :key="index" :to="x.path">{{x.title}}</van-button> -->
+      <div class="login__button"><van-button to="/login" @click="logout">退出系统</van-button></div>
     </div>
   </div>
 </template>
@@ -80,6 +80,13 @@ export default {
 </script>
 
 <style scoped>
+.login__button {
+  position: fixed;
+  bottom: 20px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
 .skeleton-tabs {
   list-style: none;
   padding: 0;

@@ -4,7 +4,7 @@
       <li
         v-for="(item,i) in list"
         :key="i"
-        :class="item.name===get_tab?'':'active'"
+        :class="item.name===get_tab?'active':''"
         @click="change_tab(item.name)"
       >
         {{item.title}}

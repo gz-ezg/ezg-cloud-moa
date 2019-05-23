@@ -19,6 +19,7 @@
 </template>
 <script>
 import * as commonApi from '../../../api/common/index.js'
+import { async } from 'q';
 export default {
     data(){
         return {
@@ -57,6 +58,7 @@ export default {
           let res = await this.show_taskPropertyDetailByTaskId(taskId);
           this.showDialog = true;
         },
+
         deleteTask(id){
           this.$store.commit("myTaskDetail/set_selected",id)
           this.get_selected();
@@ -82,8 +84,9 @@ export default {
           }
         }
         let res = await commonApi.getTaskPropertyDetailByTaskId(config);
+ 
         this.list = res;
-    }
+    },
 }
 </script>
 <style lang="scss" scoped>

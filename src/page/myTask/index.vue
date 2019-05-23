@@ -88,6 +88,7 @@ export default {
         next();
       }
       localStorage.setItem('legwork_status',resp.legwork_status);
+      
       next(vm => {
         vm.$router.replace({ path: "/field/otherLeave" });
       });
@@ -174,7 +175,7 @@ export default {
     },
 
     async start() {
-      this.$router.push({ path: "/field" });
+      this.$router.push({ path: "/field/otherIndex" });
       //去完成按钮事件，如果有未完成的任务，跳转到外勤打卡结束页面，如果没有，跳转到即将开始打卡页面
       // let res = await api.getCheckTaskLegwork();
 
@@ -193,10 +194,12 @@ export default {
     },
     async get_toDoTaskListByUserId() {
       // 获取待进行的任务，并展示将数据展示
+      let date = new Date()
+      let Month = Number(date.getMonth()+1) > 10 ? Number(date.getMonth()+1) : '0' + Number(date.getMonth()+1)
+      let Day = Number(date.getDate()) > 10 ? Number(date.getDate()) : '0' + Number(date.getDate())
       const config = {
         params: {
-          userId: "10059",
-          date: "2019-05-07"
+          date: date.getFullYear() + '-' + Month +'-' + Day
         }
       };
       // let date = new Date();
@@ -206,16 +209,19 @@ export default {
       //     date: `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
       //   }
       // };
-      console.log("$store", this.$store.state.userId);
+      
       let res = await api.getToDoTaskListByUserId(config);
       this.remainList = JSON.parse(JSON.stringify(res));
       console.log("this.remainList", this.remainList);
       localStorage.setItem("STARTTASK", JSON.stringify(this.remainList));
     },
     async get_FinishTaskListByUserId() {
+            let date = new Date()
+      let Month = Number(date.getMonth()+1) > 10 ? Number(date.getMonth()+1) : '0' + Number(date.getMonth()+1)
+      let Day = Number(date.getDate()) > 10 ? Number(date.getDate()) : '0' + Number(date.getDate())
       const config = {
         params: {
-          date: "2019-05-21"
+          date: date.getFullYear() + '-' + Month +'-' + Day
         }
       };
       let res = await api.getFinishedLegworkTask(config);
@@ -238,6 +244,7 @@ export default {
   },
   created() {
     // this.get_userInfo();
+    this.$store.state.myTaskDetail.selected = []
     this.get_toDoTaskListByUserId();
     this.get_FinishTaskListByUserId();
   },

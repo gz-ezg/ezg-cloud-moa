@@ -62,6 +62,7 @@ export default class OtherLeave extends Vue {
   };
 
   legworkStatus = localStorage.getItem("legwork_status");
+
   get uploadImg() {
     return this.$store.state.fieldDetail.uploadImg;
   }
@@ -139,6 +140,8 @@ export default class OtherLeave extends Vue {
     try {
       let res = await commonApi.endLegwork(formdata);
       this.$toast.success('打卡成功');
+      localStorage.getItem("legwork_status");
+      localStorage.clear();
       setTimeout(() => {
         this.$router.push({
           path: "/myTask"

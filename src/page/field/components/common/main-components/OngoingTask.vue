@@ -205,7 +205,7 @@ export default {
           return "red";
           break;
         case "有效":
-          return "yellow";
+          return "blue";
           break;
         default:
           return;
@@ -258,6 +258,7 @@ export default {
     onConfirmStatus(value, i) {
       //确定状态
 
+      console.log(value,i)
       this.list[this.selectStatusCurrent].status = value;
       if (
         value == "无效" ||
@@ -341,11 +342,21 @@ export default {
       obj.taskKindName = this.$taskKindToChinese(res.details[i].task_kind);
       obj.taskContent = res.details[i].task_content;
       obj.uploadingImg = [];
-      obj.showImg = res.details[i].realpaths.split(",").map(v => {
-        // return { src: "/api/assets/" + v };
-        return "/api/assets/" + v;
-      });
-      obj.status = "命中";
+      if (res.details[i].realpaths) {
+        obj.showImg = res.details[i].realpaths.split(",").map(v => {
+          // return { src: "/api/assets/" + v };
+          return "/api/assets/" + v;
+        });
+      } else {
+        obj.showImg = []
+      }
+      if (obj.taskKind  === "tkLegBus" ||
+        obj.taskKind === "tkLegAcc" ||
+        obj.taskKind === "tkLegBusAss") {
+        obj.status = "命中";
+      } else {
+        obj.status = "完成";
+      }
       obj.desc = "";
       this.list.push(obj);
     }
