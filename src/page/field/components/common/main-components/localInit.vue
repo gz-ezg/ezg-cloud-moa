@@ -29,7 +29,7 @@ export default class localInit extends Vue {
     let _self = this
       let config = {
         params:{
-            agentId: "1000028",
+            agentId: "1000041",
             url: location.href.split('#')[0]
           }
       }

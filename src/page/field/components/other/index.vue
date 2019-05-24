@@ -89,6 +89,7 @@ export default class OtherIndex extends Vue {
   }
 
   async created() {
+    
     let config = {
       params: {
         groupCodes: "other_field_type"
@@ -162,7 +163,7 @@ export default class OtherIndex extends Vue {
     //     })
     //   }, 1000)
     // }
-    console.log(res);
+
     if (res.status) {
       _self.$toast.loading({
         message: "正在跳转至离开打卡界面...",

@@ -258,7 +258,6 @@ export default {
     onConfirmStatus(value, i) {
       //确定状态
 
-      console.log(value,i)
       this.list[this.selectStatusCurrent].status = value;
       if (
         value == "无效" ||
@@ -266,6 +265,8 @@ export default {
           value == "有效")
       ) {
         this.list[this.selectStatusCurrent].required = true;
+      } else {
+        this.list[this.selectStatusCurrent].required = false;
       }
       this.showPopup = false;
     },
