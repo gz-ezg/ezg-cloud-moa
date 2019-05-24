@@ -32,8 +32,8 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-         target: 'http://192.168.0.220:9000',//正常地址
-        //  target: 'http://192.168.0.222:9000',//眼镜男
+        target: 'http://192.168.0.220:9000',//正常地址
+         //target: 'http://192.168.0.222:9000',//眼镜男
       //  target: 'http://192.168.0.224:9000',//杨公子
         // target: 'http://cloud.zgcfo.com/api/',
         pathRewrite: {

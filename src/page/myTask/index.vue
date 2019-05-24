@@ -17,9 +17,10 @@
       >
         <!-- 点击选中即commit vuex -->
         <div class="checkbox"></div>
-        <div class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
+        <div v-if="!!item.productName" class="li_title">{{item.productName}}</div>
+        <div v-else class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
         <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
-        <div class="li_btn" @click="btn_click(item.taskId)" @click.stop>详情</div>
+        <div class="li_btn" @click="btn_click(item.taskId,'')" @click.stop>详情</div>
         <!-- 点击详情可以展示详情页面 -->
       </li>
       <div class="btn" :class="btnActive?'btnActive':''" @click="btnActive && start()">去完成</div>
@@ -34,7 +35,7 @@
         <div
           class="li_btn"
           style="background-color:#d63605"
-          @click="btn_click(item.task_id)"
+          @click="btn_click(item.task_id,item.finish_status)"
           @click.stop
         >详情</div>
         <div class="li_state">{{taskState[item.finish_status]}}</div>
@@ -64,11 +65,31 @@
       :title="taskPropertyDetail.taskName"
     >
       <ul class="taskDetail">
-        <li>任务时间：{{taskPropertyDetail.planDate}}</li>
-        <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
+        <li>任务对象{{taskPropertyDetail.companyName}}</li>
+        <li>任务详情：{{taskPropertyDetail.taskContent}}</li>
+        <li>任务状态：{{taskState[finishState]}}</li>
         <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
-        <li>任务地点：{{taskPropertyDetail.taskArea}}</li>
-        <li>公司名称：{{taskPropertyDetail.taskKindName}}</li>
+        <li v-if="taskPropertyDetail.executorName">任务类型：{{taskPropertyDetail.executorName}}</li>
+        <li v-if="taskPropertyDetail.planDate">开始时间：{{taskPropertyDetail.planDate}}</li>
+        <li v-if="taskPropertyDetail.Place">任务地点：{{taskPropertyDetail.Place}}</li>
+        <div v-if="taskPropertyDetail.pictures" class="taskDetail__pic">
+          <img :key="index" v-for="(item,index) in taskPropertyDetail.pictures" class="taskDetail__pic-item" :src="item">
+          <!-- <van-row>
+            <van-col
+              v-for="(item,index) in taskPropertyDetail.pictures"
+              :key="index"
+              style="margin-left:3px;margin-right:3px"
+            >
+              <div class="img-content" style="margin-bottom:0.1rem;">
+                <img
+                  :src="item.src||item"
+                  alt="Ballade"
+                  style="max-width:2rem;max-height:1.5rem;margin-bottom:0.1rem;"
+                >
+              </div>
+            </van-col>
+          </van-row> -->
+        </div>
       </ul>
     </van-dialog>
   </div>
@@ -87,13 +108,15 @@ export default {
       if (!resp) {
         next();
       }
-
-      // localStorage.setItem('legwork_status',resp.legwork_status);
-      
-      next(vm => {
-        vm.$store.commit("fieldDetail/change_legwork_status", resp.legwork_status)
-        vm.$router.replace({ path: "/field/otherLeave" });
-      });
+      try {
+        next(vm => {
+          vm.$store.commit(
+            "fieldDetail/change_legwork_status",
+            resp.legwork_status
+          );
+          vm.$router.replace({ path: "/field/otherLeave" });
+        });
+      } catch (error) {}
     } catch (error) {
       console.log(error);
     }
@@ -130,9 +153,10 @@ export default {
         youxiao: "命中",
         wuxiao: "无效",
         mingzhong: "命中",
-        weiwancheng: '未完成',
-        wancheng: '完成'
+        weiwancheng: "未完成",
+        wancheng: "完成"
       },
+      finishState: "",
       btnActive: false, //完成按钮高亮
       showDialog: false, //详情展示
       dialogBtn: "添加任务", //详情按钮内容
@@ -167,15 +191,19 @@ export default {
     },
     async handleFinishTaskDetail(id) {},
 
-    async btn_click(taskId) {
+    async btn_click(taskId, finishState) {
       //点击，反选
       let res = await this.show_taskPropertyDetailByTaskId(taskId);
+      console.log('res',res)
       if (
         this.$store.state.myTaskDetail.selected.indexOf(taskId) === -1
           ? (this.dialogBtn = "添加任务")
           : (this.dialogBtn = "删除任务")
       )
-        this.showDialog = true;
+        if (finishState) {
+          this.finishState = finishState;
+        }
+      this.showDialog = true;
     },
 
     async start() {
@@ -198,38 +226,52 @@ export default {
     },
     async get_toDoTaskListByUserId() {
       // 获取待进行的任务，并展示将数据展示
-      let date = new Date()
-      let Month = Number(date.getMonth()+1) > 10 ? Number(date.getMonth()+1) : '0' + Number(date.getMonth()+1)
-      let Day = Number(date.getDate()) > 10 ? Number(date.getDate()) : '0' + Number(date.getDate())
+      let date = new Date();
+      let Month =
+        Number(date.getMonth() + 1) > 10
+          ? Number(date.getMonth() + 1)
+          : "0" + Number(date.getMonth() + 1);
+      let Day =
+        Number(date.getDate()) > 10
+          ? Number(date.getDate())
+          : "0" + Number(date.getDate());
       const config = {
         params: {
-          date: date.getFullYear() + '-' + Month +'-' + Day
+          date: date.getFullYear() + "-" + Month + "-" + Day
         }
       };
-      // let date = new Date();
-      // const config = {
-      //   params: {
-      //     userId: JSON.parse(localStorage.getItem("user")).id,
-      //     date: `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
-      //   }
-      // };
-      
+
       let res = await api.getToDoTaskListByUserId(config);
       this.remainList = JSON.parse(JSON.stringify(res));
       console.log("this.remainList", this.remainList);
       localStorage.setItem("STARTTASK", JSON.stringify(this.remainList));
     },
     async get_FinishTaskListByUserId() {
-            let date = new Date()
-      let Month = Number(date.getMonth()+1) > 10 ? Number(date.getMonth()+1) : '0' + Number(date.getMonth()+1)
-      let Day = Number(date.getDate()) > 10 ? Number(date.getDate()) : '0' + Number(date.getDate())
+      let date = new Date();
+      let Month =
+        Number(date.getMonth() + 1) > 10
+          ? Number(date.getMonth() + 1)
+          : "0" + Number(date.getMonth() + 1);
+      let Day =
+        Number(date.getDate()) > 10
+          ? Number(date.getDate())
+          : "0" + Number(date.getDate());
       const config = {
         params: {
-          date: date.getFullYear() + '-' + Month +'-' + Day
+          date: date.getFullYear() + "-" + Month + "-" + Day
         }
       };
       let res = await api.getFinishedLegworkTask(config);
       this.finishList = JSON.parse(JSON.stringify(res));
+      // console.log(this.finishList);
+      // this.finishList = this.finishList.map(v=>{
+      //   if (v.legpicurls) {
+      //     v.legpicurls = v.legpicurls.split(",").map(v => {
+      //     return "/api/assets/" + v;
+      //   });
+      //   }
+      //   return v;
+      // })
     },
 
     async show_taskPropertyDetailByTaskId(taskId) {
@@ -240,15 +282,21 @@ export default {
         }
       };
       let res = await api.getTaskPropertyDetailByTaskId(config);
+
       res.length
         ? (this.taskPropertyDetail = JSON.parse(JSON.stringify(res[0])))
         : null;
-      console.log(this.taskPropertyDetail);
+
+      if (this.taskPropertyDetail && this.taskPropertyDetail.legpicurls) {
+        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls.split(",").map(v => {
+          return "/api/assets/" + v;
+        });
+      }
     }
   },
   created() {
     // this.get_userInfo();
-    this.$store.state.myTaskDetail.selected = []
+    this.$store.state.myTaskDetail.selected = [];
     this.get_toDoTaskListByUserId();
     this.get_FinishTaskListByUserId();
   },
@@ -450,5 +498,14 @@ export default {
     line-height: 0.7rem;
     overflow: hidden;
   }
+  .taskDetail__pic {
+    margin-top: 0.5rem;
+    padding-right: 1rem;
+    &-item {
+      margin: 5px;
+      width: 2.2rem;
+    }
+  }
 }
+
 </style>
