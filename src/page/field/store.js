@@ -16,8 +16,12 @@ const fieldDetail = {
     customerModalStatus: false,
     fieldTypeModalStatus: false,
     ongoingTask:[],
+    legworkStatus: ''
   },
   mutations: {
+    change_legwork_status(state, item) {
+      state.legworkStatus = item;
+    },
     change_company_modal_status(state) {
       state.companyModalStatus = !state.companyModalStatus;
     },

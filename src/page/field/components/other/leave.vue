@@ -28,7 +28,7 @@
         style="font-size:20px;border-radius:5px"
         @click="data_check"
         :loading="buttonLoading"
-      >{{legworkStatus=='begin'?'结束打卡':'上传图片'}}</van-button>
+      >{{legworkStatus!=='imgNotUpload'?'结束打卡':'上传图片'}}</van-button>
     </van-tabbar>
   </van-row>
 </template>
@@ -61,7 +61,9 @@ export default class OtherLeave extends Vue {
     clocktime: ""
   };
 
-  legworkStatus = localStorage.getItem("legwork_status");
+  get legworkStatus() {
+    return this.$store.state.fieldDetail.legworkStatus;
+  } 
 
   get uploadImg() {
     return this.$store.state.fieldDetail.uploadImg;
@@ -123,7 +125,7 @@ export default class OtherLeave extends Vue {
       "legwork_task_json",
       JSON.stringify(
         taskData.map(v => {
-          return { legwork_task_id: v.legwork_task_id, memo: v.memo };
+          return { legwork_task_id: v.legwork_task_id, memo: v.memo,finish_status:v.finish_status };
         })
       )
     );
@@ -140,7 +142,6 @@ export default class OtherLeave extends Vue {
     try {
       let res = await commonApi.endLegwork(formdata);
       this.$toast.success('打卡成功');
-      localStorage.getItem("legwork_status");
       localStorage.clear();
       setTimeout(() => {
         this.$router.push({

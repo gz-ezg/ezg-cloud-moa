@@ -4,9 +4,9 @@
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
-    <company-list></company-list>
-    <customer-list></customer-list>
-    <type-list></type-list>
+    <!-- <company-list></company-list> -->
+    <!-- <customer-list></customer-list> -->
+    <!-- <type-list></type-list> -->
   </div>
 </template>
 

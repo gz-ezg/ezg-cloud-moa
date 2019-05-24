@@ -87,9 +87,11 @@ export default {
       if (!resp) {
         next();
       }
-      localStorage.setItem('legwork_status',resp.legwork_status);
+
+      // localStorage.setItem('legwork_status',resp.legwork_status);
       
       next(vm => {
+        vm.$store.commit("fieldDetail/change_legwork_status", resp.legwork_status)
         vm.$router.replace({ path: "/field/otherLeave" });
       });
     } catch (error) {
@@ -127,7 +129,9 @@ export default {
       taskState: {
         youxiao: "命中",
         wuxiao: "无效",
-        mingzhong: "命中"
+        mingzhong: "命中",
+        weiwancheng: '未完成',
+        wancheng: '完成'
       },
       btnActive: false, //完成按钮高亮
       showDialog: false, //详情展示

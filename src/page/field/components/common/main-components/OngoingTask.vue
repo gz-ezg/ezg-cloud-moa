@@ -115,9 +115,11 @@ import { Toast } from "vant";
 import { constants } from "crypto";
 
 const dict = {
-  命中: "mingzhong",
-  无效: "wuxiao",
-  有效: "youxiao"
+  '命中': "mingzhong",
+  '无效': "wuxiao",
+  '有效': "youxiao",
+  '完成': 'wancheng',
+  '未完成': "weiwancheng"
 };
 export default {
   data() {
