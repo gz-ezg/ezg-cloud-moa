@@ -163,7 +163,7 @@ export default class OtherIndex extends Vue {
     //     })
     //   }, 1000)
     // }
-
+    this.buttonLoading = false;
     if (res.status) {
       _self.$toast.loading({
         message: "正在跳转至离开打卡界面...",

@@ -87,11 +87,12 @@
     <!-- 详情弹出框 -->
     <van-dialog v-model="showDialog" :title="taskPropertyDetail.taskName">
       <ul class="taskDetail">
-        <li>任务时间：{{taskPropertyDetail.planDate}}</li>
+        <li v-if="taskPropertyDetail.companyName">任务对象：{{taskPropertyDetail.companyName}}</li>
+        <li v-if="taskPropertyDetail.planDate">计划时间：{{taskPropertyDetail.planDate}}</li>
         <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
         <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
-        <li>任务地点：{{taskPropertyDetail.taskArea}}</li>
-        <li>公司名称：{{taskPropertyDetail.taskKindName}}</li>
+        <li v-if="taskPropertyDetail.executorName">执行者: {{taskPropertyDetail.executorName}}</li>
+        <li v-if="taskPropertyDetail.taskArea">任务地址：{{taskPropertyDetail.taskArea}}</li>
       </ul>
     </van-dialog>
     <!-- 状态弹出层(完成、未完成) -->
@@ -262,7 +263,7 @@ export default {
 
       this.list[this.selectStatusCurrent].status = value;
       if (
-        value == "无效" ||
+        value == "无效" || value == "未完成" ||
         (this.list[this.selectStatusCurrent].taskKind == "tkLegBusAss" &&
           value == "有效")
       ) {

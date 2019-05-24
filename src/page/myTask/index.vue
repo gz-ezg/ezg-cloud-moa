@@ -65,15 +65,24 @@
       :title="taskPropertyDetail.taskName"
     >
       <ul class="taskDetail">
-        <li>任务对象{{taskPropertyDetail.companyName}}</li>
+        <li>任务对象：{{taskPropertyDetail.companyName}}</li>
         <li>任务详情：{{taskPropertyDetail.taskContent}}</li>
         <li>任务状态：{{taskState[finishState]}}</li>
+        <li
+          v-if="taskPropertyDetail.finishMemo"
+        >任务{{taskState[finishState]}}原因：{{taskPropertyDetail.finishMemo}}</li>
         <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
-        <li v-if="taskPropertyDetail.executorName">任务类型：{{taskPropertyDetail.executorName}}</li>
-        <li v-if="taskPropertyDetail.planDate">开始时间：{{taskPropertyDetail.planDate}}</li>
-        <li v-if="taskPropertyDetail.Place">任务地点：{{taskPropertyDetail.Place}}</li>
+        <li v-if="taskPropertyDetail.executorName">执行者: {{taskPropertyDetail.executorName}}</li>
+        <li v-if="taskPropertyDetail.planDate">计划时间：{{taskPropertyDetail.planDate}}</li>
+        <li v-if="taskPropertyDetail.taskArea">任务地点：{{taskPropertyDetail.taskArea}}</li>
+        <li v-if="taskPropertyDetail.taskPlace">公司地点：{{taskPropertyDetail.taskPlace}}</li>
         <div v-if="taskPropertyDetail.pictures" class="taskDetail__pic">
-          <img :key="index" v-for="(item,index) in taskPropertyDetail.pictures" class="taskDetail__pic-item" :src="item">
+          <img
+            :key="index"
+            v-for="(item,index) in taskPropertyDetail.pictures"
+            class="taskDetail__pic-item"
+            :src="item"
+          >
           <!-- <van-row>
             <van-col
               v-for="(item,index) in taskPropertyDetail.pictures"
@@ -88,7 +97,7 @@
                 >
               </div>
             </van-col>
-          </van-row> -->
+          </van-row>-->
         </div>
       </ul>
     </van-dialog>
@@ -97,26 +106,30 @@
 <script>
 import { getUserInfo } from "../../api/login.js";
 import * as api from "./api/index.js";
+import { AjaxDic } from "@api/index";
 import Xheader from "../../layouts/Xheader.vue";
 import Mtab from "./Mtab.vue";
 import { constants } from "crypto";
+import { Promise } from "q";
 let _this = this;
+let gzbusinessarea = [];
+let gzbusinessplace = [];
 export default {
   async beforeRouteEnter(to, from, next) {
     try {
       let resp = await api.getCheckTaskLegwork();
       if (!resp) {
         next();
-      }
-      try {
+      } else {
         next(vm => {
+          console.log(resp);
           vm.$store.commit(
             "fieldDetail/change_legwork_status",
             resp.legwork_status
           );
           vm.$router.replace({ path: "/field/otherLeave" });
         });
-      } catch (error) {}
+      }
     } catch (error) {
       console.log(error);
     }
@@ -194,7 +207,6 @@ export default {
     async btn_click(taskId, finishState) {
       //点击，反选
       let res = await this.show_taskPropertyDetailByTaskId(taskId);
-      console.log('res',res)
       if (
         this.$store.state.myTaskDetail.selected.indexOf(taskId) === -1
           ? (this.dialogBtn = "添加任务")
@@ -273,7 +285,11 @@ export default {
       //   return v;
       // })
     },
-
+    async getDic() {
+      let res = await AjaxDic("gzbusinessarea,gzbusinessplace");
+      gzbusinessarea = res.gzbusinessarea;
+      gzbusinessplace = res.gzbusinessplace;
+    },
     async show_taskPropertyDetailByTaskId(taskId) {
       //获取任务详情并展示
       const config = {
@@ -288,9 +304,25 @@ export default {
         : null;
 
       if (this.taskPropertyDetail && this.taskPropertyDetail.legpicurls) {
-        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls.split(",").map(v => {
-          return "/api/assets/" + v;
+        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls
+          .split(",")
+          .map(v => {
+            return "/api/assets/" + v;
+          });
+      }
+      if (this.taskPropertyDetail && this.taskPropertyDetail.taskPlace) {
+        let taskPlace = gzbusinessarea.find(v => {
+          return (v.typecode = this.taskPropertyDetail.taskPlace);
         });
+        this.taskPropertyDetail.taskPlace = !!taskPlace
+          ? taskPlace.typename
+          : "";
+      }
+      if (this.taskPropertyDetail && this.taskPropertyDetail.taskArea) {
+        let taskArea = gzbusinessplace.find(v => {
+          return (v.typecode = this.taskPropertyDetail.taskArea);
+        });
+        this.taskPropertyDetail.taskArea = !!taskArea ? taskArea.typename : "";
       }
     }
   },
@@ -299,6 +331,7 @@ export default {
     this.$store.state.myTaskDetail.selected = [];
     this.get_toDoTaskListByUserId();
     this.get_FinishTaskListByUserId();
+    this.getDic();
   },
   mounted() {
     //背景色
@@ -507,5 +540,4 @@ export default {
     }
   }
 }
-
 </style>
