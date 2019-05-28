@@ -68,6 +68,33 @@ Vue.prototype.$taskKindToChinese = function(taskKind){
       return "未知任务";
   }//任务类型转中文
 }
+Vue.prototype.$followResultToChinese = function(result){
+  switch(result){
+      case 'Party':
+      return '参加活动'; 
+      break;
+      case "InfoCollect":
+      return '收集资料';
+      break;
+      case "Other":
+      return '其他';
+      break;
+      case "ContractSign":
+      return '签订合同';
+      break;
+      case "Dunning":
+      return '上门催款';
+      break;
+      case "Visit":
+      return '陌拜';
+      break;
+      case "FirstVisit":
+      return '初次拜访';
+      break;
+      default:
+      return "";
+  }//任务类型转中文
+}
 //$Get & $Post
 // Vue.prototype.$Get = $Get;
 // Vue.prototype.$Post = $Post;

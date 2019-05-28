@@ -20,6 +20,7 @@
         <div v-if="!!item.productName" class="li_title">{{item.productName}}</div>
         <div v-else class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
         <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
+        <div v-if="item.follow_result_name" class="li_process">{{item.follow_result_name}}</div>
         <div class="li_btn" @click="btn_click(item.taskId,'')" @click.stop>详情</div>
         <!-- 点击详情可以展示详情页面 -->
       </li>
@@ -38,6 +39,7 @@
           @click="btn_click(item.task_id,item.finish_status)"
           @click.stop
         >详情</div>
+        <div v-if="item.follow_result_name" class="li_process">{{item.follow_result_name}}</div>
         <div class="li_state">{{taskState[item.finish_status]}}</div>
       </li>
     </ul>
@@ -54,8 +56,11 @@
         <li>任务时间：{{taskPropertyDetail.planDate}}</li>
         <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
         <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
-        <li>任务地点：{{taskPropertyDetail.taskArea}}</li>
-        <li>公司名称：{{taskPropertyDetail.taskKindName}}</li>
+        <li v-if="taskPropertyDetail.executorName">执行者: {{taskPropertyDetail.executorName}}</li>
+        <!-- <li>任务地点：{{taskPropertyDetail.taskArea}}</li> -->
+        <li>公司名称：{{taskPropertyDetail.companyName}}</li>
+        <li v-if="taskPropertyDetail.taskArea">任务地点：{{taskPropertyDetail.taskArea}}</li>
+        <li v-if="taskPropertyDetail.taskPlace">公司地点：{{taskPropertyDetail.taskPlace}}</li>
       </ul>
     </van-dialog>
 
@@ -114,6 +119,7 @@ import { Promise } from "q";
 let _this = this;
 let gzbusinessarea = [];
 let gzbusinessplace = [];
+let followStage = [];
 export default {
   async beforeRouteEnter(to, from, next) {
     try {
@@ -255,6 +261,13 @@ export default {
 
       let res = await api.getToDoTaskListByUserId(config);
       this.remainList = JSON.parse(JSON.stringify(res));
+      console.log(followStage);
+      // this.remainList = this.remainList.map(v => {
+      //   v.follow_result = followStage.find(e => {
+      //     e.typecode == v.follow_result;
+      //   });
+      //   return v;
+      // });
       console.log("this.remainList", this.remainList);
       localStorage.setItem("STARTTASK", JSON.stringify(this.remainList));
     },
@@ -286,9 +299,10 @@ export default {
       // })
     },
     async getDic() {
-      let res = await AjaxDic("gzbusinessarea,gzbusinessplace");
+      let res = await AjaxDic("gzbusinessarea,gzbusinessplace,followStage");
       gzbusinessarea = res.gzbusinessarea;
       gzbusinessplace = res.gzbusinessplace;
+      followStage = res.followStage;
     },
     async show_taskPropertyDetailByTaskId(taskId) {
       //获取任务详情并展示
@@ -387,6 +401,13 @@ export default {
       overflow: hidden;
       border-top: 1px solid rgb(204, 204, 204);
       padding: 0.2rem 0.2rem 0.15rem 0.15rem;
+    }
+    .li_process {
+      position: absolute;
+      right: 0.3rem;
+      top: 1.4rem;
+      color: #000;
+      font-size: 0.4rem;
     }
     .checkbox {
       width: 0.6rem;
@@ -498,6 +519,13 @@ export default {
       /* color: rgb(214, 54, 5); */
       background-color: rgb(131, 117, 113);
       color: #fff;
+    }
+    .li_process {
+      position: absolute;
+      right: 0.3rem;
+      top: 1.4rem;
+      color: #000;
+      font-size: 0.4rem;
     }
     .li_state {
       position: absolute;

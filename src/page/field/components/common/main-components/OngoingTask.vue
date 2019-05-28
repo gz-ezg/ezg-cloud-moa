@@ -4,10 +4,12 @@
       <li v-for="(item,i) in list" :key="i">
         <div class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
         <!-- 展示任务类型+任务名 -->
-        <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
+        <div class="li_con pdr">{{item.companyName?item.companyName:item.taskContent}}</div>
         <!-- 如果由公司名，显示公司名，如果没有，显示任务内容 -->
         <div class="li_btn" @click="showDetail(item.taskId)" @click.stop>详情</div>
         <!-- 点击展示详情 -->
+        <div class="li_process">{{item.follow_result}}</div>
+        <van-switch @change="changeStatus($event,i)" active-color="#07c160" size="0.7rem" class="li_switch" v-model="checked"/>
         <div>
           <div
             class="state"
@@ -70,19 +72,18 @@
         </van-cell-group>
       </li>
     </ul>
-<!-- 
+    <!-- 
     <ul v-if="startList.length" class="ongoingTask">
       <li v-for="(item,i) in startList" :key="i">
         <div class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
 
         <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
-        <div class="li_btns" @click="showDetail(item.taskId)" @click.stop>详情</div> -->
-        <!-- <van-cell-group>
+    <div class="li_btns" @click="showDetail(item.taskId)" @click.stop>详情</div>-->
+    <!-- <van-cell-group>
           <van-field v-model="item.desc" type="textarea" :placeholder="`请描述任务描述`"/>
-        </van-cell-group> -->
-      <!-- </li>
-    </ul> -->
-
+    </van-cell-group>-->
+    <!-- </li>
+    </ul>-->
 
     <!-- 详情弹出框 -->
     <van-dialog v-model="showDialog" :title="taskPropertyDetail.taskName">
@@ -116,15 +117,16 @@ import { Toast } from "vant";
 import { constants } from "crypto";
 
 const dict = {
-  '命中': "mingzhong",
-  '无效': "wuxiao",
-  '有效': "youxiao",
-  '完成': 'wancheng',
-  '未完成': "weiwancheng"
+  命中: "mingzhong",
+  无效: "wuxiao",
+  有效: "youxiao",
+  完成: "wancheng",
+  未完成: "weiwancheng"
 };
 export default {
   data() {
     return {
+      checked: true,
       startShowImg: [],
       startList: [],
       taskId: "",
@@ -189,9 +191,14 @@ export default {
         arr.push(obj);
       }
       return JSON.stringify(arr);
-    },
+    }
   },
   methods: {
+    changeStatus(e,i) {
+      console.log(e,i)
+      e ? this.list[i].status = '完成':this.list[i].status = '未完成'
+      this.list[i].required = !e;
+    },
     statusColor(status) {
       //更改状态颜色
       switch (status) {
@@ -263,7 +270,8 @@ export default {
 
       this.list[this.selectStatusCurrent].status = value;
       if (
-        value == "无效" || value == "未完成" ||
+        value == "无效" ||
+        value == "未完成" ||
         (this.list[this.selectStatusCurrent].taskKind == "tkLegBusAss" &&
           value == "有效")
       ) {
@@ -323,7 +331,7 @@ export default {
 
   async created() {
     // console.log(this.$store.state.fieldDetail.ongoingTask)
-    let res = await commonApi.getCheckTaskLegwork(); 
+    let res = await commonApi.getCheckTaskLegwork();
     // console.log("res", res);
     // if (res) {
     //   console.log(this.$store.state.myTaskDetail.selected);
@@ -343,6 +351,7 @@ export default {
       obj.taskId = res.details[i].legwork_task_id;
       obj.taskName = res.details[i].task_name;
       obj.taskKind = res.details[i].task_kind;
+      obj.follow_result = this.$followResultToChinese(res.details[i].follow_result)
       obj.taskKindName = this.$taskKindToChinese(res.details[i].task_kind);
       obj.taskContent = res.details[i].task_content;
       obj.uploadingImg = [];
@@ -352,11 +361,13 @@ export default {
           return "/api/assets/" + v;
         });
       } else {
-        obj.showImg = []
+        obj.showImg = [];
       }
-      if (obj.taskKind  === "tkLegBus" ||
+      if (
+        obj.taskKind === "tkLegBus" ||
         obj.taskKind === "tkLegAcc" ||
-        obj.taskKind === "tkLegBusAss") {
+        obj.taskKind === "tkLegBusAss"
+      ) {
         obj.status = "命中";
       } else {
         obj.status = "完成";
@@ -383,6 +394,9 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+.pdr {
+  padding-right: 1.5rem!important;
 }
 .ongoingTask {
   width: 100%;
@@ -420,6 +434,13 @@ export default {
       border-top: 1px solid rgb(204, 204, 204);
       padding: 0.2rem 0.2rem 0.15rem 0.15rem;
     }
+    .li_process {
+      position: absolute;
+      right: 0.3rem;
+      top: 1.4rem;
+      color: #000;
+      font-size: 0.4rem;
+    }
     .li_btn {
       position: absolute;
       right: 0.1rem;
@@ -433,6 +454,13 @@ export default {
       /* color: rgb(214, 54, 5); */
       background-color: rgb(214, 54, 5);
       color: #fff;
+    }
+    .li_switch {
+      position: absolute;
+      right: 2.3rem;
+      top: 1.3rem;
+      color: #000;
+      font-size: 0.4rem;
     }
     .li_btns {
       position: absolute;
