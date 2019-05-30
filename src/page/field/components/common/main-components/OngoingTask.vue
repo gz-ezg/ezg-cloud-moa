@@ -120,8 +120,8 @@ const dict = {
   命中: "mingzhong",
   无效: "wuxiao",
   有效: "youxiao",
-  完成: "wancheng",
-  未完成: "weiwancheng"
+  完成: "youxiao",
+  未完成: "wuxiao"
 };
 export default {
   data() {

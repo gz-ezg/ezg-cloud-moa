@@ -40,7 +40,11 @@
           @click.stop
         >详情</div>
         <div v-if="item.follow_result_name" class="li_process">{{item.follow_result_name}}</div>
-        <div class="li_state">{{taskState[item.finish_status]}}</div>
+        <div
+          v-if="item.task_kind=='tkLegBus'||item.task_kind=='tkLegBusAss'||item.task_kind=='tkLegAcc'"
+          class="li_state"
+        >{{taskState[item.finish_status]}}</div>
+        <div v-else class="li_state">{{taskState1[item.finish_status]}}</div>
       </li>
     </ul>
     <!-- 详情弹出框 -->
@@ -171,6 +175,13 @@ export default {
       taskState: {
         youxiao: "命中",
         wuxiao: "无效",
+        mingzhong: "命中",
+        weiwancheng: "未完成",
+        wancheng: "完成"
+      },
+      taskState1: {
+        youxiao: "完成",
+        wuxiao: "未完成",
         mingzhong: "命中",
         weiwancheng: "未完成",
         wancheng: "完成"
