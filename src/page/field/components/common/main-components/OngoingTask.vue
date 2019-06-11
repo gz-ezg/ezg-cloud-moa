@@ -263,7 +263,6 @@ export default {
       this.showPopup = true;
       if (
         taskKindName === "tkLegBus" ||
-        taskKindName === "tkLegAcc" ||
         taskKindName === "tkLegBusAss"
       ) {
         this.selectStatusColums = ["命中", "有效", "无效"];
@@ -366,7 +365,6 @@ export default {
       }
       if (
         obj.taskKind === "tkLegBus" ||
-        obj.taskKind === "tkLegAcc" ||
         obj.taskKind === "tkLegBusAss"
       ) {
         obj.status = "命中";
