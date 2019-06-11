@@ -21,6 +21,7 @@
         <div v-else class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
         <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
         <div v-if="item.follow_result_name" class="li_process">{{item.follow_result_name}}</div>
+        <div v-if="!item.follow_result_name" class="li_process">{{item.taskKindName}}</div>
         <div class="li_btn" @click="btn_click(item.taskId,'')" @click.stop>详情</div>
         <!-- 点击详情可以展示详情页面 -->
       </li>
@@ -59,7 +60,14 @@
       <ul class="taskDetail">
         <li>任务时间：{{taskPropertyDetail.planDate}}</li>
         <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
-        <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
+        <template
+          v-if="taskPropertyDetail.taskKind == 'tkLegAccHom'||taskPropertyDetail.taskKind == 'tkLegAccCyc'"
+        >
+          <li v-if="taskPropertyDetail.legType">任务类型：{{taskPropertyDetail.legType}}类</li>
+          <li>服务内容：{{taskPropertyDetail.taskKindName}}</li>
+        </template>
+
+        <li v-else>任务类型：{{taskPropertyDetail.taskKindName}}</li>
         <li v-if="taskPropertyDetail.executorName">执行者: {{taskPropertyDetail.executorName}}</li>
         <!-- <li>任务地点：{{taskPropertyDetail.taskArea}}</li> -->
         <li>公司名称：{{taskPropertyDetail.companyName}}</li>
@@ -257,11 +265,11 @@ export default {
       // 获取待进行的任务，并展示将数据展示
       let date = new Date();
       let Month =
-        Number(date.getMonth() + 1) > 10
+        Number(date.getMonth() + 1) >= 10
           ? Number(date.getMonth() + 1)
           : "0" + Number(date.getMonth() + 1);
       let Day =
-        Number(date.getDate()) > 10
+        Number(date.getDate()) >= 10
           ? Number(date.getDate())
           : "0" + Number(date.getDate());
       const config = {
@@ -285,11 +293,11 @@ export default {
     async get_FinishTaskListByUserId() {
       let date = new Date();
       let Month =
-        Number(date.getMonth() + 1) > 10
+        Number(date.getMonth() + 1) >= 10
           ? Number(date.getMonth() + 1)
           : "0" + Number(date.getMonth() + 1);
       let Day =
-        Number(date.getDate()) > 10
+        Number(date.getDate()) >= 10
           ? Number(date.getDate())
           : "0" + Number(date.getDate());
       const config = {

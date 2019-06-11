@@ -9,7 +9,13 @@
         <div class="li_btn" @click="showDetail(item.taskId)" @click.stop>详情</div>
         <!-- 点击展示详情 -->
         <div class="li_process">{{item.follow_result}}</div>
-        <van-switch @change="changeStatus($event,i)" active-color="#07c160" size="0.7rem" class="li_switch" v-model="checked"/>
+        <van-switch
+          @change="changeStatus($event,i)"
+          active-color="#07c160"
+          size="0.7rem"
+          class="li_switch"
+          v-model="checked"
+        />
         <div>
           <div
             class="state"
@@ -194,9 +200,9 @@ export default {
     }
   },
   methods: {
-    changeStatus(e,i) {
-      console.log(e,i)
-      e ? this.list[i].status = '完成':this.list[i].status = '未完成'
+    changeStatus(e, i) {
+      console.log(e, i);
+      e ? (this.list[i].status = "完成") : (this.list[i].status = "未完成");
       this.list[i].required = !e;
     },
     statusColor(status) {
@@ -286,31 +292,23 @@ export default {
       let i = detail.name.i;
       let _self = this;
       let img = await yasuo(e); //压缩
-      console.log(img);
       this.list[i].uploadingImg.push(img);
-      console.log(this.list[i].uploadingImg);
+
       let formdata = new FormData();
-      console.log(this.list[i].taskId, this.list[i].uploadingImg);
       formdata.append("legwork_task_id", this.list[i].taskId);
       formdata.append("legwork_id", this.list[i].id);
       formdata.append(
         "files",
-        this.list[i].uploadingImg[0],
+        img,
         "file_" + this.list[i].taskId + new Date() + ".jpg"
       );
-      console.log(formdata.get("legwork_task_id"));
-      console.log(formdata.get("legwork_id"));
-      console.log(formdata.get("files"));
 
       const toast = Toast.loading({
         mask: true,
         message: "图片上传中..."
       });
-
       let res = await commonApi.taskImgUpload(formdata); //上传图片
-      console.log(res);
       toast.clear();
-      this.list[i].uploadingImg = [];
 
       let reader = new FileReader(); //读取图片展示在页面上
       reader.readAsDataURL(e);
@@ -322,6 +320,7 @@ export default {
         };
         _self.list[i].showImg.push(imgMsg);
       };
+      this.list[i].uploadingImg = [];
     },
     remove(index, i) {
       this.list[i].uploadingImg.splice(index, 1);
@@ -351,7 +350,9 @@ export default {
       obj.taskId = res.details[i].legwork_task_id;
       obj.taskName = res.details[i].task_name;
       obj.taskKind = res.details[i].task_kind;
-      obj.follow_result = this.$followResultToChinese(res.details[i].follow_result)
+      obj.follow_result = this.$followResultToChinese(
+        res.details[i].follow_result
+      );
       obj.taskKindName = this.$taskKindToChinese(res.details[i].task_kind);
       obj.taskContent = res.details[i].task_content;
       obj.uploadingImg = [];
@@ -396,7 +397,7 @@ export default {
   box-sizing: border-box;
 }
 .pdr {
-  padding-right: 1.5rem!important;
+  padding-right: 1.5rem !important;
 }
 .ongoingTask {
   width: 100%;

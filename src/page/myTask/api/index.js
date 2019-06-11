@@ -12,7 +12,7 @@ import {
  */
 
 function getToDoTaskListByUserId(config) {
-	let url = '/task/getToDoTaskListByUserId';
+	let url = 'task/getToDoTaskListByUserId';
   return new Promise((resolve, reject) => {
     resolve(AjaxGet(url, config))
   }).catch((err) => {
@@ -21,7 +21,7 @@ function getToDoTaskListByUserId(config) {
 }
 
 function getTaskPropertyDetailByTaskId(config) {
-	let url = `/task/getTaskPropertyDetailByTaskId`;
+	let url = `task/getTaskPropertyDetailByTaskId`;
   return new Promise((resolve, reject) => {
     resolve(AjaxGet(url, config))
   }).catch((err) => {
@@ -30,7 +30,7 @@ function getTaskPropertyDetailByTaskId(config) {
 }
 
 function getCheckTaskLegwork(config){
-  let url = `/user/legwork/check/status`;
+  let url = `user/legwork/check/status`;
   return new Promise((resolve, reject) => {
     resolve(AjaxGet(url, config))
   }).catch((err) => {
