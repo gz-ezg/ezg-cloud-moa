@@ -5,6 +5,7 @@ import DeviceError from '../layouts/deviceError';
 import fieldRouter from '../page/field/router.js';
 import resumeRouter from '../page/resume/router.js';
 import myTaskRouter from '../page/myTask/router.js';
+import newTaskRouter from '../page/newTask/router.js';
 
 export const loginRouter = {
   path: '/login',
@@ -30,6 +31,7 @@ export const DeviceErrorRouter = {
 };
 
 export const PageRouter = [
+  newTaskRouter,
   fieldRouter,
   resumeRouter,
   myTaskRouter,
@@ -76,11 +78,4 @@ export const PageRouter = [
   },
 ];
 
-
-export const routers = [
-  loginRouter,
-  BaseRouter,
-  IndexRouter,
-  DeviceErrorRouter,
-  ...PageRouter,
-];
+export const routers = [loginRouter, BaseRouter, IndexRouter, DeviceErrorRouter, ...PageRouter];

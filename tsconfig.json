@@ -12,7 +12,13 @@
     "module": "esnext",
     "target": "es5",
     "moduleResolution": "node",
-    "isolatedModules": true,
+    "isolatedModules": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
     "lib": [
       "dom",
       "es5",

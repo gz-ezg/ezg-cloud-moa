@@ -1,8 +1,4 @@
-import {
-  AjaxGet,
-  AjaxDic,
-  AjaxPost
-} from '@api/index';
+import { AjaxGet, AjaxDic, AjaxPost } from '@api/index';
 
 /**
  * 登录
@@ -12,44 +8,39 @@ import {
  */
 
 function getToDoTaskListByUserId(config) {
-	let url = 'task/getToDoTaskListByUserId';
+  let url = 'task/getToDoTaskListByUserId';
   return new Promise((resolve, reject) => {
-    resolve(AjaxGet(url, config))
-  }).catch((err) => {
-    return err
-  })
+    resolve(AjaxGet(url, config));
+  }).catch(err => {
+    return err;
+  });
 }
 
 function getTaskPropertyDetailByTaskId(config) {
-	let url = `task/getTaskPropertyDetailByTaskId`;
+  let url = `task/getTaskPropertyDetailByTaskId`;
   return new Promise((resolve, reject) => {
-    resolve(AjaxGet(url, config))
-  }).catch((err) => {
-    return err
-  })
+    resolve(AjaxGet(url, config));
+  }).catch(err => {
+    return err;
+  });
 }
 
-function getCheckTaskLegwork(config){
+function getCheckTaskLegwork(config) {
   let url = `user/legwork/check/status`;
   return new Promise((resolve, reject) => {
-    resolve(AjaxGet(url, config))
-  }).catch((err) => {
-    reject(err)
-  })
+    resolve(AjaxGet(url, config));
+  }).catch(err => {
+    reject(err);
+  });
 }
 
 function getFinishedLegworkTask(config) {
   let url = `user/legwork/finished/list`;
   return new Promise((resolve, reject) => {
-    resolve(AjaxGet(url, config))
-  }).catch((err) => {
-    reject(err)
-  })
+    resolve(AjaxGet(url, config));
+  }).catch(err => {
+    reject(err);
+  });
 }
 
-export {
-  getToDoTaskListByUserId,
-  getTaskPropertyDetailByTaskId,
-  getCheckTaskLegwork,
-  getFinishedLegworkTask
-}
+export { getToDoTaskListByUserId, getTaskPropertyDetailByTaskId, getCheckTaskLegwork, getFinishedLegworkTask };

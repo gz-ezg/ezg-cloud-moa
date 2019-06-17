@@ -3,10 +3,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Cookies from 'js-cookie';
-import Toast from 'vant/lib/toast';
+// import Toast from 'vant/lib/toast';
 import 'vant/lib/toast/style';
 import { routers } from './routes';
+// eslint-disable-next-line import/no-cycle
 import store from '../store/index';
+// eslint-disable-next-line import/no-cycle
 import { getUserInfo } from '../api/login';
 
 Vue.use(Router);
@@ -66,30 +68,30 @@ router.beforeEach(async (to, from, next) => {
   //  当cookie获取不到时，应该在路由拦截器中执行获取登录信息登录，如果无登录信息，则跳回login，有登录信息则设置cookie并跳过拦截器
   if (!Cookies.get('userId') && to.name !== 'Login') {
     try {
-      const {roles, user, departs} = await getUserInfo();
+      const { roles, user } = await getUserInfo();
       if (user.id) {
         store.commit('setUserInfo', user);
         Cookies.set('userId', '10000');
       }
-			store.commit("setUserRole", roles);
+      store.commit('setUserRole', roles);
     } catch (error) {
-			console.log(error)
+      console.log(error);
       next('/login');
     }
   }
 
   //  权限及设备拦截器
-//   if (store.state.deviceType === currentDeviceType || to.name === 'DeviceError') {
-//     if (to.meta.access && !store.state.userAccess.includes(to.meta.access)) {
-//       Toast.fail('权限不足！');
-//       next(false);
-//     } else {
-//       next();
-//     }
-//   } else {
-//     next('/deviceError');
-//   }
-	next();
+  //   if (store.state.deviceType === currentDeviceType || to.name === 'DeviceError') {
+  //     if (to.meta.access && !store.state.userAccess.includes(to.meta.access)) {
+  //       Toast.fail('权限不足！');
+  //       next(false);
+  //     } else {
+  //       next();
+  //     }
+  //   } else {
+  //     next('/deviceError');
+  //   }
+  next();
 });
 
 router.afterEach(() => {

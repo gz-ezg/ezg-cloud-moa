@@ -11,20 +11,23 @@ const myTaskRouter = {
   },
   title: '我的任务',
   component: Main,
-  children: [{
-    meta: {
-      //   access: 6001,
+  children: [
+    {
+      meta: {
+        //   access: 6001,
+      },
+      path: '/',
+      redirect: 'index',
     },
-    path: '/',
-    redirect: 'index',
-  }, {
-    path: 'index',
-    name: 'myTaskIndex',
-    component: myTaskIndex,
-    // meta: {
-    //   keepAlive: true,
-    // },
-  }],
+    {
+      path: 'index',
+      name: 'myTaskIndex',
+      component: myTaskIndex,
+      // meta: {
+      //   keepAlive: true,
+      // },
+    },
+  ],
 };
 
 export default myTaskRouter;

@@ -15,6 +15,7 @@
           size="0.7rem"
           class="li_switch"
           v-model="checked"
+          v-if="!(item.taskKind=='tkLegBus'||item.taskKind == 'tkLegBusAss')"
         />
         <div>
           <div

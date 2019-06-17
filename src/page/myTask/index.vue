@@ -118,16 +118,20 @@
         </div>
       </ul>
     </van-dialog>
+
+    <div class="side-buttom" @click="handleNewTask">
+      <van-icon color="white" name="plus"/>
+    </div>
   </div>
 </template>
 <script>
-import { getUserInfo } from "../../api/login.js";
-import * as api from "./api/index.js";
-import { AjaxDic } from "@api/index";
-import Xheader from "../../layouts/Xheader.vue";
-import Mtab from "./Mtab.vue";
-import { constants } from "crypto";
-import { Promise } from "q";
+import { getUserInfo } from '../../api/login.js';
+import * as api from './api/index.js';
+import { AjaxDic } from '@api/index';
+import Xheader from '../../layouts/Xheader.vue';
+import Mtab from './Mtab.vue';
+import { constants } from 'crypto';
+import { Promise } from 'q';
 let _this = this;
 let gzbusinessarea = [];
 let gzbusinessplace = [];
@@ -141,11 +145,8 @@ export default {
       } else {
         next(vm => {
           console.log(resp);
-          vm.$store.commit(
-            "fieldDetail/change_legwork_status",
-            resp.legwork_status
-          );
-          vm.$router.replace({ path: "/field/otherLeave" });
+          vm.$store.commit('fieldDetail/change_legwork_status', resp.legwork_status);
+          vm.$router.replace({ path: '/field/otherLeave' });
         });
       }
     } catch (error) {
@@ -154,7 +155,7 @@ export default {
   },
   components: {
     Xheader,
-    Mtab
+    Mtab,
   },
   computed: {
     get_tab() {
@@ -176,28 +177,28 @@ export default {
         this.btnActive = false;
       }
       return this.$store.state.myTaskDetail.selected;
-    }
+    },
   },
   data() {
     return {
       taskState: {
-        youxiao: "命中",
-        wuxiao: "无效",
-        mingzhong: "命中",
-        weiwancheng: "未完成",
-        wancheng: "完成"
+        youxiao: '命中',
+        wuxiao: '无效',
+        mingzhong: '命中',
+        weiwancheng: '未完成',
+        wancheng: '完成',
       },
       taskState1: {
-        youxiao: "完成",
-        wuxiao: "未完成",
-        mingzhong: "命中",
-        weiwancheng: "未完成",
-        wancheng: "完成"
+        youxiao: '完成',
+        wuxiao: '未完成',
+        mingzhong: '命中',
+        weiwancheng: '未完成',
+        wancheng: '完成',
       },
-      finishState: "",
+      finishState: '',
       btnActive: false, //完成按钮高亮
       showDialog: false, //详情展示
-      dialogBtn: "添加任务", //详情按钮内容
+      dialogBtn: '添加任务', //详情按钮内容
       remainList: [
         // {
         //   taskId:347,
@@ -211,21 +212,24 @@ export default {
       finishList: [
         {
           taskId: 347,
-          taskName: "123456789",
-          taskKind: "tkLegBus",
-          taskKindName: "商事外勤",
-          taskContent: "123456789",
-          companyName: "广州云馨心理卫生服务中心有限公司",
-          state: "finished"
-        }
+          taskName: '123456789',
+          taskKind: 'tkLegBus',
+          taskKindName: '商事外勤',
+          taskContent: '123456789',
+          companyName: '广州云馨心理卫生服务中心有限公司',
+          state: 'finished',
+        },
       ],
-      taskPropertyDetail: {} //详情弹出框内容
+      taskPropertyDetail: {}, //详情弹出框内容
     };
   },
   methods: {
+    handleNewTask() {
+      this.$router.push({ name: 'newTaskIndex' });
+    },
     select(id) {
       // 以任务ID选中即commit进仓库
-      this.$store.commit("myTaskDetail/set_selected", id);
+      this.$store.commit('myTaskDetail/set_selected', id);
     },
     async handleFinishTaskDetail(id) {},
 
@@ -234,8 +238,8 @@ export default {
       let res = await this.show_taskPropertyDetailByTaskId(taskId);
       if (
         this.$store.state.myTaskDetail.selected.indexOf(taskId) === -1
-          ? (this.dialogBtn = "添加任务")
-          : (this.dialogBtn = "删除任务")
+          ? (this.dialogBtn = '添加任务')
+          : (this.dialogBtn = '删除任务')
       )
         if (finishState) {
           this.finishState = finishState;
@@ -244,7 +248,7 @@ export default {
     },
 
     async start() {
-      this.$router.push({ path: "/field/otherIndex" });
+      this.$router.push({ path: '/field/otherIndex' });
       //去完成按钮事件，如果有未完成的任务，跳转到外勤打卡结束页面，如果没有，跳转到即将开始打卡页面
       // let res = await api.getCheckTaskLegwork();
 
@@ -264,18 +268,12 @@ export default {
     async get_toDoTaskListByUserId() {
       // 获取待进行的任务，并展示将数据展示
       let date = new Date();
-      let Month =
-        Number(date.getMonth() + 1) >= 10
-          ? Number(date.getMonth() + 1)
-          : "0" + Number(date.getMonth() + 1);
-      let Day =
-        Number(date.getDate()) >= 10
-          ? Number(date.getDate())
-          : "0" + Number(date.getDate());
+      let Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : '0' + Number(date.getMonth() + 1);
+      let Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : '0' + Number(date.getDate());
       const config = {
         params: {
-          date: date.getFullYear() + "-" + Month + "-" + Day
-        }
+          date: date.getFullYear() + '-' + Month + '-' + Day,
+        },
       };
 
       let res = await api.getToDoTaskListByUserId(config);
@@ -287,23 +285,17 @@ export default {
       //   });
       //   return v;
       // });
-      console.log("this.remainList", this.remainList);
-      localStorage.setItem("STARTTASK", JSON.stringify(this.remainList));
+      console.log('this.remainList', this.remainList);
+      localStorage.setItem('STARTTASK', JSON.stringify(this.remainList));
     },
     async get_FinishTaskListByUserId() {
       let date = new Date();
-      let Month =
-        Number(date.getMonth() + 1) >= 10
-          ? Number(date.getMonth() + 1)
-          : "0" + Number(date.getMonth() + 1);
-      let Day =
-        Number(date.getDate()) >= 10
-          ? Number(date.getDate())
-          : "0" + Number(date.getDate());
+      let Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : '0' + Number(date.getMonth() + 1);
+      let Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : '0' + Number(date.getDate());
       const config = {
         params: {
-          date: date.getFullYear() + "-" + Month + "-" + Day
-        }
+          date: date.getFullYear() + '-' + Month + '-' + Day,
+        },
       };
       let res = await api.getFinishedLegworkTask(config);
       this.finishList = JSON.parse(JSON.stringify(res));
@@ -318,7 +310,7 @@ export default {
       // })
     },
     async getDic() {
-      let res = await AjaxDic("gzbusinessarea,gzbusinessplace,followStage");
+      let res = await AjaxDic('gzbusinessarea,gzbusinessplace,followStage');
       gzbusinessarea = res.gzbusinessarea;
       gzbusinessplace = res.gzbusinessplace;
       followStage = res.followStage;
@@ -327,37 +319,31 @@ export default {
       //获取任务详情并展示
       const config = {
         params: {
-          taskId: taskId
-        }
+          taskId: taskId,
+        },
       };
       let res = await api.getTaskPropertyDetailByTaskId(config);
 
-      res.length
-        ? (this.taskPropertyDetail = JSON.parse(JSON.stringify(res[0])))
-        : null;
+      res.length ? (this.taskPropertyDetail = JSON.parse(JSON.stringify(res[0]))) : null;
 
       if (this.taskPropertyDetail && this.taskPropertyDetail.legpicurls) {
-        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls
-          .split(",")
-          .map(v => {
-            return "/api/assets/" + v;
-          });
+        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls.split(',').map(v => {
+          return '/api/assets/' + v;
+        });
       }
       if (this.taskPropertyDetail && this.taskPropertyDetail.taskPlace) {
         let taskPlace = gzbusinessarea.find(v => {
           return (v.typecode = this.taskPropertyDetail.taskPlace);
         });
-        this.taskPropertyDetail.taskPlace = !!taskPlace
-          ? taskPlace.typename
-          : "";
+        this.taskPropertyDetail.taskPlace = !!taskPlace ? taskPlace.typename : '';
       }
       if (this.taskPropertyDetail && this.taskPropertyDetail.taskArea) {
         let taskArea = gzbusinessplace.find(v => {
           return (v.typecode = this.taskPropertyDetail.taskArea);
         });
-        this.taskPropertyDetail.taskArea = !!taskArea ? taskArea.typename : "";
+        this.taskPropertyDetail.taskArea = !!taskArea ? taskArea.typename : '';
       }
-    }
+    },
   },
   created() {
     // this.get_userInfo();
@@ -368,14 +354,12 @@ export default {
   },
   mounted() {
     //背景色
-    document
-      .querySelector("body")
-      .setAttribute("style", "background-color:rgb(247, 247, 247)");
+    document.querySelector('body').setAttribute('style', 'background-color:rgb(247, 247, 247)');
   },
   beforeDestroy() {
     //背景色
-    document.querySelector("body").removeAttribute("style");
-  }
+    document.querySelector('body').removeAttribute('style');
+  },
 };
 </script>
 <style scoped lang="scss">
@@ -438,7 +422,7 @@ export default {
       border-radius: 50%;
     }
     .checkbox::after {
-      content: "";
+      content: '';
       position: absolute;
       left: 0.14rem;
       top: 0.2rem;
@@ -586,5 +570,17 @@ export default {
       width: 2.2rem;
     }
   }
+}
+.side-buttom {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 2rem;
+  right: 0.6rem;
+  background: rgba(199, 0, 0, 1);
+  border-radius: 50%;
+  width: 1.3rem;
+  height: 1.3rem;
 }
 </style>
