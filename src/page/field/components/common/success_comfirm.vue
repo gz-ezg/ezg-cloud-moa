@@ -26,7 +26,7 @@ export default {
     },
     methods:{
         close () {
-            localStorage.clear()
+            // localStorage.clear()
             sessionStorage.clear()
             window.close()
             // WeixinJSBridge.invoke('closeWindow',{},function(res){

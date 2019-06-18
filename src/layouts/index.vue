@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="移动亿账柜" left-arrow @click-left="$backTo()"/>
+    <van-nav-bar title="移动亿账柜" />
     <!-- <van-button to="/field">外勤打卡</van-button>
     <van-button to="/resume">简历管理</van-button>
     <van-button to="/field1">外勤打卡1</van-button>-->

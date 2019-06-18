@@ -43,6 +43,7 @@
         <van-field
           @click="handleshowCompany"
           v-model="mainFrom.companyname"
+          readonly
           label="公司名称"
           placeholder="请选择公司名称"
         />
@@ -142,7 +143,7 @@
             :key="index"
             size="small"
             plain
-            style="margin:0 1px"
+            style="margin:2px"
             type="info"
           >
             {{item.realname}}
@@ -164,7 +165,12 @@
 
     <!-- 时间选择 -->
     <van-popup class="select" v-model="showSelectTime" position="bottom">
-      <van-datetime-picker v-model="currentDate" type="datetime" @confirm="confirmTime"/>
+      <van-datetime-picker
+        class="executor-content"
+        v-model="currentDate"
+        type="datetime"
+        @confirm="confirmTime"
+      />
     </van-popup>
 
     <!-- 服务内容 -->
@@ -309,7 +315,7 @@
         <van-search
           show-action
           @cancel="CloseCompanySelect"
-          @search="CompanySearch"
+          @search="CompanySearch()"
           v-model="searchValue"
           shape="round"
           clearable
@@ -454,12 +460,14 @@ export default class NewsTask extends Vue {
       this.companyList = await handleSeachCompany(config);
     } else {
       const regMobile = /^0?1[3|4|5|8][0-9]\d{8}$/;
-      if (regMobile.test(searchValue)) {
+      if (regMobile.test(searchValue) || label == 2) {
         config.customerTel = searchValue;
       } else {
         label == 0 ? (config.companyname = searchValue) : (config.customerName = searchValue);
       }
+
       this.companyList = await handleSeachCompany(config);
+      console.log(this.companyList);
     }
   }
   handleSelectTime() {
@@ -497,7 +505,7 @@ export default class NewsTask extends Vue {
   selectProduct({ businessId, product, taskKind = '' }) {
     this.mainFrom.businessId = businessId;
     this.mainFrom.product = product;
-    if (this.departName == 'MARKET') {
+    if (this.departName == 'ACCOUNT') {
       this.mainFrom.taskKind = taskKind;
     }
     this.hanldeShowProduct();
@@ -511,7 +519,7 @@ export default class NewsTask extends Vue {
     this.mainFrom.companyname = companyname;
     this.mainFrom.companyId = companyid;
 
-    if (this.departName == 'MARKET') {
+    if (this.departName == 'ACCOUNT') {
       this.handleKJProductList(companyid);
     } else {
       this.handleProductList(companyid);
@@ -606,6 +614,7 @@ export default class NewsTask extends Vue {
         followResult: this.followResult.typecode,
         customerId: mainFrom.customerid,
       });
+      delete config.businessId;
       sumbitfunc = addMarketLegworkTask;
     }
 
@@ -620,7 +629,7 @@ export default class NewsTask extends Vue {
       sumbitfunc = addLegworkTask;
     }
 
-    if (this.departName == 'MARKET') {
+    if (this.departName == 'ACCOUNT') {
       if (mainFrom.taskKind == 'tkLegAccCyc') {
         config = Object.assign(config, {
           legTypeId: mainFrom.legTypeId,
@@ -694,7 +703,7 @@ export default class NewsTask extends Vue {
 </script>
 <style scoped lang="scss">
 .main {
-  width: 100vw;
+  width: 100%;
   //
 
   &-body {
@@ -706,7 +715,7 @@ export default class NewsTask extends Vue {
 
     &-text {
       margin-top: 0.3rem;
-      border: 1px solid rgb(247, 247, 247);
+      // border: 1px solid rgb(247, 247, 247);
     }
 
     &-radio {
@@ -750,22 +759,21 @@ export default class NewsTask extends Vue {
   }
 
   .select {
-    width: 100vw;
     background-color: rgb(247, 247, 247);
-
     &-company {
-      font-size: 0.37333rem;
       height: 100vh;
-      width: 100vw;
       &-list {
+        font-size: 0.37333rem;
+        overflow: hidden;
         margin: 0.3rem;
         display: flex;
         flex-direction: column;
         align-content: center;
-        border-bottom: 1px solid rgba(227, 227, 227, 0.2);
+        // border-bottom: 1px solid rgba(227, 227, 227, 0.2);
 
         .list {
           &-top {
+            flex-wrap: wrap;
             display: flex;
             align-items: center;
             justify-content: space-between;
