@@ -675,7 +675,7 @@ export default class NewsTask extends Vue {
   async created() {
     // 获取当前登录用户的信息
     let user = JSON.parse(localStorage.getItem('user'));
-    this.departName = user.currentDepart.departname;
+    this.departName = user.currentDepart.aliasCode;
     this.executorResult.push({ id: user.id, realname: user.realname, departname: user.currentDepart.departname });
 
     let { gzbusinessarea, gzbusinessplace, followStage } = await queryCodes([

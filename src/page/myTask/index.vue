@@ -119,7 +119,7 @@
       </ul>
     </van-dialog>
 
-    <div class="side-buttom" @click="handleNewTask">
+    <div v-if="sideButton" class="side-buttom" @click="handleNewTask">
       <van-icon size="0.8rem" color="white" name="plus"/>
     </div>
   </div>
@@ -209,6 +209,7 @@ export default {
         //   companyName:"广州云馨心理卫生服务中心有限公司"
         // }
       ],
+      sideButton: false,
       finishList: [
         {
           taskId: 347,
@@ -347,6 +348,11 @@ export default {
   },
   created() {
     // this.get_userInfo();
+    let {
+      currentDepart: { aliasCode },
+    } = JSON.parse(localStorage.getItem('user'));
+    this.sideButton = aliasCode == 'BUSSINESS' || aliasCode == 'MARKET' || aliasCode == 'ACCOUNT' ? true : false;
+
     this.$store.state.myTaskDetail.selected = [];
     this.get_toDoTaskListByUserId();
     this.get_FinishTaskListByUserId();
@@ -577,11 +583,11 @@ export default {
   justify-content: center;
   align-items: center;
   bottom: 2rem;
-  right: 0.6rem;
+  right: 0.8rem;
   background: rgba(199, 0, 0, 1);
   border-radius: 50%;
-  box-shadow: 0px 2px 0px 0px rgba(226, 22, 22, 1);
-  width: 1.34rem;
+  // box-shadow: 0px 2px 0px 0px rgba(226, 22, 22, 1);
+  width: 1.3rem;
   height: 1.3rem;
 }
 </style>
