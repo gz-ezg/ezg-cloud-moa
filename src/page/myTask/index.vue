@@ -120,7 +120,7 @@
     </van-dialog>
 
     <div class="side-buttom" @click="handleNewTask">
-      <van-icon color="white" name="plus"/>
+      <van-icon size="0.8rem" color="white" name="plus"/>
     </div>
   </div>
 </template>
@@ -580,7 +580,8 @@ export default {
   right: 0.6rem;
   background: rgba(199, 0, 0, 1);
   border-radius: 50%;
-  width: 1.3rem;
+  box-shadow: 0px 2px 0px 0px rgba(226, 22, 22, 1);
+  width: 1.34rem;
   height: 1.3rem;
 }
 </style>

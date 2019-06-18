@@ -21,7 +21,7 @@ const myTaskRouter = {
     },
     {
       path: 'index',
-      name: 'myTaskIndex',
+      name: 'MyTaskIndex',
       component: myTaskIndex,
       // meta: {
       //   keepAlive: true,
