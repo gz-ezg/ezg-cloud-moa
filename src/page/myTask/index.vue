@@ -1,68 +1,71 @@
 <template>
-  <div class="main" style="padding-top:1.2rem;">
+  <div class="main"
+       style="padding-top:1.2rem;">
     <!-- <van-nav-bar title="我的任务" left-arrow @click-left="$backTo(-1)"/> -->
-    <Xheader back="-1" title="外勤打卡"/>
-    <Mtab
-      :remainingTaskCount="remainingTaskCount"
-      :finishTaskCount="finishTaskCount"
-      style="position:fixed;top:1.2rem;left:0;width:100%;z-index:5"
-    />
+    <Xheader back="-1"
+             title="外勤打卡" />
+    <Mtab :remainingTaskCount="remainingTaskCount"
+          :finishTaskCount="finishTaskCount"
+          style="position:fixed;top:1.2rem;left:0;width:100%;z-index:5" />
     <!-- 今日剩余 -->
-    <ul class="remainingTask" v-show="get_tab==='remainingTask'?true:false">
-      <li
-        v-for="(item,i) in remainList"
-        :key="i"
-        @click="select(item.taskId)"
-        :class="selected.indexOf(item.taskId)===-1?'':'selected'"
-      >
+    <ul class="remainingTask"
+        v-show="get_tab==='remainingTask'?true:false">
+      <li v-for="(item,i) in remainList"
+          :key="i"
+          @click="select(item.taskId)"
+          :class="selected.indexOf(item.taskId)===-1?'':'selected'">
         <!-- 点击选中即commit vuex -->
         <div class="checkbox"></div>
-        <div v-if="!!item.productName" class="li_title">{{item.productName}}</div>
-        <div v-else class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
+        <div v-if="!!item.productName"
+             class="li_title">{{item.productName}}</div>
+        <div v-else
+             class="li_title">{{item.taskKindName+'-'+item.taskName}}</div>
         <div class="li_con">{{item.companyName?item.companyName:item.taskContent}}</div>
-        <div v-if="item.follow_result_name" class="li_process">{{item.follow_result_name}}</div>
-        <div v-if="!item.follow_result_name" class="li_process">{{item.taskKindName}}</div>
-        <div class="li_btn" @click="btn_click(item.taskId,'')" @click.stop>详情</div>
+        <div v-if="item.follow_result_name"
+             class="li_process">{{item.follow_result_name}}</div>
+        <div v-if="!item.follow_result_name"
+             class="li_process">{{item.taskKindName}}</div>
+        <div class="li_btn"
+             @click="btn_click(item.taskId,'')"
+             @click.stop>详情</div>
         <!-- 点击详情可以展示详情页面 -->
       </li>
-      <div class="btn" :class="btnActive?'btnActive':''" @click="btnActive && start()">去完成</div>
+      <div class="btn"
+           :class="btnActive?'btnActive':''"
+           @click="btnActive && start()">去完成</div>
       <!-- 去完成即将任务进入待开始打卡 -->
     </ul>
 
     <!-- 今日完成任务 -->
-    <ul class="finishTask" v-show="get_tab==='finishTask'?true:false">
-      <li v-for="(item,i) in finishList" :key="i">
+    <ul class="finishTask"
+        v-show="get_tab==='finishTask'?true:false">
+      <li v-for="(item,i) in finishList"
+          :key="i">
         <div class="li_title">{{item.task_name}}</div>
         <div class="li_con">{{item.task_content}}</div>
-        <div
-          class="li_btn"
-          style="background-color:#d63605"
-          @click="btn_click(item.task_id,item.finish_status)"
-          @click.stop
-        >详情</div>
-        <div v-if="item.follow_result_name" class="li_process">{{item.follow_result_name}}</div>
-        <div
-          v-if="item.task_kind=='tkLegBus'||item.task_kind=='tkLegBusAss'||item.task_kind=='tkLegAcc'"
-          class="li_state"
-        >{{taskState[item.finish_status]}}</div>
-        <div v-else class="li_state">{{taskState1[item.finish_status]}}</div>
+        <div class="li_btn"
+             style="background-color:#d63605"
+             @click="btn_click(item.task_id,item.finish_status)"
+             @click.stop>详情</div>
+        <div v-if="item.follow_result_name"
+             class="li_process">{{item.follow_result_name}}</div>
+        <div v-if="item.task_kind=='tkLegBus'||item.task_kind=='tkLegBusAss'||item.task_kind=='tkLegAcc'"
+             class="li_state">{{taskState[item.finish_status]}}</div>
+        <div v-else
+             class="li_state">{{taskState1[item.finish_status]}}</div>
       </li>
     </ul>
     <!-- 详情弹出框 -->
-    <van-dialog
-      v-if="get_tab==='remainingTask'"
-      v-model="showDialog"
-      :title="taskPropertyDetail.taskName"
-      @confirm="select(taskPropertyDetail.taskId)"
-      show-cancel-button
-      :confirm-button-text="dialogBtn"
-    >
+    <van-dialog v-if="get_tab==='remainingTask'"
+                v-model="showDialog"
+                :title="taskPropertyDetail.taskName"
+                @confirm="select(taskPropertyDetail.taskId)"
+                show-cancel-button
+                :confirm-button-text="dialogBtn">
       <ul class="taskDetail">
         <li>任务时间：{{taskPropertyDetail.planDate}}</li>
         <li>任务内容：{{taskPropertyDetail.taskContent}}</li>
-        <template
-          v-if="taskPropertyDetail.taskKind == 'tkLegAccHom'||taskPropertyDetail.taskKind == 'tkLegAccCyc'"
-        >
+        <template v-if="taskPropertyDetail.taskKind == 'tkLegAccHom'||taskPropertyDetail.taskKind == 'tkLegAccCyc'">
           <li v-if="taskPropertyDetail.legType">任务类型：{{taskPropertyDetail.legType}}类</li>
           <li>服务内容：{{taskPropertyDetail.taskKindName}}</li>
         </template>
@@ -76,30 +79,25 @@
       </ul>
     </van-dialog>
 
-    <van-dialog
-      v-if="get_tab==='finishTask'"
-      v-model="showDialog"
-      :title="taskPropertyDetail.taskName"
-    >
+    <van-dialog v-if="get_tab==='finishTask'"
+                v-model="showDialog"
+                :title="taskPropertyDetail.taskName">
       <ul class="taskDetail">
         <li>任务对象：{{taskPropertyDetail.companyName}}</li>
         <li>任务详情：{{taskPropertyDetail.taskContent}}</li>
         <li>任务状态：{{taskState[finishState]}}</li>
-        <li
-          v-if="taskPropertyDetail.finishMemo"
-        >任务{{taskState[finishState]}}原因：{{taskPropertyDetail.finishMemo}}</li>
+        <li v-if="taskPropertyDetail.finishMemo">任务{{taskState[finishState]}}原因：{{taskPropertyDetail.finishMemo}}</li>
         <li>任务类型：{{taskPropertyDetail.taskKindName}}</li>
         <li v-if="taskPropertyDetail.executorName">执行者: {{taskPropertyDetail.executorName}}</li>
         <li v-if="taskPropertyDetail.planDate">计划时间：{{taskPropertyDetail.planDate}}</li>
         <li v-if="taskPropertyDetail.taskArea">任务地点：{{taskPropertyDetail.taskArea}}</li>
         <li v-if="taskPropertyDetail.taskPlace">公司地点：{{taskPropertyDetail.taskPlace}}</li>
-        <div v-if="taskPropertyDetail.pictures" class="taskDetail__pic">
-          <img
-            :key="index"
-            v-for="(item,index) in taskPropertyDetail.pictures"
-            class="taskDetail__pic-item"
-            :src="item"
-          >
+        <div v-if="taskPropertyDetail.pictures"
+             class="taskDetail__pic">
+          <img :key="index"
+               v-for="(item,index) in taskPropertyDetail.pictures"
+               class="taskDetail__pic-item"
+               :src="item">
           <!-- <van-row>
             <van-col
               v-for="(item,index) in taskPropertyDetail.pictures"
@@ -119,32 +117,36 @@
       </ul>
     </van-dialog>
 
-    <div v-if="sideButton" class="side-buttom" @click="handleNewTask">
-      <van-icon size="0.8rem" color="white" name="plus"/>
+    <div v-if="sideButton"
+         class="side-buttom"
+         @click="handleNewTask">
+      <van-icon size="0.8rem"
+                color="white"
+                name="plus" />
     </div>
   </div>
 </template>
 <script>
+import { AjaxDic } from '@api/index';
 import { getUserInfo } from '../../api/login.js';
 import * as api from './api/index.js';
-import { AjaxDic } from '@api/index';
 import Xheader from '../../layouts/Xheader.vue';
 import Mtab from './Mtab.vue';
 import { constants } from 'crypto';
 import { Promise } from 'q';
-let _this = this;
+
+const _this = this;
 let gzbusinessarea = [];
 let gzbusinessplace = [];
 let followStage = [];
 export default {
   async beforeRouteEnter(to, from, next) {
     try {
-      let resp = await api.getCheckTaskLegwork();
+      const resp = await api.getCheckTaskLegwork();
       if (!resp) {
         next();
       } else {
-        next(vm => {
-          console.log(resp);
+        next((vm) => {
           vm.$store.commit('fieldDetail/change_legwork_status', resp.legwork_status);
           vm.$router.replace({ path: '/field/otherLeave' });
         });
@@ -163,14 +165,14 @@ export default {
       return this.$store.state.myTaskDetail.tab;
     },
     remainingTaskCount() {
-      //今日剩余任务数量
+      // 今日剩余任务数量
       return this.remainList.length;
     },
     finishTaskCount() {
       return this.finishList.length;
     },
     selected() {
-      //获取已选的任务，并确定按钮是否高亮
+      // 获取已选的任务，并确定按钮是否高亮
       if (this.$store.state.myTaskDetail.selected.length > 0) {
         this.btnActive = true;
       } else {
@@ -196,9 +198,9 @@ export default {
         wancheng: '完成',
       },
       finishState: '',
-      btnActive: false, //完成按钮高亮
-      showDialog: false, //详情展示
-      dialogBtn: '添加任务', //详情按钮内容
+      btnActive: false, // 完成按钮高亮
+      showDialog: false, // 详情展示
+      dialogBtn: '添加任务', // 详情按钮内容
       remainList: [
         // {
         //   taskId:347,
@@ -221,7 +223,7 @@ export default {
           state: 'finished',
         },
       ],
-      taskPropertyDetail: {}, //详情弹出框内容
+      taskPropertyDetail: {}, // 详情弹出框内容
     };
   },
   methods: {
@@ -232,25 +234,25 @@ export default {
       // 以任务ID选中即commit进仓库
       this.$store.commit('myTaskDetail/set_selected', id);
     },
-    async handleFinishTaskDetail(id) {},
+    async handleFinishTaskDetail(id) { },
 
     async btn_click(taskId, finishState) {
-      //点击，反选
-      let res = await this.show_taskPropertyDetailByTaskId(taskId);
+      // 点击，反选
+      const res = await this.show_taskPropertyDetailByTaskId(taskId);
       if (
         this.$store.state.myTaskDetail.selected.indexOf(taskId) === -1
           ? (this.dialogBtn = '添加任务')
           : (this.dialogBtn = '删除任务')
       )
-        if (finishState) {
+        {if (finishState) {
           this.finishState = finishState;
-        }
+        }}
       this.showDialog = true;
     },
 
     async start() {
       this.$router.push({ path: '/field/otherIndex' });
-      //去完成按钮事件，如果有未完成的任务，跳转到外勤打卡结束页面，如果没有，跳转到即将开始打卡页面
+      // 去完成按钮事件，如果有未完成的任务，跳转到外勤打卡结束页面，如果没有，跳转到即将开始打卡页面
       // let res = await api.getCheckTaskLegwork();
 
       // if (res) {
@@ -262,22 +264,22 @@ export default {
     },
 
     async get_userInfo() {
-      //获取用户信息
+      // 获取用户信息
       const user = await getUserInfo();
       console.log(user);
     },
     async get_toDoTaskListByUserId() {
       // 获取待进行的任务，并展示将数据展示
-      let date = new Date();
-      let Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : '0' + Number(date.getMonth() + 1);
-      let Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : '0' + Number(date.getDate());
+      const date = new Date();
+      const Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : `0${  Number(date.getMonth() + 1)}`;
+      const Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : `0${  Number(date.getDate())}`;
       const config = {
         params: {
-          date: date.getFullYear() + '-' + Month + '-' + Day,
+          date: `${date.getFullYear()  }-${  Month  }-${  Day}`,
         },
       };
 
-      let res = await api.getToDoTaskListByUserId(config);
+      const res = await api.getToDoTaskListByUserId(config);
       this.remainList = JSON.parse(JSON.stringify(res));
       console.log(followStage);
       // this.remainList = this.remainList.map(v => {
@@ -290,15 +292,15 @@ export default {
       localStorage.setItem('STARTTASK', JSON.stringify(this.remainList));
     },
     async get_FinishTaskListByUserId() {
-      let date = new Date();
-      let Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : '0' + Number(date.getMonth() + 1);
-      let Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : '0' + Number(date.getDate());
+      const date = new Date();
+      const Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : `0${  Number(date.getMonth() + 1)}`;
+      const Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : `0${  Number(date.getDate())}`;
       const config = {
         params: {
-          date: date.getFullYear() + '-' + Month + '-' + Day,
+          date: `${date.getFullYear()  }-${  Month  }-${  Day}`,
         },
       };
-      let res = await api.getFinishedLegworkTask(config);
+      const res = await api.getFinishedLegworkTask(config);
       this.finishList = JSON.parse(JSON.stringify(res));
       // console.log(this.finishList);
       // this.finishList = this.finishList.map(v=>{
@@ -311,47 +313,41 @@ export default {
       // })
     },
     async getDic() {
-      let res = await AjaxDic('gzbusinessarea,gzbusinessplace,followStage');
+      const res = await AjaxDic('gzbusinessarea,gzbusinessplace,followStage');
       gzbusinessarea = res.gzbusinessarea;
       gzbusinessplace = res.gzbusinessplace;
       followStage = res.followStage;
     },
     async show_taskPropertyDetailByTaskId(taskId) {
-      //获取任务详情并展示
+      // 获取任务详情并展示
       const config = {
         params: {
-          taskId: taskId,
+          taskId,
         },
       };
-      let res = await api.getTaskPropertyDetailByTaskId(config);
+      const res = await api.getTaskPropertyDetailByTaskId(config);
 
       res.length ? (this.taskPropertyDetail = JSON.parse(JSON.stringify(res[0]))) : null;
 
       if (this.taskPropertyDetail && this.taskPropertyDetail.legpicurls) {
-        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls.split(',').map(v => {
-          return '/api/assets/' + v;
-        });
+        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls.split(',').map((v) => '/api/assets/' + v);
       }
       if (this.taskPropertyDetail && this.taskPropertyDetail.taskPlace) {
-        let taskPlace = gzbusinessarea.find(v => {
-          return (v.typecode = this.taskPropertyDetail.taskPlace);
-        });
-        this.taskPropertyDetail.taskPlace = !!taskPlace ? taskPlace.typename : '';
+        const taskPlace = gzbusinessarea.find((v) => (v.typecode = this.taskPropertyDetail.taskPlace));
+        this.taskPropertyDetail.taskPlace = taskPlace ? taskPlace.typename : '';
       }
       if (this.taskPropertyDetail && this.taskPropertyDetail.taskArea) {
-        let taskArea = gzbusinessplace.find(v => {
-          return (v.typecode = this.taskPropertyDetail.taskArea);
-        });
-        this.taskPropertyDetail.taskArea = !!taskArea ? taskArea.typename : '';
+        const taskArea = gzbusinessplace.find((v) => (v.typecode = this.taskPropertyDetail.taskArea));
+        this.taskPropertyDetail.taskArea = taskArea ? taskArea.typename : '';
       }
     },
   },
   created() {
     // this.get_userInfo();
-    let {
+    const {
       currentDepart: { aliasCode },
     } = JSON.parse(localStorage.getItem('user'));
-    this.sideButton = aliasCode == 'BUSSINESS' || aliasCode == 'MARKET' || aliasCode == 'ACCOUNT' ? true : false;
+    this.sideButton = !!(aliasCode == 'BUSSINESS' || aliasCode == 'MARKET' || aliasCode == 'ACCOUNT');
 
     this.$store.state.myTaskDetail.selected = [];
     this.get_toDoTaskListByUserId();
@@ -359,11 +355,11 @@ export default {
     this.getDic();
   },
   mounted() {
-    //背景色
+    // 背景色
     document.querySelector('body').setAttribute('style', 'background-color:rgb(247, 247, 247)');
   },
   beforeDestroy() {
-    //背景色
+    // 背景色
     document.querySelector('body').removeAttribute('style');
   },
 };

@@ -2,7 +2,8 @@
   <van-row style="overflow-x: hidden">
     <van-row style="padding-bottom:1.75rem">
       <!-- <van-nav-bar title="普通外勤打卡" /> -->
-      <Xheader back="-1" title="外勤打卡"></Xheader>
+      <Xheader back="-1"
+               title="外勤打卡"></Xheader>
       <local-init></local-init>
       <OngoingTask ref="OngoingTask"></OngoingTask>
       <!-- <van-row>
@@ -22,48 +23,46 @@
       </div>-->
     </van-row>
     <van-tabbar style="margin-top:1.25rem;">
-      <van-button
-        type="primary"
-        bottom-action
-        style="font-size:20px;border-radius:5px"
-        @click="data_check"
-        :loading="buttonLoading"
-      >{{legworkStatus!=='imgNotUpload'?'结束打卡':'上传图片'}}</van-button>
+      <van-button type="primary"
+                  bottom-action
+                  style="font-size:20px;border-radius:5px"
+                  @click="data_check"
+                  :loading="buttonLoading">{{legworkStatus!=='imgNotUpload'?'结束打卡':'上传图片'}}</van-button>
     </van-tabbar>
   </van-row>
 </template>
 
 <script lang="ts">
-import uploadImg from "../common/main-components/uploadImg.vue";
-import localInit from "../common/main-components/localInit.vue";
-import OngoingTask from "../common/main-components/OngoingTask.vue";
-import Xheader from "../../../../layouts/Xheader.vue";
-import { Component, Vue, Watch, Mixins } from "vue-property-decorator";
-import * as clockApi from "../../api/clock/index";
-import * as commonApi from "../../api/common/index";
-import schema from "async-validator";
-import { constants } from "crypto";
+import uploadImg from '../common/main-components/uploadImg.vue';
+import localInit from '../common/main-components/localInit.vue';
+import OngoingTask from '../common/main-components/OngoingTask.vue';
+import Xheader from '../../../../layouts/Xheader.vue';
+import { Component, Vue, Watch, Mixins } from 'vue-property-decorator';
+import * as clockApi from '../../api/clock/index';
+import * as commonApi from '../../api/common/index';
+import schema from 'async-validator';
+import { constants } from 'crypto';
 
 @Component({
   components: {
     uploadImg,
     localInit,
     OngoingTask,
-    Xheader
-  }
+    Xheader,
+  },
 })
 export default class OtherLeave extends Vue {
-  remark = "";
+  remark = '';
   buttonLoading: Boolean = false;
-  timeTamp = "0时0分";
+  timeTamp = '0时0分';
   clockDetail = {
-    id: "",
-    clocktime: ""
+    id: '',
+    clocktime: '',
   };
 
   get legworkStatus() {
     return this.$store.state.fieldDetail.legworkStatus;
-  } 
+  }
 
   get uploadImg() {
     return this.$store.state.fieldDetail.uploadImg;
@@ -94,43 +93,44 @@ export default class OtherLeave extends Vue {
     // );
 
     const { OngoingTask } = this.$refs;
-    let taskData = JSON.parse(OngoingTask["legwork_task_json"]) || [];
+    let taskData = JSON.parse(OngoingTask['legwork_task_json']) || [];
+    console.log(taskData);
 
     // 上传图片校验
     if (
-      this.legworkStatus !== "begin" &&
+      this.legworkStatus !== 'begin' &&
       taskData.filter(v => {
         return !v.imgList.length;
       }).length
     ) {
-      return this.$toast.fail("请上传图片");
+      console.log(this.legworkStatus, 'this.legworkStatus');
+      return this.$toast.fail('请上传图片');
     }
 
     // 描述内容校验
 
     if (
       taskData.filter(e => {
-        if (e.required && !e.memo) {
+        if ((e.required && !e.memo) || (e.taskKind == 'tkLegAccHom' && !e.memo)) {
           return true;
         }
       }).length
     ) {
-      console.log(taskData);
-      return this.$toast.fail("请填写任务描述原因");
+      return this.$toast.fail('请填写任务描述原因');
     }
 
     let formdata = new FormData();
-    formdata.append("legwork_id", OngoingTask["taskId"]);
+    formdata.append('legwork_id', OngoingTask['taskId']);
     formdata.append(
-      "legwork_task_json",
+      'legwork_task_json',
       JSON.stringify(
         taskData.map(v => {
-          return { legwork_task_id: v.legwork_task_id, memo: v.memo,finish_status:v.finish_status };
-        })
-      )
+          return { legwork_task_id: v.legwork_task_id, memo: v.memo, finish_status: v.finish_status };
+        }),
+      ),
     );
     // formdata.append("end_address", this.$store.state.fieldDetail.addr);
-    formdata.append("end_address", this.$store.state.fieldDetail.addr);
+    formdata.append('end_address', this.$store.state.fieldDetail.addr);
 
     // let config = {
     //   legwork_id:65,
@@ -145,7 +145,7 @@ export default class OtherLeave extends Vue {
       // localStorage.clear();
       setTimeout(() => {
         this.$router.push({
-          path: "/myTask"
+          path: '/myTask',
         });
       }, 500);
     } catch (error) {}
@@ -155,19 +155,15 @@ export default class OtherLeave extends Vue {
     let config = {
       task_ids: 65,
       files: this.$store.state.fieldDetail.uploadImg,
-      begin_address: "广州"
+      begin_address: '广州',
     };
     let formdata = new FormData();
     this.$store.state.fieldDetail.uploadImg.forEach((e, i) => {
-      formdata.append(
-        "files",
-        e,
-        "file_" + i + new Date() + ".jpg"
-      );
+      formdata.append('files', e, 'file_' + i + new Date() + '.jpg');
     });
 
-    formdata.append("task_ids", "65");
-    formdata.append("begin_address", "广州");
+    formdata.append('task_ids', '65');
+    formdata.append('begin_address', '广州');
 
     let res = await commonApi.beginLegwork(config);
     console.log(formdata);
@@ -177,17 +173,17 @@ export default class OtherLeave extends Vue {
     let _self = this;
     let formdata = new FormData();
     this.buttonLoading = true;
-    formdata.append("id", this.clockDetail.id);
-    formdata.append("address2", this.$store.state.fieldDetail.addr);
-    formdata.append("remark", this.remark);
+    formdata.append('id', this.clockDetail.id);
+    formdata.append('address2', this.$store.state.fieldDetail.addr);
+    formdata.append('remark', this.remark);
     for (let i = 0; i < this.uploadImg.length; i++) {
-      formdata.append("file", this.uploadImg[i], "file_" + new Date() + ".jpg");
+      formdata.append('file', this.uploadImg[i], 'file_' + new Date() + '.jpg');
     }
     let { status, data } = await clockApi.saveLegworkLeaveVisitMsg(formdata);
     if (status) {
       console.log(data);
-      this.$store.commit("fieldDetail/remove_all");
-      this.$store.commit("fieldDetail/set_finalTime", this.timeTamp);
+      this.$store.commit('fieldDetail/remove_all');
+      this.$store.commit('fieldDetail/set_finalTime', this.timeTamp);
       setTimeout(() => {
         // this.$router.push({
         //   name:
