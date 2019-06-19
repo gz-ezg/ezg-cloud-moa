@@ -2,8 +2,8 @@ import { AjaxGet, AjaxDic, AjaxPost } from '@/api/index';
 
 export interface SearchConfig {
   companyname: string;
-  customerName: string;
-  customerTel: string;
+  name: string;
+  tel: string;
 }
 
 export interface SearchRsp {

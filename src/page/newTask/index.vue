@@ -69,6 +69,7 @@
             <van-radio-group @change="changeLegName" class="radio-node" v-model="mainFrom.legType">
               <van-radio name="A">A</van-radio>
               <van-radio name="B">B</van-radio>
+              <van-radio name="其他">其他</van-radio>
             </van-radio-group>
           </div>
         </template>
@@ -315,6 +316,7 @@
         <van-search
           show-action
           @cancel="CloseCompanySelect"
+          @input="CompanySearch()"
           @search="CompanySearch()"
           v-model="searchValue"
           shape="round"
@@ -356,6 +358,7 @@ import {
 } from './api';
 import { formatDate } from '@/utils';
 import Xheader from '../../layouts/Xheader.vue';
+import { watch } from 'fs';
 
 let AreaList: any[] = [];
 let PlaceList: any[] = [];
@@ -375,11 +378,15 @@ export default class NewsTask extends Vue {
   get executId() {
     return this.executorResult.map(v => v.id).join(',');
   }
-  // get taskName() {
-  //   return this.mainFrom.companyname + this.mainFrom.product;
-  // }
 
-  private taskName = '';
+  get taskName() {
+    if (this.departName != 'BUSSINESS' && this.mainFrom.companyname) {
+      return `${this.mainFrom.companyname}--${this.mainFrom.product}--${this.mainFrom.legName}`;
+    }
+    return '';
+  }
+
+  // private taskName = '';
   private departName = '';
   private mainFrom = {
     businessId: '',
@@ -452,8 +459,8 @@ export default class NewsTask extends Vue {
     let { searchValue, label } = this;
     let config: SearchConfig = {
       companyname: '',
-      customerName: '',
-      customerTel: '',
+      name: '',
+      tel: '',
     };
     if (companyname) {
       config.companyname = companyname;
@@ -461,9 +468,9 @@ export default class NewsTask extends Vue {
     } else {
       const regMobile = /^0?1[3|4|5|8][0-9]\d{8}$/;
       if (regMobile.test(searchValue) || label == 2) {
-        config.customerTel = searchValue;
+        config.tel = searchValue;
       } else {
-        label == 0 ? (config.companyname = searchValue) : (config.customerName = searchValue);
+        label == 0 ? (config.companyname = searchValue) : (config.name = searchValue);
       }
 
       this.companyList = await handleSeachCompany(config);
@@ -765,11 +772,14 @@ export default class NewsTask extends Vue {
       &-list {
         font-size: 0.37333rem;
         overflow: hidden;
-        margin: 0.3rem;
+        margin: 0.2rem;
+        border-radius: 4px;
         display: flex;
         flex-direction: column;
+        background: #fff;
+        padding: 0.2rem;
         align-content: center;
-        // border-bottom: 1px solid rgba(227, 227, 227, 0.2);
+        border-bottom: 1px solid rgba(227, 227, 227, 0.6);
 
         .list {
           &-top {
@@ -779,7 +789,7 @@ export default class NewsTask extends Vue {
             justify-content: space-between;
           }
           &-bottom {
-            margin: 0.3rem 0;
+            margin: 0.2rem 0;
             text-align: left;
           }
         }
