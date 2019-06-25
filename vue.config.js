@@ -1,7 +1,9 @@
 /* eslint-disable global-require */
 const path = require('path');
 const merge = require('webpack-merge');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const {
+  BundleAnalyzerPlugin,
+} = require('webpack-bundle-analyzer');
 // const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
@@ -32,9 +34,9 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://192.168.0.220:9000',//正常地址
-         //target: 'http://192.168.0.222:9000',//眼镜男
-        //target: 'http://192.168.0.224:9000',//杨公子
+        // target: 'http://192.168.0.220:9000', // 正常地址
+        target: 'http://192.168.0.222:9000', // 眼镜男
+        // target: 'http://192.168.0.224:9000',//杨公子
         // target: 'http://cloud.zgcfo.com/api/',
         pathRewrite: {
           '^/api': '',

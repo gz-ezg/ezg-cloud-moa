@@ -1,72 +1,71 @@
 <template>
-  <div class="main" style="padding-top:1.2rem;">
-    <Xheader back="-1" title="新增任务"/>
+  <div class="main"
+       style="padding-top:1.2rem;">
+    <Xheader back="-1"
+             title="新增任务" />
     <!-- 内容区域 -->
     <van-cell-group class="main-body">
-      <van-field class="main-body-text" v-model="taskName" type="textarea" placeholder="请输入任务内容"/>
+
+      <van-field v-if="departName!=='BUSSINESS'"
+                 class="main-body-text"
+                 v-model="taskName"
+                 type="textarea"
+                 placeholder="请输入任务内容" />
+      <van-field v-else class="main-body-text"
+                 v-model="taskNameBus"
+                 type="textarea"
+                 placeholder="请输入任务内容" />
 
       <!-- 市场 -->
       <template v-if="departName == 'MARKET'">
-        <van-field
-          @click="handleCompanySelect(0)"
-          v-model="mainFrom.companyname"
-          readonly
-          label="企业"
-          placeholder="请选择企业"
-        />
-        <van-field
-          readonly
-          @click="handleCompanySelect(1)"
-          v-model="mainFrom.name"
-          label="客户"
-          placeholder="请选择客户"
-        />
-        <van-field
-          readonly
-          @click="handleCompanySelect(2)"
-          v-model="mainFrom.tel"
-          type="tel"
-          label="联系电话"
-          placeholder="请输入联系电话"
-        />
-        <van-field
-          readonly
-          @click="handleShowFollowStage"
-          :value="followResult.typename"
-          label="服务内容"
-          placeholder="请选择服务内容"
-        />
+        <van-field @click="handleCompanySelect(0)"
+                   v-model="mainFrom.companyname"
+                   readonly
+                   label="企业"
+                   placeholder="请选择企业" />
+        <van-field readonly
+                   @click="handleCompanySelect(1)"
+                   v-model="mainFrom.name"
+                   label="客户"
+                   placeholder="请选择客户" />
+        <van-field readonly
+                   @click="handleCompanySelect(2)"
+                   v-model="mainFrom.tel"
+                   type="tel"
+                   label="联系电话"
+                   placeholder="请输入联系电话" />
+        <van-field readonly
+                   @click="handleShowFollowStage"
+                   :value="followResult.typename"
+                   label="服务内容"
+                   placeholder="请选择服务内容" />
       </template>
 
       <!-- 会计 -->
       <template v-if="departName=='ACCOUNT'">
-        <van-field
-          @click="handleshowCompany"
-          v-model="mainFrom.companyname"
-          readonly
-          label="公司名称"
-          placeholder="请选择公司名称"
-        />
-        <van-field
-          readonly
-          @click="hanldeShowProduct"
-          v-model="mainFrom.product"
-          label="产品"
-          placeholder="请选择产品"
-        />
+        <van-field @click="handleshowCompany"
+                   v-model="mainFrom.companyname"
+                   readonly
+                   label="公司名称"
+                   placeholder="请选择公司名称" />
+        <van-field readonly
+                   @click="hanldeShowProduct"
+                   v-model="mainFrom.product"
+                   label="产品"
+                   placeholder="请选择产品" />
 
         <template v-if="mainFrom.taskKind=='tkLegAccCyc'">
-          <van-field
-            readonly
-            @click="hanldeShowlegName"
-            :value="mainFrom.legName"
-            label="外勤名称"
-            placeholder="请选择外勤名称"
-          />
+          <van-field readonly
+                     @click="hanldeShowlegName"
+                     :value="mainFrom.legName"
+                     label="外勤名称"
+                     placeholder="请选择外勤名称" />
 
           <div class="main-body-radio">
             <div class="radio-label">外勤类型</div>
-            <van-radio-group @change="changeLegName" class="radio-node" v-model="mainFrom.legType">
+            <van-radio-group @change="changeLegName"
+                             class="radio-node"
+                             v-model="mainFrom.legType">
               <van-radio name="A">A</van-radio>
               <van-radio name="B">B</van-radio>
               <van-radio name="其他">其他</van-radio>
@@ -75,86 +74,77 @@
         </template>
 
         <template v-if="mainFrom.taskKind=='tkLegAcc'">
-          <van-field
-            v-model="mainFrom.taskArea"
-            @click="hanldeShowArea"
-            type="tel"
-            label="区域"
-            readonly
-            placeholder="请选择区域"
-          />
-          <van-field
-            @click="hanldeShowPlace"
-            v-model="mainFrom.taskPlace"
-            type="tel"
-            label="地点"
-            placeholder="请选择地点"
-          />
+          <van-field v-model="mainFrom.taskArea"
+                     @click="hanldeShowArea"
+                     type="tel"
+                     label="区域"
+                     readonly
+                     placeholder="请选择区域" />
+          <van-field @click="hanldeShowPlace"
+                     v-model="mainFrom.taskPlace"
+                     type="tel"
+                     label="地点"
+                     placeholder="请选择地点" />
         </template>
       </template>
 
       <!-- 商事 -->
       <template v-if="departName=='BUSSINESS'">
         <!-- <template v-if="true"> -->
-        <van-field
-          @click="handleshowCompany"
-          v-model="mainFrom.companyname"
-          readonly
-          label="公司名称"
-          placeholder="请选择公司名称"
-        />
-        <van-field
-          readonly
-          @click="hanldeShowProduct"
-          v-model="mainFrom.product"
-          label="产品"
-          placeholder="请选择产品"
-        />
-        <van-field
-          v-model="mainFrom.taskArea"
-          @click="hanldeShowArea"
-          type="tel"
-          label="区域"
-          readonly
-          placeholder="请选择区域"
-        />
-        <van-field
-          @click="hanldeShowPlace"
-          v-model="mainFrom.taskPlace"
-          type="tel"
-          label="地点"
-          placeholder="请选择地点"
-        />
+        <van-field @click="handleshowCompany"
+                   v-model="mainFrom.companyname"
+                   readonly
+                   label="公司名称"
+                   placeholder="请选择公司名称" />
+        <van-field readonly
+                   @click="hanldeShowProduct"
+                   v-model="mainFrom.product"
+                   label="产品"
+                   placeholder="请选择产品" />
+        <van-field v-model="mainFrom.taskArea"
+                   @click="hanldeShowArea"
+                   type="tel"
+                   label="区域"
+                   readonly
+                   placeholder="请选择区域" />
+        <van-field @click="hanldeShowPlace"
+                   v-model="mainFrom.taskPlace"
+                   type="tel"
+                   label="地点"
+                   placeholder="请选择地点" />
         <div class="main-body-radio">
           <div class="radio-label">正常节点</div>
-          <van-radio-group class="radio-node" v-model="mainFrom.workNode">
+          <van-radio-group class="radio-node"
+                           v-model="mainFrom.workNode">
             <van-radio name="是">是</van-radio>
             <van-radio name="否">否</van-radio>
           </van-radio-group>
         </div>
       </template>
 
-      <van-field :value="selectDate" @click="handleSelectTime" label="代办时间" placeholder="请选择时间"/>
+      <van-field :value="selectDate"
+                 @click="handleSelectTime"
+                 label="代办时间"
+                 placeholder="请选择时间" />
 
-      <div @click="handleShowExecutor" class="main-body-radio">
+      <div @click="handleShowExecutor"
+           class="main-body-radio">
         <div class="radio-label">执行人</div>
         <div class="radio-node">
-          <van-button
-            v-for="(item,index) in executorResult "
-            :key="index"
-            size="small"
-            plain
-            style="margin:2px"
-            type="info"
-          >
+          <van-button v-for="(item,index) in executorResult "
+                      :key="index"
+                      size="small"
+                      plain
+                      style="margin:2px"
+                      type="info">
             {{item.realname}}
-            <van-icon
-              @click.stop="deleteExecutor(index)"
-              style="vertical-align:middle"
-              name="close"
-            />
+            <van-icon @click.stop="deleteExecutor(index)"
+                      style="vertical-align:middle"
+                      name="close" />
           </van-button>
-          <div style="color:#969799;" class="radio-node" v-if="!executorResult.length">请选择执行人</div>
+          <div style="color:#969799;"
+               class="radio-node"
+               v-if="!executorResult.length">请选择执行人</div>
         </div>
       </div>
 
@@ -162,148 +152,148 @@
     </van-cell-group>
 
     <!-- 底部按钮 -->
-    <div @click="HandleAddLegworkTask" class="main-button">保存</div>
+    <div @click="HandleAddLegworkTask"
+         class="main-button">保存</div>
 
     <!-- 时间选择 -->
-    <van-popup class="select" v-model="showSelectTime" position="bottom">
-      <van-datetime-picker
-        class="executor-content"
-        v-model="currentDate"
-        type="datetime"
-        @confirm="confirmTime"
-      />
+    <van-popup class="select"
+               v-model="showSelectTime"
+               position="bottom">
+      <van-datetime-picker class="executor-content"
+                           v-model="currentDate"
+                           type="datetime"
+                           @confirm="confirmTime" />
     </van-popup>
 
     <!-- 服务内容 -->
-    <van-popup class="select" v-model="showFollowStage" position="bottom">
+    <van-popup class="select"
+               v-model="showFollowStage"
+               position="bottom">
       <div class="area-content">
-        <div
-          class="area-content-item"
-          @click="selectFollowStage(item)"
-          v-for="(item,index) in followStageList"
-          :key="index"
-        >{{item.typename}}</div>
-        <div class="area-content-item" v-if="!followStageList.length">请选择服务内容</div>
+        <div class="area-content-item"
+             @click="selectFollowStage(item)"
+             v-for="(item,index) in followStageList"
+             :key="index">{{item.typename}}</div>
+        <div class="area-content-item"
+             v-if="!followStageList.length">请选择服务内容</div>
       </div>
     </van-popup>
 
     <!-- 外勤类型 -->
-    <van-popup class="select" v-model="showlegName" position="bottom">
+    <van-popup class="select"
+               v-model="showlegName"
+               position="bottom">
       <div class="area-content">
-        <div
-          class="area-content-item"
-          @click="selectlegName(item)"
-          v-for="(item,index) in legNameList"
-          :key="index"
-        >{{item.legwork_name}}</div>
-        <div class="area-content-item" v-if="!legNameList.length">暂无产品</div>
+        <div class="area-content-item"
+             @click="selectlegName(item)"
+             v-for="(item,index) in legNameList"
+             :key="index">{{item.legwork_name}}</div>
+        <div class="area-content-item"
+             v-if="!legNameList.length">暂无产品</div>
       </div>
     </van-popup>
 
     <!-- 公司选择 -->
-    <van-popup class="select" v-model="showCompany" position="bottom">
+    <van-popup class="select"
+               v-model="showCompany"
+               position="bottom">
       <div class="area-content">
-        <van-search
-          class="area-content-search"
-          show-action
-          @cancel="handleshowCompany"
-          @search="CompanySearch"
-          v-model="searchValue"
-          shape="round"
-          clearable
-          placeholder="请输入搜索词"
-        ></van-search>
-        <div
-          class="area-content-item"
-          @click="handleselectCompany(item)"
-          v-for="(item,index) in companyList"
-          :key="index"
-        >{{item.companyname}}</div>
-        <div class="area-content-item" v-if="!companyList.length">暂无产品</div>
+        <van-search class="area-content-search"
+                    show-action
+                    @cancel="handleshowCompany"
+                    @search="CompanySearch"
+                    v-model="searchValue"
+                    shape="round"
+                    clearable
+                    placeholder="请输入搜索词"></van-search>
+        <div class="area-content-item"
+             @click="handleselectCompany(item)"
+             v-for="(item,index) in companyList"
+             :key="index">{{item.companyname}}</div>
+        <div class="area-content-item"
+             v-if="!companyList.length">暂无产品</div>
       </div>
     </van-popup>
 
     <!-- 产品选择 -->
-    <van-popup class="select" v-model="showProduct" position="bottom">
+    <van-popup class="select"
+               v-model="showProduct"
+               position="bottom">
       <div class="area-content">
-        <div
-          class="area-content-item"
-          @click="selectProduct(item)"
-          v-for="(item,index) in productList"
-          :key="index"
-        >{{item.product}}</div>
-        <div class="area-content-item" v-if="!productList.length">暂无产品</div>
+        <div class="area-content-item"
+             @click="selectProduct(item)"
+             v-for="(item,index) in productList"
+             :key="index">{{item.product}}</div>
+        <div class="area-content-item"
+             v-if="!productList.length">暂无产品</div>
       </div>
     </van-popup>
 
     <!-- 区域选择 -->
-    <van-popup class="select" v-model="showArea" position="bottom">
+    <van-popup class="select"
+               v-model="showArea"
+               position="bottom">
       <div class="area-content">
-        <van-search
-          show-action
-          class="area-content-search"
-          @cancel="hanldeShowArea"
-          @search="filterSearch"
-          v-model="searchValue"
-          shape="round"
-          clearable
-          placeholder="请输入搜索词"
-        ></van-search>
-        <div
-          class="area-content-item"
-          @click="selectArea(item)"
-          v-for="(item,index) in areaList"
-          :key="index"
-        >{{item.typename}}</div>
-        <div class="area-content-item" v-if="!areaList.length">暂无数据</div>
+        <van-search show-action
+                    class="area-content-search"
+                    @cancel="hanldeShowArea"
+                    @search="filterSearch"
+                    v-model="searchValue"
+                    shape="round"
+                    clearable
+                    placeholder="请输入搜索词"></van-search>
+        <div class="area-content-item"
+             @click="selectArea(item)"
+             v-for="(item,index) in areaList"
+             :key="index">{{item.typename}}</div>
+        <div class="area-content-item"
+             v-if="!areaList.length">暂无数据</div>
       </div>
     </van-popup>
 
     <!-- 地点选择 -->
-    <van-popup class="select" v-model="showPlace" position="bottom">
+    <van-popup class="select"
+               v-model="showPlace"
+               position="bottom">
       <div class="area-content">
-        <van-search
-          class="area-content-search"
-          show-action
-          @cancel="hanldeShowPlace"
-          @search="filterSearch"
-          v-model="searchValue"
-          shape="round"
-          clearable
-          placeholder="请输入搜索词"
-        ></van-search>
-        <div
-          class="area-content-item"
-          @click="selectPlace(item)"
-          v-for="(item,index) in placeList"
-          :key="index"
-        >{{item.typename}}</div>
-        <div class="area-content-item" v-if="!placeList.length">暂无数据</div>
+        <van-search class="area-content-search"
+                    show-action
+                    @cancel="hanldeShowPlace"
+                    @search="filterSearch"
+                    v-model="searchValue"
+                    shape="round"
+                    clearable
+                    placeholder="请输入搜索词"></van-search>
+        <div class="area-content-item"
+             @click="selectPlace(item)"
+             v-for="(item,index) in placeList"
+             :key="index">{{item.typename}}</div>
+        <div class="area-content-item"
+             v-if="!placeList.length">暂无数据</div>
       </div>
     </van-popup>
 
     <!-- 执行者选择 -->
-    <van-popup class="select" v-model="showExecutor" position="bottom">
+    <van-popup class="select"
+               v-model="showExecutor"
+               position="bottom">
       <div class="executor-content">
-        <van-search
-          show-action
-          @cancel="handleShowExecutor"
-          @search="handleExecutorSearch"
-          v-model="searchValue"
-          shape="round"
-          clearable
-          placeholder="请输入搜索关键词"
-        ></van-search>
+        <van-search show-action
+                    @cancel="handleShowExecutor"
+                    @search="handleExecutorSearch"
+                    v-model="searchValue"
+                    shape="round"
+                    clearable
+                    placeholder="请输入搜索关键词"></van-search>
         <van-checkbox-group v-model="executorResult">
           <van-cell-group>
-            <van-cell
-              v-for="(item, index) in executorList"
-              clickable
-              :key="index"
-              :title="`${item.realname}(${item.departname})`"
-              @click="toggle(index)"
-            >
-              <van-checkbox :name="item" ref="checkboxes"/>
+            <van-cell v-for="(item, index) in executorList"
+                      clickable
+                      :key="index"
+                      :title="`${item.realname}(${item.departname})`"
+                      @click="toggle(index)">
+              <van-checkbox :name="item"
+                            ref="checkboxes" />
             </van-cell>
           </van-cell-group>
         </van-checkbox-group>
@@ -311,26 +301,25 @@
     </van-popup>
 
     <!-- 公司客户选择 -->
-    <van-popup class="select" v-model="showSelectCompany" position="bottom">
+    <van-popup class="select"
+               v-model="showSelectCompany"
+               position="bottom">
       <div class="select-company">
-        <van-search
-          show-action
-          @cancel="CloseCompanySelect"
-          @input="CompanySearch()"
-          @search="CompanySearch()"
-          v-model="searchValue"
-          shape="round"
-          clearable
-          placeholder="请输入搜索关键词"
-        >
-          <div @click="changeLabel" slot="label">{{label == 0 ? '公司' :label == 1? '客户':'电话'}}</div>
+        <van-search show-action
+                    @cancel="CloseCompanySelect"
+                    @input="CompanySearch()"
+                    @search="CompanySearch()"
+                    v-model="searchValue"
+                    shape="round"
+                    clearable
+                    placeholder="请输入搜索关键词">
+          <div @click="changeLabel"
+               slot="label">{{label == 0 ? '公司' :label == 1? '客户':'电话'}}</div>
         </van-search>
-        <div
-          @click="selectOne(item)"
-          class="select-company-list"
-          v-for="(item,index) in companyList"
-          :key="index"
-        >
+        <div @click="selectOne(item)"
+             class="select-company-list"
+             v-for="(item,index) in companyList"
+             :key="index">
           <div class="list-top">
             <div>{{item.name}}</div>
             <div>{{item.tel}}</div>
@@ -369,24 +358,24 @@ let PlaceList: any[] = [];
   },
 })
 export default class NewsTask extends Vue {
-  get selectDate() {
+  private get selectDate() {
     return formatDate(this.currentDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
   }
-  get executName() {
+  private get executName() {
     return this.executorResult.map(v => v.realname).join(',');
   }
-  get executId() {
+  private get executId() {
     return this.executorResult.map(v => v.id).join(',');
   }
 
-  get taskName() {
-    if (this.departName != 'BUSSINESS' && this.mainFrom.companyname) {
+  private get taskName() {
+    if (this.departName !== 'BUSSINESS' && this.mainFrom.companyname) {
       return `${this.mainFrom.companyname}--${this.mainFrom.product}--${this.mainFrom.legName}`;
     }
-    return '';
+    return this.taskNameBus;
   }
 
-  // private taskName = '';
+  private taskNameBus = '';
   private departName = '';
   private mainFrom = {
     businessId: '',
