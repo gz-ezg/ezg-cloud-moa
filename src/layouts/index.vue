@@ -7,7 +7,9 @@
     <div v-if="!menuList.length">
       <!-- 骨架屏 -->
       <ul class="skeleton-tabs">
-        <li v-for="i in 8" class="skeleton-tabs-item" :key="i">
+        <li v-for="i in 8"
+            class="skeleton-tabs-item"
+            :key="i">
           <span></span>
         </li>
       </ul>
@@ -15,41 +17,50 @@
     <div v-else>
       <!-- 页面效果待补充 -->
       <ul class="menuList">
-        <router-link v-for="(item,i) in menuList" :key="i" :to="item.path">
-          <p class="iconfont" :class="`icon-${item.icon}`"></p>
-          <p style="color:#333;" class="item_title">{{item.title}}</p>
+        <router-link v-for="(item,i) in menuList"
+                     :key="i"
+                     :to="item.path">
+          <p class="iconfont"
+             :class="`icon-${item.icon}`"></p>
+          <p style="color:#333;"
+             class="item_title">{{item.title}}</p>
         </router-link>
         <!-- <router-link to="/login" @click="logout"></router-link> -->
       </ul>
-       <!-- <van-button v-for="(x, index) in menuList" :key="index" :to="x.path">{{x.title}}</van-button> -->
-      <div class="login__button"><van-button to="/login" @click="logout">退出系统</van-button></div>
+      <!-- <van-button v-for="(x, index) in menuList" :key="index" :to="x.path">{{x.title}}</van-button> -->
+      <div class="login__button">
+        <van-button to="/login"
+                    @click="logout">退出系统</van-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { logOut } from "@api/login";
+import { logOut } from '@api/login';
 //  渲染九宫格效果；获取用户菜单值，与vuex交互，如果vuex中menu无数据，这请求渲染，如果有数据，则利用旧数据进行渲染，此部分放在vuex中action目测比较合适
+import { AjaxGet } from '@api/index';
+
 export default {
   data() {
     return {
       menuList: [
         {
-          title: "外勤打卡",
-          path: "/myTask",
-          icon: "weizhi"
+          title: '外勤打卡',
+          path: '/myTask',
+          icon: 'weizhi',
         },
         {
-          title: "资料管理",
-          path: "",
-          icon: "ziliaoku"
+          title: '资料管理',
+          path: '',
+          icon: 'ziliaoku',
         },
         // {
         //   title: "退出系统",
         //   path: "/field",
         //   icon: "weizhi"
         // }
-      ]
+      ],
     };
   },
   methods: {
@@ -58,16 +69,16 @@ export default {
       // eslint-disable-next-line no-unused-vars
       const data = await logOut();
       this.$router.push({
-        path: "/login"
+        path: '/login',
       });
-    }
+    },
   },
   computed: {
     // menuList() {
     // return this.$store.state.menu;
     // },
   },
-  created() {
+  async created() {
     //     if (this.$store.state.userAccess.length === 0 || this.$store.state.menu.length === 0) {
     //       this.$store.dispatch('updateAccess');
     //     }
@@ -75,7 +86,9 @@ export default {
     //   this.$store.dispatch('updateMenu');
     //   console.log('需要渲染菜单！');
     // }
-  }
+    const resp = await AjaxGet('/user/login/detail');
+    localStorage.setItem('user', JSON.stringify(resp));
+  },
 };
 </script>
 

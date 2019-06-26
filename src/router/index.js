@@ -70,7 +70,7 @@ router.beforeEach(async (to, from, next) => {
     try {
       const { roles, user } = await getUserInfo();
       if (user.id) {
-        store.commit('setUserInfo', user);
+        // store.commit('setUserInfo', user);
         Cookies.set('userId', '10000');
       }
       store.commit('setUserRole', roles);

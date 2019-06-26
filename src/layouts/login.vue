@@ -20,38 +20,38 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
-import { userLogin } from "@api/login";
+import Cookies from 'js-cookie';
+import { userLogin } from '@api/login';
 
 export default {
   data() {
     return {
-      username: "",
-      password: ""
+      username: '',
+      password: '',
     };
   },
   methods: {
     async login() {
       if (!this.username || !this.password) {
-        return this.$toast.fail("账号或密码不能为空");
+        return this.$toast.fail('账号或密码不能为空');
       }
       const config = {
         username: this.username,
-        password: this.password
+        password: this.password,
       };
       try {
         const { data } = await userLogin(config);
-        this.$store.commit("setUserInfo", data.data.user);
+        // this.$store.commit('setUserInfo', data.data.user);
         //  设置标志位表示已登录，用于首页跳转
-        Cookies.set("userId", "10000");
+        Cookies.set('userId', '10000');
         this.$router.push({
-          name: "Index"
+          name: 'Index',
         });
       } catch (error) {
         return this.$toast.fail(error);
       }
-    }
-  }
+    },
+  },
   //   autologin(code) {
   //     let _self = this
   //     let url = `api/legwork/apiLoginByWechatCode`

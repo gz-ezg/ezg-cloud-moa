@@ -128,12 +128,12 @@
 </template>
 <script>
 import { AjaxDic } from '@api/index';
+import { constants } from 'crypto';
+import { Promise } from 'q';
 import { getUserInfo } from '../../api/login.js';
 import * as api from './api/index.js';
 import Xheader from '../../layouts/Xheader.vue';
 import Mtab from './Mtab.vue';
-import { constants } from 'crypto';
-import { Promise } from 'q';
 
 const _this = this;
 let gzbusinessarea = [];
@@ -234,7 +234,7 @@ export default {
       // 以任务ID选中即commit进仓库
       this.$store.commit('myTaskDetail/set_selected', id);
     },
-    async handleFinishTaskDetail(id) { },
+    async handleFinishTaskDetail(id) {},
 
     async btn_click(taskId, finishState) {
       // 点击，反选
@@ -243,10 +243,11 @@ export default {
         this.$store.state.myTaskDetail.selected.indexOf(taskId) === -1
           ? (this.dialogBtn = '添加任务')
           : (this.dialogBtn = '删除任务')
-      )
-        {if (finishState) {
+      ) {
+        if (finishState) {
           this.finishState = finishState;
-        }}
+        }
+      }
       this.showDialog = true;
     },
 
@@ -271,11 +272,11 @@ export default {
     async get_toDoTaskListByUserId() {
       // 获取待进行的任务，并展示将数据展示
       const date = new Date();
-      const Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : `0${  Number(date.getMonth() + 1)}`;
-      const Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : `0${  Number(date.getDate())}`;
+      const Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : `0${Number(date.getMonth() + 1)}`;
+      const Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : `0${Number(date.getDate())}`;
       const config = {
         params: {
-          date: `${date.getFullYear()  }-${  Month  }-${  Day}`,
+          date: `${date.getFullYear()}-${Month}-${Day}`,
         },
       };
 
@@ -293,11 +294,11 @@ export default {
     },
     async get_FinishTaskListByUserId() {
       const date = new Date();
-      const Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : `0${  Number(date.getMonth() + 1)}`;
-      const Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : `0${  Number(date.getDate())}`;
+      const Month = Number(date.getMonth() + 1) >= 10 ? Number(date.getMonth() + 1) : `0${Number(date.getMonth() + 1)}`;
+      const Day = Number(date.getDate()) >= 10 ? Number(date.getDate()) : `0${Number(date.getDate())}`;
       const config = {
         params: {
-          date: `${date.getFullYear()  }-${  Month  }-${  Day}`,
+          date: `${date.getFullYear()}-${Month}-${Day}`,
         },
       };
       const res = await api.getFinishedLegworkTask(config);
@@ -330,24 +331,27 @@ export default {
       res.length ? (this.taskPropertyDetail = JSON.parse(JSON.stringify(res[0]))) : null;
 
       if (this.taskPropertyDetail && this.taskPropertyDetail.legpicurls) {
-        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls.split(',').map((v) => '/api/assets/' + v);
+        this.taskPropertyDetail.pictures = this.taskPropertyDetail.legpicurls.split(',').map(v => `/api/assets/${v}`);
       }
       if (this.taskPropertyDetail && this.taskPropertyDetail.taskPlace) {
-        const taskPlace = gzbusinessarea.find((v) => (v.typecode = this.taskPropertyDetail.taskPlace));
+        const taskPlace = gzbusinessarea.find(v => (v.typecode = this.taskPropertyDetail.taskPlace));
         this.taskPropertyDetail.taskPlace = taskPlace ? taskPlace.typename : '';
       }
       if (this.taskPropertyDetail && this.taskPropertyDetail.taskArea) {
-        const taskArea = gzbusinessplace.find((v) => (v.typecode = this.taskPropertyDetail.taskArea));
+        const taskArea = gzbusinessplace.find(v => (v.typecode = this.taskPropertyDetail.taskArea));
         this.taskPropertyDetail.taskArea = taskArea ? taskArea.typename : '';
       }
     },
   },
   created() {
     // this.get_userInfo();
-    const {
-      currentDepart: { aliasCode },
-    } = JSON.parse(localStorage.getItem('user'));
-    this.sideButton = !!(aliasCode == 'BUSSINESS' || aliasCode == 'MARKET' || aliasCode == 'ACCOUNT');
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      console.log(user);
+      const { aliasCode } = user.departs[0];
+
+      this.sideButton = !!(aliasCode == 'BUSSINESS' || aliasCode == 'MARKET' || aliasCode == 'ACCOUNT');
+    } catch (error) {}
 
     this.$store.state.myTaskDetail.selected = [];
     this.get_toDoTaskListByUserId();

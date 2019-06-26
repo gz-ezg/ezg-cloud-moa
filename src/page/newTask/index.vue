@@ -11,7 +11,8 @@
                  v-model="taskName"
                  type="textarea"
                  placeholder="请输入任务内容" />
-      <van-field v-else class="main-body-text"
+      <van-field v-else
+                 class="main-body-text"
                  v-model="taskNameBus"
                  type="textarea"
                  placeholder="请输入任务内容" />
@@ -679,9 +680,11 @@ export default class NewsTask extends Vue {
   // 生命周期
   async created() {
     // 获取当前登录用户的信息
-    let user = JSON.parse(localStorage.getItem('user'));
-    this.departName = user.currentDepart.aliasCode;
-    this.executorResult.push({ id: user.id, realname: user.realname, departname: user.currentDepart.departname });
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      this.departName = user.departs[0].aliasCode;
+      this.executorResult.push({ id: user.user.id, realname: user.user.realname, departname: user.departs[0].departname });
+    } catch (error) {}
 
     let { gzbusinessarea, gzbusinessplace, followStage } = await queryCodes([
       'gzbusinessarea',
