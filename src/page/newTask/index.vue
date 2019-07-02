@@ -367,12 +367,12 @@ export default class NewsTask extends Vue {
   private get taskNameBus() {
     if (this.departName !== 'BUSSINESS' && this.mainFrom.companyname) {
       this.taskName = `${this.mainFrom.companyname}--${this.mainFrom.product}--${this.mainFrom.legName}`;
-      return `${this.mainFrom.companyname||''}--${this.mainFrom.product||''}--${this.mainFrom.legName||''}`;
+      return `${this.mainFrom.companyname || ''}--${this.mainFrom.product || ''}--${this.mainFrom.legName || ''}`;
     }
     return this.taskName;
   }
-  private set taskNameBus(newVale,) {
-    this.taskName = newVale
+  private set taskNameBus(newVale) {
+    this.taskName = newVale;
   }
   private taskName = '';
   private departName = '';
@@ -609,6 +609,10 @@ export default class NewsTask extends Vue {
         followResult: this.followResult.typecode,
         customerId: mainFrom.customerid,
       });
+      if (config.followResult == 'Visit' || config.followResult == 'Party') {
+        delete config.companyId;
+        delete config.customerId;
+      }
       delete config.businessId;
       sumbitfunc = addMarketLegworkTask;
     }
@@ -648,7 +652,16 @@ export default class NewsTask extends Vue {
 
     console.warn(config);
     if (departName == 'MARKET') {
-      if ((!config.companyId && !config.customerId) || !config.taskName || !config.followResult || !config.executorId) {
+      if (config.followResult == 'Visit' || config.followResult == 'Party') {
+        if (!config.taskName || !config.executorId) {
+          return this.$toast.fail('请补全信息');
+        }
+      } else if (
+        (!config.companyId && !config.customerId) ||
+        !config.taskName ||
+        !config.followResult ||
+        !config.executorId
+      ) {
         return this.$toast.fail('请补全信息');
       }
     } else {
