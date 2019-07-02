@@ -8,7 +8,7 @@
       </div>
       <div style="width:80%;margin:auto">
         <van-cell-group>
-          <van-field required v-model="username" label="用户名" placeholder="请输入用户名"/>
+          <van-field required v-model="username" label="用户名" placeholder="请输入用户名称"/>
           <van-field required v-model="password" type="password" label="密码" placeholder="请输入密码"/>
         </van-cell-group>
       </div>
