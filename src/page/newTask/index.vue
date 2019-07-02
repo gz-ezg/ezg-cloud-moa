@@ -318,7 +318,7 @@
         <div @click="selectOne(item)" class="select-company-list" v-for="(item, index) in companyList" :key="index">
           <div class="list-top">
             <div>{{ item.name }}</div>
-            <div>{{ item.tel }}</div>
+            <div>{{ item.encryTel }}</div>
           </div>
           <div class="list-bottom">{{ item.companyname }}</div>
         </div>
@@ -475,11 +475,11 @@ export default class NewsTask extends Vue {
     this.showExecutor = !this.showExecutor;
     this.showExecutor && this.handleExecutorSearch();
   }
-  selectOne({ companyname, name, tel, customerid, companyid }) {
+  selectOne({ companyname, name, tel,encryTel, customerid, companyid }) {
     this.mainFrom = Object.assign(this.mainFrom, {
       companyname,
       name,
-      tel,
+      tel:encryTel,
       customerid,
       companyId: companyid,
     });
