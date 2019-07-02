@@ -13,7 +13,7 @@
         </van-cell-group>
       </div>
       <van-row style="width:80%;margin:auto;margin-top:60px">
-        <van-button size="large" type="primary" @click="login">登 陆</van-button>
+        <van-button size="large" type="primary" @click="login">登 录</van-button>
       </van-row>
     </van-row>
   </van-row>
