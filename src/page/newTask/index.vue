@@ -204,6 +204,7 @@
           class="area-content-search"
           show-action
           @cancel="handleshowCompany"
+          @input="CompanySearch"
           @search="CompanySearch"
           v-model="searchValue"
           shape="round"
@@ -239,6 +240,7 @@
           show-action
           class="area-content-search"
           @cancel="hanldeShowArea"
+          @input="filterSearch"
           @search="filterSearch"
           v-model="searchValue"
           shape="round"
@@ -259,6 +261,7 @@
           class="area-content-search"
           show-action
           @cancel="hanldeShowPlace"
+          @input="filterSearch"
           @search="filterSearch"
           v-model="searchValue"
           shape="round"
@@ -278,6 +281,7 @@
         <van-search
           show-action
           @cancel="handleShowExecutor"
+          @input="handleExecutorSearch"
           @search="handleExecutorSearch"
           v-model="searchValue"
           shape="round"
