@@ -65,6 +65,12 @@
                      type="textarea"
                      :placeholder="`请描述任务${item.status}的原因（必填）`" />
         </van-cell-group>
+        <van-cell-group v-show="showDesc1(item.status,item.taskKind)">
+          <!-- 是否显示描述任务失败原因 -->
+          <van-field v-model="item.desc"
+                     type="textarea"
+                     :placeholder="`请描述任务${item.status}的原因（选填）`" />
+        </van-cell-group>
       </li>
     </ul>
     <!--
@@ -230,6 +236,21 @@ export default {
         || status === '无效'
       ) {
         return true;
+      }
+    },
+    showDesc1(status, taskKind) {
+      // 根据状态，是否展示任务描述textarea
+      if (taskKind === 'tkLegAccHom') {
+        return false;
+      }
+      if (status === '完成' || status === '命中') {
+        return true;
+      } if (
+        status === '未完成'
+        || status === '有效'
+        || status === '无效'
+      ) {
+        return false;
       }
     },
 
