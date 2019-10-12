@@ -185,7 +185,7 @@ export default {
         //   obj.required = true
         // }
 
-        obj.legwork_task_id = this.list[i].taskId;
+        obj.legwork_task_id = this.list[i].legworkTaskId;
         obj.memo = this.list[i].desc;
         this.list[i].required && (obj.required = true);
         obj.imgList = this.list[i].showImg;
@@ -306,14 +306,14 @@ export default {
       const _self = this;
       const img = await yasuo(e);// 压缩
       this.list[i].uploadingImg.push(img);
-
+      console.log(this.list[i])
       const formdata = new FormData();
-      formdata.append('legwork_task_id', this.list[i].taskId);
+      formdata.append('legwork_task_id', this.list[i].legworkTaskId);
       formdata.append('legwork_id', this.list[i].id);
       formdata.append(
         'files',
         img,
-        `file_${this.list[i].taskId}${new Date()}.jpg`,
+        `file_${this.list[i].legworkTaskId}${new Date()}.jpg`,
       );
 
       const toast = Toast.loading({
@@ -360,7 +360,8 @@ export default {
     for (let i = 0; i < res.details.length; i++) {
       const obj = {};
       obj.id = res.id;
-      obj.taskId = res.details[i].legwork_task_id;
+      obj.legworkTaskId = res.details[i].legwork_task_id;
+      obj.taskId = res.details[i].id;
       obj.taskName = res.details[i].task_name;
       obj.taskKind = res.details[i].task_kind;
       obj.follow_result = this.$followResultToChinese(
