@@ -79,6 +79,13 @@
               <van-radio name="其他">其他</van-radio>
             </van-radio-group>
           </div>
+
+          <van-field
+            readonly
+            v-show="mainFrom.legType!=='其他'"
+            :value="num"
+            label="剩余次数"
+          />
         </template>
 
         <template v-if="mainFrom.taskKind == 'tkLegAcc'">
@@ -344,6 +351,7 @@ import {
   SearchConfig,
   getLegworkType,
   addAccLegworkTask,
+  getNum
 } from './api';
 import { formatDate } from '@/utils';
 import Xheader from '../../layouts/Xheader.vue';
@@ -378,6 +386,11 @@ export default class NewsTask extends Vue {
   private set taskNameBus(newVale) {
     this.taskName = newVale;
   }
+  private num = '';
+  private numList = {
+    remainderA:'',
+    remainderB:'',
+  };
   private taskName = '';
   private departName = '';
   private mainFrom = {
@@ -443,6 +456,14 @@ export default class NewsTask extends Vue {
   }
   async changeLegName() {
     this.legNameList = await getLegworkType(this.mainFrom.legType);
+    if(this.mainFrom.legType =='A'){
+      this.num = this.numList.remainderA
+    }else if(this.mainFrom.legType =='B'){
+      this.num = this.numList.remainderB
+    } else {
+      this.num = 999
+
+    }
     if (this.legNameList.length) {
       this.selectlegName(this.legNameList[0]);
     }
@@ -501,9 +522,10 @@ export default class NewsTask extends Vue {
     this.mainFrom.taskPlaceCode = typecode;
     this.hanldeShowPlace();
   }
-  selectProduct({ businessId, product, taskKind = '' }) {
+  selectProduct({ businessId, product, taskKind = '' ,companyid}) {
     this.mainFrom.businessId = businessId;
     this.mainFrom.product = product;
+    this.mainFrom.companyId = companyid;
     if (this.departName == 'ACCOUNT') {
       this.mainFrom.taskKind = taskKind;
     }
@@ -520,6 +542,7 @@ export default class NewsTask extends Vue {
 
     if (this.departName == 'ACCOUNT') {
       this.handleKJProductList(companyid);
+      this.getNum(companyid)
     } else {
       this.handleProductList(companyid);
     }
@@ -549,6 +572,10 @@ export default class NewsTask extends Vue {
       this.mainFrom.businessId = this.productList[0].businessId;
     }
   }
+
+  async getNum(companyid) {
+      this.numList = await getNum(companyid);
+    }
 
   hanldeShowArea() {
     this.areaList = AreaList;
@@ -595,7 +622,7 @@ export default class NewsTask extends Vue {
     this.legNameList = await getLegworkType(this.mainFrom.legType);
   }
   async HandleAddLegworkTask() {
-    const { mainFrom, selectDate, executName, executId, taskName, departName } = this;
+    const { mainFrom, selectDate, executName, executId, taskName, departName,num } = this;
     // 表单验证
     let sumbitfunc;
     // 组装数据
@@ -634,12 +661,16 @@ export default class NewsTask extends Vue {
 
     if (this.departName == 'ACCOUNT') {
       if (mainFrom.taskKind == 'tkLegAccCyc') {
-        config = Object.assign(config, {
-          legTypeId: mainFrom.legTypeId,
-          legType: mainFrom.legType,
-          legName: mainFrom.legName,
-          taskKind: mainFrom.taskKind,
-        });
+        if (num<=0) {
+          return this.$toast.fail('剩余次数不够');
+        } else{
+          config = Object.assign(config, {
+                    legTypeId: mainFrom.legTypeId,
+                    legType: mainFrom.legType,
+                    legName: mainFrom.legName,
+                    taskKind: mainFrom.taskKind,
+                  });
+        }
       } else if (mainFrom.taskKind == 'tkLegAcc') {
         config = Object.assign(config, {
           taskKind: mainFrom.taskKind,

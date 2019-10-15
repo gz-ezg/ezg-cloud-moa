@@ -29,6 +29,16 @@ export const handleUserList = async (realname) => {
     },
   });
 };
+
+export const getNum = async  companyId => {
+  const url = '/user/legwork/companyLegworkCountByCompanyId';
+  return AjaxGet(url, {
+    params: {
+      companyId,
+    },
+  });
+};
+
 export const queryCodes = async (arr: string[]) => {
   const url = '/system/tsType/queryTsTypeByGroupCodes';
   return AjaxGet(url, {
