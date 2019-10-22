@@ -359,7 +359,6 @@ import { watch } from 'fs';
 
 let AreaList: any[] = [];
 let PlaceList: any[] = [];
-
 @Component({
   components: {
     Xheader,
@@ -386,7 +385,7 @@ export default class NewsTask extends Vue {
   private set taskNameBus(newVale) {
     this.taskName = newVale;
   }
-  private num = '';
+  private num  : any = 999;
   private numList = {
     remainderA:'',
     remainderB:'',
@@ -525,7 +524,8 @@ export default class NewsTask extends Vue {
   selectProduct({ businessId, product, taskKind = '' ,companyid}) {
     this.mainFrom.businessId = businessId;
     this.mainFrom.product = product;
-    this.mainFrom.companyId = companyid;
+    // this.mainFrom.companyId = companyid;
+    // console.log(this.mainFrom.companyId)
     if (this.departName == 'ACCOUNT') {
       this.mainFrom.taskKind = taskKind;
     }
