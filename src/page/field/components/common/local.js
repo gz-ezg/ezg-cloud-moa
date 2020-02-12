@@ -22,6 +22,7 @@ export default {
           url: location.href.split('#')[0]
         }
       }
+      // 修改appi
       let data = await commonApi.getWxTicker(config)
       wx.config({
         beta: true, // 必须这么写，否则wx.invoke调用形式的jsapi会有问题
